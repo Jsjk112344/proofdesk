@@ -37,3 +37,19 @@ output. No snippets were copied from the following implementation references.
 - Skill-required competition refresh on 2026-11-03: [official event](https://lablab.ai/ai-hackathons/vultr-hackathon)
   and [LabLab terms](https://lablab.ai/terms-of-use). No account activation, terms acceptance,
   credit redemption, provisioning, publication or submission was performed in this slice.
+
+## Bounded inference workflow — 2026-11-03
+
+The Vultr adapter, budget accounting, workflow, tests, additional synthetic documents,
+answers and canned response parser are original ProofDesk code/data. No external sample
+dataset or model output was imported. The offline parser is fixture source, not generated
+code. No new runtime or development dependency was added; HTTP and process deadlines use
+Python's standard library. No provider SDK, automatic retry layer or alternate provider.
+
+Official technical API references checked for this implementation on 2026-11-03 (no
+snippets copied): [Vultr chat-completions contract](https://api.vultrinference.com/docs/reference/create-chat-completion),
+[request/context/output limits](https://api.vultrinference.com/docs/concepts/limits),
+[quickstart and usage](https://api.vultrinference.com/docs/get-started/quickstart), and
+[Vultr model/API FAQ](https://docs.vultr.com/products/compute/serverless-inference/faq).
+No new competition/market research, account access, credit redemption or paid call was
+performed; current model availability/prices must be verified before live authorization.

@@ -8,6 +8,7 @@ import signal
 import subprocess
 import uuid
 from contextlib import contextmanager
+from copy import deepcopy
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -16,6 +17,7 @@ from .runner import LABEL, DockerRunner, Limits, RunError, Runner, Task, limits_
 
 ROOT = Path(__file__).resolve().parents[3]
 STORE = ROOT / ".local" / "executions"
+TASK_BYTES = 32768
 
 
 def now():
@@ -83,26 +85,44 @@ def revision():
         return {"commit": None, "dirty": None}
 
 
-def execute(runner: Runner, task: Task, expected: dict, *, scenario: str, store=STORE, limits=None):
+def execute(
+    runner: Runner,
+    task: Task,
+    expected: dict,
+    *,
+    scenario: str,
+    store=STORE,
+    limits=None,
+    source_kind="deterministic_synthetic_fixture",
+    generation=None,
+):
     limits = limits or Limits()
     run_id = uuid.uuid4().hex
     name = "proofdesk-" + run_id
     directory = store / run_id
     directory.mkdir(parents=True, mode=0o700)
+    rejected = len(task.script) > TASK_BYTES or len(task.input) > TASK_BYTES
     expected_bytes = json.dumps(expected, sort_keys=True).encode()
     record = {
-        "schema_version": 1,
+        "schema_version": 2,
         "id": run_id,
         "container_name": name,
         "started_at": now(),
         "finished_at": None,
         "scenario": scenario,
-        "source_kind": "deterministic_synthetic_fixture",
+        "source_kind": source_kind,
+        "generation": generation,
         "execution_kind": "local_docker",
         "revision": revision(),
-        "input_sha256": sha256(task.input),
-        "script_sha256": sha256(task.script),
-        "expected_sha256": sha256(expected_bytes),
+        "input_sha256": None if rejected else sha256(task.input),
+        "script_sha256": None if rejected else sha256(task.script),
+        "expected_sha256": None if rejected else sha256(expected_bytes),
+        "dispatched": False,
+        "input_rejection": (
+            {"input_bytes": len(task.input), "script_bytes": len(task.script), "limit": TASK_BYTES}
+            if rejected
+            else None
+        ),
         "image": getattr(runner, "image", None),
         "limits": limits_record(limits),
         "status": "running",
@@ -112,15 +132,19 @@ def execute(runner: Runner, task: Task, expected: dict, *, scenario: str, store=
         "validated_artifacts": [],
         "cleanup": {"removed": False, "reason": "not_attempted"},
     }
-    # Save the exact synthetic inputs so dirty-tree evidence remains reproducible.
-    (directory / "input.txt").write_bytes(task.input)
-    (directory / "script.py").write_bytes(task.script)
-    (directory / "expected.json").write_bytes(expected_bytes)
+    # Reject before persisting contents (or hashing oversized data). Rejections
+    # retain only bounded metadata; they never touch reusable runner state.
+    if not rejected:
+        (directory / "input.txt").write_bytes(task.input)
+        (directory / "script.py").write_bytes(task.script)
+        (directory / "expected.json").write_bytes(expected_bytes)
     record_path = directory / "record.json"
     atomic_json(record_path, record)
     try:
-        if len(task.script) > 32768 or len(task.input) > 32768:
+        if rejected:
             raise RunError("task_input_limit")
+        record["dispatched"] = True
+        atomic_json(record_path, record)
         result = runner.execute(name, task, limits)
         record["exit_code"] = result.exit_code
         record["evidence"] = result.evidence
@@ -135,7 +159,7 @@ def execute(runner: Runner, task: Task, expected: dict, *, scenario: str, store=
                 "media_type": "application/json",
                 "size_bytes": len(artifact),
                 "sha256": sha256(artifact),
-                "validation": "exact_fixture_schema_and_content",
+                "validation": "exact_controller_schema_and_content",
             }
         ]
         record["status"] = "succeeded"
@@ -152,10 +176,16 @@ def execute(runner: Runner, task: Task, expected: dict, *, scenario: str, store=
         record["failure_reason"] = "controller_internal_error"
     finally:
         with finish_without_interruption():
-            record["evidence"] = getattr(runner, "evidence", record["evidence"])
-            if record["exit_code"] is None:
-                record["exit_code"] = record["evidence"].get("task_exit_code")
-            record["cleanup"] = runner.cleanup(name)
+            if record["dispatched"]:
+                record["evidence"] = deepcopy(getattr(runner, "evidence", record["evidence"]))
+                if record["exit_code"] is None:
+                    record["exit_code"] = record["evidence"].get("task_exit_code")
+                try:
+                    record["cleanup"] = runner.cleanup(name)
+                except Exception:
+                    record["cleanup"] = {"removed": False, "reason": "cleanup_internal_error"}
+            else:
+                record["cleanup"] = {"removed": True, "reason": "not_started"}
             if not record["cleanup"]["removed"] and record["status"] == "succeeded":
                 record["status"] = "failed"
                 record["failure_reason"] = "cleanup_unverified"

@@ -1,0 +1,9 @@
+SYNTHETIC EXAMPLE — no real company, customer, or transaction
+  Supplier: Example Café Workshop
+Document: HOLDOUT-809
+Currency: USD
+Date: 2026-11-02
+
+Item: Démo kits | Quantity: 2 | Unit cents: 1000
+Item: Sample clips | Quantity: 3 | Unit cents: 65
+Item: Free test insert | Quantity: 0 | Unit cents: 0

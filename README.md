@@ -5,10 +5,11 @@
 A proposed sales-engineering agent that researches prospects, executes small technical
 demonstrations, and prepares outreach backed by inspectable evidence.
 
-**Status: local execution slice plus application scaffold.** A CLI runs deterministic
-synthetic Python tasks in disposable Docker containers, validates artifacts, and saves
-execution records. Live research, model integration, outreach and Vultr deployment are
-not implemented. This is not an autonomous agent or a complete hackathon entry.
+**Status: bounded local generation/execution workflow plus application scaffold.** A CLI
+runs synthetic Python tasks in disposable Docker containers and validates artifacts.
+A controller-side Vultr adapter and one-correction workflow are implemented and tested
+with offline provider fixtures. Live inference and model quality remain unverified;
+research, outreach and Vultr deployment are not implemented. This is not a complete entry.
 See [STATUS.md](STATUS.md).
 
 ## Vultr Agent Rush
@@ -103,6 +104,55 @@ abandoned task containers remain. Keep the checkout at the same path until recov
 Missing Docker, missing image, unsupported limits and failed cleanup are explicit failures;
 there is no host execution fallback. See [actual boundaries and limitations](SECURITY.md).
 
+## Bounded generation and evaluation
+
+The same Docker prerequisites apply. These commands make **no model or paid requests**:
+
+```bash
+uv run python -m backend.app.execution generate --provider fake
+uv run python -m backend.app.execution generate --provider fake --fake-outcome correct-once
+uv run python -m backend.app.execution generate --provider fake --fake-outcome fail-twice
+```
+
+`fake` supplies original canned Python responses through the bounded provider protocol.
+The returned script actually runs in Docker against three varied synthetic documents.
+The original input is the generation example; the other documents, including the held-out
+case, stay outside prompts. No expected answers enter initial or correction prompts.
+The last command intentionally exits 1 after two rejected attempts. Each attempt and each
+execution has its own evidence. This measures orchestration, not live model quality or
+statistical generalization; see the [evaluation fixtures](fixtures/evaluation/README.md).
+
+Only nonzero task exits, missing/malformed JSON artifacts and content/schema mismatches
+permit one correction. Correction feedback contains the previous script and a stable
+failure code, without logs, observed output, held-out input or expected values. A second
+failure, provider error, policy violation, quota/deadline or cleanup failure stops the
+workflow. Models cannot change the controller's limits or validation.
+
+The summary points to `.local/workflows/<id>/record.json`. Each `attempt-N/` stores a
+generation receipt, bounded request JSON and accepted source; task records stay under
+`.local/executions/`. Record v2 distinguishes deterministic fixtures, offline provider
+fixtures and Vultr-generated scripts. Oversized task input/source is rejected before
+contents are saved: only bounded metadata remains, with empty evidence and no exit code.
+
+Live inference uses only Vultr's fixed HTTPS chat-completions endpoint. No live spending
+is currently authorized. A key alone cannot enable requests. Before a live run, prepare
+and obtain approval of the [exact model/pricing plan](docs/inference.md), then supply its
+local approval file and a controller-only `VULTR_INFERENCE_API_KEY`:
+
+```bash
+uv run python -m backend.app.execution generate --provider vultr \
+  --authorization .local/approved-model-plan.json
+```
+
+There is no default live model and no automatic `.env` loading. The approval file binds
+the model, deadlines, response/token bounds, request count, prices and cost cap. The
+default plan bounds are two requests, 12,000 input plus 2,048 completion tokens each,
+30 seconds per request, 64 KiB response and 32 KiB source. Failed requests retain their
+full reservation; no SDK retries, redirects or provider fallback exist. A durable local
+approval ledger prevents reloading the same plan from resetting its allowance. Keep
+that ledger and checkout intact. Future live runs are separately labelled; none is
+claimed here. Provider compatibility, current prices and billing need live verification.
+
 ## Development screen
 
 Terminal 1, from the repository root:
@@ -119,8 +169,8 @@ npm --prefix frontend run dev
 
 Open http://127.0.0.1:5173. The bootstrap screen checks `/api/health` through the
 Vite development proxy. API documentation is at http://127.0.0.1:8000/docs.
-The [environment example](.env.example) contains empty placeholders for future
-server-side configuration; the current scaffold does not read it or make model calls.
+The [environment example](.env.example) describes controller-only configuration. It is
+not loaded automatically; the web scaffold remains disconnected from execution/inference.
 
 ## Checks
 
@@ -133,15 +183,17 @@ npm --prefix frontend run build
 python3 scripts/check_repository.py
 ```
 
-These check the scaffold and offline validation/missing-Docker behavior. Two Docker test
-groups are skipped unless explicitly enabled. After pulling the image, run:
+These check the scaffold, offline provider/workflow behavior, artifact validation and
+missing-Docker behavior. Four Docker test methods are skipped unless explicitly enabled.
+After pulling the image, run:
 
 ```bash
 PROOFDESK_DOCKER_TESTS=1 uv run python -m unittest discover -s backend/tests -v
 ```
 
-This additionally exercises actual containers, all probes, SIGINT/SIGTERM, forced-controller
-crash recovery and a valid task after each interruption. The GitHub workflow runs the offline
+This additionally exercises actual containers, all probes, generated-response fixtures,
+correction bounds, input-rejection reuse, SIGINT/SIGTERM, forced-controller crash recovery
+and a valid task after each interruption. The GitHub workflow runs the offline
 checks without credentials, Docker image pulls or paid services. Local Docker observations
 are not evidence of Vultr deployment, agent quality or protection against every escape.
 
@@ -164,7 +216,8 @@ flowchart TB
 ```
 
 Cloud Compute will host the web app, API, controller and execution service. Serverless
-Inference will provide every runtime agent model call through
+Inference is the only implemented live provider adapter and will provide every runtime
+agent model call through
 `https://api.vultrinference.com/v1`, including planning, code generation, review and
 outreach drafting. Model selection requires task-specific evaluation.
 

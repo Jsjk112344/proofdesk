@@ -1,7 +1,8 @@
 # Architecture and first workflow
 
-The product architecture below remains planned. The health endpoint, bootstrap screen
-and a separate local execution CLI exist today.
+The full product architecture below remains planned. The health endpoint, bootstrap
+screen and a separate bounded generation/execution CLI exist today. Live model requests
+have not been verified.
 
 ## Implemented execution slice
 
@@ -20,10 +21,37 @@ archive without extracting it and saves only exactly validated bytes at a fixed 
 The finalizer removes the whole container on success, failure, timeout or interruption.
 Explicit recovery handles abandoned containers/records after a hard crash.
 
-Records live in ignored `.local/executions/`, with no database, network service or model
-provider involved. See [the record contract](execution-record.md),
+Records live in ignored `.local/executions/`, with no database or public network service.
+See [the record contract](execution-record.md),
 [schema](execution-record.schema.json) and [implemented security limits](../SECURITY.md).
 The web API is intentionally disconnected from this local CLI.
+
+## Implemented bounded generation workflow
+
+`generation/provider.py` implements the controller-side Vultr HTTPS adapter and an
+explicit offline fake provider. No other live provider is available. A trusted controller
+transport process makes one request under a total deadline and byte cap, without retries
+or redirects. Configuration, usage and worst-case reservations are persisted separately
+from sandbox evidence. Credentials remain in that controller boundary. The approval
+ledger survives reloads; failures retain reserved capacity.
+
+`generation/workflow.py` builds a prompt from the extraction contract and one synthetic
+development input, then requests source. Each script runs through the existing Docker
+controller against up to three fixed documents, including one held-out input. Expected
+answers are loaded only for local deterministic validation. One eligible failure can
+request a corrected script, evaluated again from the first case. Feedback contains the
+prior script and a generic failure code; no additional document or expected answer is
+sent. Any second failure, unsafe artifact, containment/infrastructure failure or cleanup
+failure terminates the workflow. Limits and validators are controller code, not model
+parameters. No provider-returned Python executes on the host.
+
+Workflow records and per-attempt generation receipts live under `.local/workflows/`.
+Execution record v2 links each task to its workflow/attempt and labels deterministic
+fixtures, offline provider fixtures and live Vultr-generated code distinctly. Recovery
+marks unfinished workflows/requests abandoned without repeating requests or refunding
+budgets. [Inference configuration and authorization](inference.md) documents the exact
+plan needed before live requests. Current observed results use only offline responses;
+there is no evidence of live inference quality or Vultr deployment yet.
 
 ## Product
 

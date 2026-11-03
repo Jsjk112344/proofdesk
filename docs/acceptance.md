@@ -58,3 +58,35 @@ fixture checks above cover only the narrow execution boundary, not these full pr
 
 Record actual commands, outputs and revision for observed checks. Clearly label fault
 injection and fixture replay in demonstrations. Security claims cannot exceed observations.
+
+## Bounded generation workflow — observed 2026-11-03
+
+Continuation baseline `95b67b5` on `feat/local-execution-slice`; no unrelated working-tree
+changes were present. Tests use original offline provider responses and synthetic inputs.
+No key, paid inference request, cloud provisioning or deployment was used.
+
+| Criterion | Observed result |
+| --- | --- |
+| Oversized task input/source | Rejected before contents/hash persistence; only bounded metadata saved |
+| Reused-runner task ownership | Success → rejection → success passes offline and in Docker; rejected evidence empty, exit null, successful evidence identifies its own container |
+| Offline generation to execution | Canned source traverses provider protocol and actually runs in Docker; three varied cases validate |
+| Eligible failure/correction | Wrong JSON rejected; exactly one correction accepted and all cases re-evaluated |
+| Second failure | Stops after two requests/attempts, preserving both generations and separate failed task evidence |
+| Missing credential/approval | Offline injected checks stop before dispatch; a key alone cannot authorize spending |
+| Provider/protocol failures | Offline HTTP errors, redirects, transport errors/deadlines, truncated/malformed/oversized output, tool calls, missing/invalid/over-limit usage stop without retry or execution |
+| Budgets | Request/token/cost admission precedes dispatch; failed requests retain reservations; reloading a durable ledger cannot restore consumed allowance |
+| Cleanup and containment failure | Offline fault injection stops before another case or correction, including a cleanup exception |
+| Held-out data | Held-out failure feedback contains neither document nor expected values; initial/correction request JSON inspected in tests |
+| Provenance | Record v2 labels offline response fixtures separately from deterministic fixtures and future Vultr-generated code; linked request/response/source hashes checked |
+| Existing local execution | All fixture/probe, interruption and hard-crash recovery checks still pass with real local Docker |
+
+Offline transport tests mock HTTPS; a sleeping local transport process exercises the total
+deadline without any connection. Workflow unit tests use a recording runner and never
+execute generated Python on the host. Opt-in Docker tests exercise actual task containers.
+These checks do not demonstrate live Vultr compatibility, billing, reasoning or code quality.
+The public held-out fixture is withheld from runtime prompts, not an independent benchmark.
+A later authorized live run must supply its own separately labelled receipts/evidence.
+
+Follow the [inference plan](inference.md) before requesting any paid run. Authorized spend
+remains $0; no specific current model/price is approved. The workflow is local-only and
+supports the fixed synthetic extraction family, not arbitrary private documents.

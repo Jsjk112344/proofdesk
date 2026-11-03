@@ -49,6 +49,7 @@ class Execution:
 
 
 class Runner(Protocol):
+    def check_ready(self) -> None: ...
     def execute(self, name: str, task: Task, limits: Limits) -> Execution: ...
     def cleanup(self, name: str) -> dict: ...
 
@@ -123,7 +124,7 @@ import json, pathlib, sys
 p = json.load(sys.stdin)
 pathlib.Path('/work/out').mkdir()
 pathlib.Path('/work/input.txt').write_text(p['input'])
-exec(compile(p['script'], '<deterministic-fixture>', 'exec'), {'__name__': '__main__'})
+exec(compile(p['script'], '<sandbox-task>', 'exec'), {'__name__': '__main__'})
 """
 
 # Runs before task input is sent. Values come from the kernel, not task claims.
@@ -157,7 +158,7 @@ class DockerRunner:
             raise RunError(f"docker_{args[0]}_failed")
         return out
 
-    def execute(self, name: str, task: Task, limits: Limits) -> Execution:
+    def check_ready(self):
         self.evidence = {}
         info = json.loads(self.call("info", "--format", "{{json .}}"))
         security = info.get("SecurityOptions", [])
@@ -177,6 +178,10 @@ class DockerRunner:
         if image["Config"].get("Volumes"):
             raise RunError("image_declares_volumes")
         self.evidence["image_id"] = image["Id"]
+
+    def execute(self, name: str, task: Task, limits: Limits) -> Execution:
+        self.check_ready()
+        self.evidence["container_name"] = name
         self.call(
             "create",
             "--pull=never",

@@ -10,6 +10,8 @@ import tarfile
 import time
 import unittest
 import uuid
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 from jsonschema import Draft202012Validator, FormatChecker
@@ -23,7 +25,7 @@ from backend.app.execution.controller import (
     recover,
     serial_lock,
 )
-from backend.app.execution.runner import LABEL
+from backend.app.execution.runner import LABEL, Execution, Task
 from backend.app.execution.scenarios import FAILURES, PROBES, scenario
 
 SCHEMA = json.loads((ROOT / "docs/execution-record.schema.json").read_text())
@@ -44,6 +46,44 @@ def archive(entries):
 
 
 class ArtifactTests(unittest.TestCase):
+    def test_success_rejection_success_uses_only_own_evidence(self):
+        class ReusedRunner:
+            def execute(self, name, task, limits):
+                self.evidence = {"task_name": name, "task_exit_code": 0}
+                return Execution(
+                    0, b"", archive([("out/result.json", b"{}", tarfile.REGTYPE)]), self.evidence
+                )
+
+            def cleanup(self, name):
+                return {"removed": True, "reason": None}
+
+        with TemporaryDirectory() as temp:
+            runner = ReusedRunner()
+            for oversized in (Task(b"x" * 32769, b""), Task(b"", b"x" * 32769)):
+                first_path, first = execute(
+                    runner, Task(b"pass", b"one"), {}, scenario="first", store=Path(temp)
+                )
+                path, rejected = execute(
+                    runner, oversized, {}, scenario="rejected", store=Path(temp)
+                )
+                _, last = execute(
+                    runner, Task(b"pass", b"three"), {}, scenario="last", store=Path(temp)
+                )
+                for record in (first, rejected, last):
+                    VALIDATOR.validate(record)
+                self.assertEqual(first["status"], "succeeded")
+                self.assertEqual(last["status"], "succeeded")
+                self.assertEqual(rejected["failure_reason"], "task_input_limit")
+                self.assertEqual(rejected["evidence"], {})
+                self.assertIsNone(rejected["exit_code"])
+                self.assertFalse(rejected["dispatched"])
+                self.assertEqual([p.name for p in path.parent.iterdir()], ["record.json"])
+                self.assertLess(path.stat().st_size, 4096)
+                self.assertEqual(first["evidence"]["task_name"], first["container_name"])
+                self.assertEqual(last["evidence"]["task_name"], last["container_name"])
+                self.assertEqual(json.loads(first_path.read_text()), first)
+                self.assertNotEqual(first["id"], last["id"])
+
     def test_valid_and_wrong_content_with_successful_exit(self):
         data = archive([("out/result.json", b'{"value":1}', tarfile.REGTYPE)])
         self.assertEqual(validate(data, {"value": 1}), b'{"value":1}')
@@ -96,6 +136,26 @@ class ArtifactTests(unittest.TestCase):
 
 @unittest.skipUnless(os.environ.get("PROOFDESK_DOCKER_TESTS") == "1", "explicit Docker opt-in")
 class DockerTests(unittest.TestCase):
+    def test_success_rejection_success_same_docker_runner(self):
+        with serial_lock():
+            runner = docker_runner()
+            task, expected = scenario("fixture")
+            records = []
+            for selected in (task, Task(task.script, b"x" * 32769), task):
+                path, record = execute(runner, selected, expected, scenario="rejection-regression")
+                VALIDATOR.validate(record)
+                records.append(record)
+                if not record["dispatched"]:
+                    self.assertEqual({p.name for p in path.parent.iterdir()}, {"record.json"})
+            self.assertEqual([r["status"] for r in records], ["succeeded", "failed", "succeeded"])
+            self.assertEqual(records[1]["evidence"], {})
+            self.assertIsNone(records[1]["exit_code"])
+            self.assertEqual(len({r["id"] for r in records}), 3)
+            self.assertEqual(records[0]["input_sha256"], sha256(task.input))
+            self.assertEqual(records[2]["script_sha256"], sha256(task.script))
+            for record in (records[0], records[2]):
+                self.assertEqual(record["evidence"]["container_name"], record["container_name"])
+
     def test_fixture_and_all_probes(self):
         with (
             serial_lock(),
@@ -172,7 +232,7 @@ class DockerTests(unittest.TestCase):
                             capture_output=True,
                             timeout=3,
                         )
-                        if b"<deterministic-fixture>" in code.stdout:
+                        if b"<sandbox-task>" in code.stdout:
                             break
                     if process.poll() is not None:
                         self.fail("controller exited before signal injection")

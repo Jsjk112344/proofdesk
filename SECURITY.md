@@ -3,15 +3,17 @@
 ## Current status
 
 The HTTP application still exposes only a health endpoint and development screen.
-A separate local CLI executes deterministic synthetic tasks in Docker. It has no
-authentication, models, research tools, public execution endpoint or send integration.
+A separate local CLI executes deterministic fixtures and bounded provider-returned Python
+in Docker. A controller-side Vultr adapter is implemented; only offline response fixtures
+have been exercised. It has no authentication, research tools, public execution endpoint
+or send integration.
 Observed local checks are recorded in [STATUS.md](STATUS.md). This is not a production
 deployment, microVM boundary, or proof of protection against every container escape.
 
 ## Implemented local boundaries
 
 - The controller owns task selection, limits, expected results, validation and records.
-  The CLI offers fixed fixtures/probes, not arbitrary public code execution. Every task
+  The CLI offers fixed fixtures/probes and a bounded extraction generator. Every task
   uses a fresh named container and a digest-pinned official Python image, without pulls
   at dispatch. Images declaring volumes are refused.
 - UID/GID 65532, all Linux capabilities dropped, `no-new-privileges`, Docker's default
@@ -48,6 +50,48 @@ deployment, microVM boundary, or proof of protection against every container esc
   repeated signals are ignored during finalization. Success requires verified container
   absence. Explicit `cleanup` reconciles SIGKILL/crash leftovers using a checkout-specific
   label, never a global Docker prune. New tasks refuse existing labelled containers.
+- Task input/source has a 32 KiB per-field bound checked before content persistence.
+  Rejected tasks save only metadata, no content/hash, task logs, prior evidence or exit
+  code. They do not dispatch or consult reusable runner state. `cleanup.reason=not_started`
+  denotes a task that never started, not a Docker absence observation.
+
+## Inference and correction boundary
+
+- Only the controller's fixed `https://api.vultrinference.com/v1/chat/completions` endpoint
+  is used live, with TLS verification. Endpoint overrides, redirects and compressed
+  responses are refused. The HTTP transport does not consume proxy environment settings.
+  No SDK, hidden retries, tool invocation or alternate-provider fallback is implemented.
+- The credential is read only by the controller/its trusted transport process, never
+  put in request JSON, records, arguments, prompts or sandbox environment. The transport
+  process handles HTTPS only; generated Python still runs exclusively inside Docker.
+- An explicit model configuration binds total request deadline, input-token allowance,
+  completion-token cap (including reasoning) and response bytes. A killable transport
+  process covers DNS/TLS/headers/body under the total deadline, then terminates/joins.
+  Requests use nonstreaming responses; malformed, truncated, oversized, tool-call and
+  model-mismatched results fail closed. Missing/invalid usage stops execution. Integer
+  reported usage is retained even if it violates the configured bound.
+- Input allowance uses serialized UTF-8 request bytes plus 256 framing tokens as a
+  conservative estimate, not a model tokenizer implementation. Verify this assumption
+  against the selected model before approving live work. Output tokens are explicitly
+  capped in the API request. Provider-side enforcement/billing remains unverified.
+- A controller-owned exact approval plan and positive cap are required in addition to
+  a key. Each dispatch reserves the full input/output token and priced cost allowance
+  before sending. Failed, timed-out and uncertain requests never release it. A durable
+  approval ledger under `.local/model-budgets/` survives CLI restarts; corrupted or
+  exhausted ledgers fail closed. It is local bookkeeping, not an account-wide billing
+  control. Do not delete it to retry an approval. No paid calls occur in CI.
+- At most two model requests and two script attempts per workflow. Deterministic
+  validation owns expected answers. Only nonzero exits, missing/malformed JSON and
+  schema/content mismatches can request the one correction. Unsafe artifacts, resource
+  violations, policy/infrastructure failures and unverified cleanup are terminal.
+  No later document or request runs after a cleanup failure.
+- Only the development document enters generation prompts. Additional evaluation inputs
+  and all expected answers stay in the controller. Correction feedback includes source
+  and a generic failure reason, never logs or held-out input/output. Synthetic prompt
+  data is still untrusted; instructions inside it grant no authority.
+- Generation receipts, execution records and provenance distinguish offline canned
+  scripts from Vultr-generated scripts. A hard crash requires explicit cleanup; pending
+  requests/workflows become abandoned failures and are never automatically resent.
 
 ## Local limitations
 

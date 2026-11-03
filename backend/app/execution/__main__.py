@@ -2,6 +2,8 @@
 
 import argparse
 import json
+import os
+from pathlib import Path
 
 from .artifacts import sha256
 from .controller import (
@@ -19,20 +21,96 @@ from .scenarios import FAILURES, PROBES, scenario
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Local Docker execution of synthetic fixtures only"
+        description="Bounded synthetic extraction in local Docker; live inference requires approval"
     )
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("run", help="Execute and verify deterministic extraction fixture")
     probe = sub.add_parser("probe", help="Labelled containment/failure injection; no model calls")
     probe.add_argument("name", choices=["all", *PROBES])
     sub.add_parser("cleanup", help="Recover this checkout's abandoned containers and records")
+    generation = sub.add_parser(
+        "generate", help="Generate, execute and evaluate one extraction script"
+    )
+    generation.add_argument("--provider", choices=["fake", "vultr"], required=True)
+    generation.add_argument("--model", help="Explicit Vultr model ID; no default live model")
+    generation.add_argument(
+        "--authorization", type=Path, help="Local exact approved model/budget plan"
+    )
+    generation.add_argument(
+        "--fake-outcome",
+        choices=["success", "correct-once", "fail-twice"],
+        default="success",
+        help="Offline fault injection only",
+    )
     args = parser.parse_args()
     runner = docker_runner()
     try:
         with serial_lock(), interruptions():
             if args.command == "cleanup":
-                print(json.dumps(recover(runner), indent=2))
+                from ..generation.workflow import recover_workflows
+
+                recovery = recover(runner)
+                recovery["reconciled_workflows"] = recover_workflows()
+                print(json.dumps(recovery, indent=2))
                 return 0
+            if args.command == "generate":
+                from ..generation.provider import (
+                    Authorization,
+                    Budget,
+                    FakeProvider,
+                    ModelConfig,
+                    VultrProvider,
+                    fake_response,
+                )
+                from ..generation.workflow import run_workflow
+                from .controller import ROOT
+
+                if args.provider == "fake":
+                    if args.authorization or args.model:
+                        raise RunError("fake_provider_configuration_rejected")
+                    config = ModelConfig("offline-extraction-fixture")
+                    good = (ROOT / "fixtures/evaluation/offline-script.py").read_bytes()
+                    bad = (
+                        b"from pathlib import Path\nPath('/work/out/result.json').write_text('{}')"
+                    )
+                    scripts = {
+                        "success": [good],
+                        "correct-once": [bad, good],
+                        "fail-twice": [bad, bad],
+                    }[args.fake_outcome]
+                    provider = FakeProvider([fake_response(script) for script in scripts])
+                    budget = Budget()
+                else:
+                    if args.fake_outcome != "success":
+                        raise RunError("live_fault_injection_rejected")
+                    auth = Authorization.load(args.authorization) if args.authorization else None
+                    model = args.model or os.environ.get("VULTR_INFERENCE_MODEL")
+                    if auth:
+                        if model and model != auth.config.model:
+                            raise RunError("authorization_model_mismatch")
+                        config, budget = auth.config, auth.budget
+                    else:
+                        config = ModelConfig(model or "")
+                        budget = Budget()
+                    provider = VultrProvider(auth)
+                path, record = run_workflow(runner, provider, config, budget)
+                print(
+                    json.dumps(
+                        {
+                            "status": record["status"],
+                            "failure_reason": record["failure_reason"],
+                            "provider": record["provider"],
+                            "attempts": len(record["attempts"]),
+                            "budget": record["budget"],
+                            "record": str(path),
+                        }
+                    )
+                )
+                return (
+                    130
+                    if record["status"] == "interrupted"
+                    else (0 if record["status"] == "succeeded" else 1)
+                )
             names = (
                 ["fixture"]
                 if args.command == "run"
@@ -77,6 +155,8 @@ def main():
                 )
                 if record["status"] == "interrupted":
                     return 130
+                if not check:
+                    return 1
             return 0 if passed else 1
     except RunError as exc:
         print(json.dumps({"error": str(exc)}))

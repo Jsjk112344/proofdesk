@@ -1,5 +1,9 @@
 # Project status
 
+Current checkpoint: bounded local generation/execution workflow with offline provider
+tests and a Vultr-only live adapter. Live inference remains unverified and authorized
+spend is $0. Earlier sections below are dated historical checkpoints.
+
 ## Initialization checkpoint: 2026-11-03
 
 - Track: Blast Radius Zero (working choice from the project discussion).
@@ -97,3 +101,73 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   an actual failure and make one bounded correction through this same controller.
   First add the corresponding provider, retry and spend accounting tests. Deployment,
   live research, outreach and hackathon readiness remain pending.
+
+## Bounded generation and rejection fixes: 2026-11-03
+
+- Resumed `feat/local-execution-slice` at `95b67b5`, clean working tree. No unrelated
+  changes existed; existing fixture commands and the web health scaffold are preserved.
+  Used the vultr-agent-rush skill for controller/containment/budget discipline. No new
+  competition/market research or product research feature was added; only official
+  provider technical references were checked (recorded in THIRD_PARTY.md).
+- Fixed both reviewed rejection defects before model work: input/source bounds now
+  precede content persistence/hashing, and pre-dispatch rejections never read reusable
+  runner evidence or exit codes. Only bounded metadata is saved. Success → rejection →
+  success with the same runner passes offline and in real Docker; successful task
+  evidence identifies its own container. Record v2 documents null rejection hashes.
+- Implemented controller-only Vultr HTTPS adapter with explicit model/deadline/token/
+  response bounds, usage telemetry, strict protocol checks, no redirects, compression,
+  SDK retries or provider fallback. A killable controller transport process enforces
+  the total request deadline; it never executes returned code. No new dependencies.
+- Implemented worst-case request/token/cost reservations, retained on errors/timeouts.
+  Live requests require a key plus an exact owner-approved plan. Durable local approval
+  ledgers prevent reloading a plan from resetting capacity; exhausted/corrupt ledgers
+  stop. Current authorization remains **$0**; no live plan/key was required or used.
+- Added `generate --provider fake|vultr`: source generation → existing Docker controller
+  → exact validation → at most one eligible correction. Each generation and task has
+  separate records linked by workflow/attempt and request/response/source hashes.
+  Unsafe artifacts, policy/resource/infrastructure and cleanup failures stop immediately.
+  Pending workflows/requests are abandoned on explicit recovery, without resend/refund.
+- Added three synthetic evaluation cases (original, reordered EUR input, held-out Unicode/
+  whitespace/three-item/zero-value input). Only the development document enters prompts;
+  no expected answer enters generation or correction. An offline held-out-failure test
+  inspects feedback and confirms document/answer withholding. These are public fixtures
+  authored with the parser, not an independent model-quality benchmark.
+- Provenance distinguishes `deterministic_synthetic_fixture`, `offline_provider_fixture`
+  and future `vultr_model_generated` execution. Fake usage is explicitly synthetic;
+  accepted response bytes and source are saved exactly. Malformed/oversized responses
+  retain bounded sanitized metadata, no returned content. No offline pass is live evidence.
+- Observed offline suite: 34 tests discovered, 30 passed and four Docker methods skipped
+  explicitly (3.142 seconds). Covers missing key/approval, HTTP/transport errors, malformed/
+  oversized responses, usage/token/request/cost limits, durable failed-call reservations,
+  cleanup exceptions, terminal containment failures, held-out withholding and recovery.
+- Observed final full Docker-enabled suite: all **34 tests passed** in **32.359 seconds**,
+  including existing 15 probes, SIGINT/SIGTERM/SIGKILL recovery, rejection reuse, and new
+  fake-provider Docker workflows (success, one correction, second failure stops). A final
+  targeted recovery check also passed after ordering receipt recovery before workflow
+  finalization, so interrupted recovery can be repeated. No paid requests occurred.
+- Example ignored local workflow evidence from that full pass:
+  `d978734133004f7fb793d7e5417395fe` — first incorrect output, one correction, all three
+  cases passed; `232a644d4fc54d7686ecf313fa8d33f2` — two rejected script attempts, stopped.
+  Earlier direct CLI `generate --provider fake --fake-outcome correct-once` also succeeded
+  (`ea3bbc710e144294baa5c6e7b8b40556`). These scripts are canned fixture responses executed
+  in Docker, not model-generated code.
+- Actual CLI missing-credential check (key explicitly removed from environment) produced
+  `missing_vultr_credentials`, zero reserved/sent requests and no task executions:
+  `bcd80eecf2284a658548d9aa7ca8d612`. Its intended provider is labelled Vultr; it is not a
+  live inference observation. Other provider failures were injected offline.
+- Other completed checks: `uv sync --locked`, Ruff lint and formatting, Python compileall,
+  `npm --prefix frontend ci`, TypeScript/Vite production build, and git whitespace checks.
+  README, SECURITY, architecture, record v2/schema, acceptance, environment placeholders,
+  contributor status and minimal screen status copy are aligned with implementation.
+- Remaining limitations: no live Vultr request, selected model, verified price/billing,
+  deployment or general escape guarantee. Input token admission uses a conservative byte
+  estimate, requiring selected-tokenizer verification before live approval. Local ledgers
+  are checkout-scoped and trusted, not account-wide billing controls; hard crashes still
+  require explicit recovery. Local storage has no aggregate retention quota.
+- Next authorized boundary: prepare the exact model/current pricing/tokenizer plan and
+  conservative cap in docs/inference.md, then obtain only missing owner authorization
+  before any paid call. No live spending, provisioning, outreach, publication, push or
+  submission was performed in this continuation. No receipt or remote CI run is claimed.
+- Final publication-pattern/local-link check passed for all 57 tracked files. No labelled
+  ProofDesk task containers remained after verification. Only the intended implementation,
+  tests, synthetic fixtures and documentation are included in the local commit.
