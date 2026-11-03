@@ -1,5 +1,7 @@
 # ProofDesk
 
+[![Scaffold checks](https://github.com/Jsjk112344/proofdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Jsjk112344/proofdesk/actions/workflows/ci.yml)
+
 A proposed sales-engineering agent that researches prospects, executes small technical
 demonstrations, and prepares outreach backed by inspectable evidence.
 

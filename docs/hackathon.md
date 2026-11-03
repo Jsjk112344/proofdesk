@@ -9,7 +9,7 @@ Sources:
 
 ## Repository and rights
 
-- [ ] Public repository and anonymous access verified.
+- [x] Public repository and anonymous access verified.
 - [x] MIT license for newly authored project work.
 - [x] Existing work and third-party provenance documented.
 - [x] README includes setup, proposed architecture and Vultr use.

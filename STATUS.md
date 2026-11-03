@@ -5,7 +5,12 @@
 - Track: Blast Radius Zero (working choice from the project discussion).
 - Rules checked: official event, LabLab terms and rule book on 2026-11-03.
 - Existing-code baseline: empty new repository; original scaffold and planning only.
-- Repository publication: authorized by owner; verification pending.
+- Repository publication: https://github.com/Jsjk112344/proofdesk is PUBLIC.
+  Unauthenticated metadata, README and MIT license access verified.
+- GitHub protections: secret scanning, push protection and private vulnerability
+  reporting enabled and verified.
+- GitHub CI: [initial scaffold run](https://github.com/Jsjk112344/proofdesk/actions/runs/41681064090)
+  passed on initialization commit fe195c1. Subsequent runs remain visible in Actions.
 - Local scaffold: React/Vite screen and FastAPI health endpoint implemented.
 - Observed local checks: locked dependency sync, Ruff lint/format, Python compilation,
   TypeScript/Vite build, API and built-page HTTP smoke checks, publication-file patterns
