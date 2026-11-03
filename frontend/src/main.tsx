@@ -26,7 +26,7 @@ function App() {
       <p className="status">Development scaffold · Vultr Agent Rush</p>
       <h1>ProofDesk</h1>
       <p className="intro">Research a prospect. Execute a useful demonstration. Prepare an evidenced approach.</p>
-      <p>This repository is being built for Blast Radius Zero. Live research, sandbox execution and outreach are not implemented yet.</p>
+      <p>A local CLI now executes and validates synthetic demonstrations in disposable Docker containers. This screen remains a scaffold; live research, model integration and outreach are not implemented.</p>
       <p role="status">{apiStatus}</p>
       <a href="https://github.com/Jsjk112344/proofdesk">View project and build status</a>
     </main>

@@ -5,9 +5,11 @@
 A proposed sales-engineering agent that researches prospects, executes small technical
 demonstrations, and prepares outreach backed by inspectable evidence.
 
-**Status: repository and local application scaffold.** Live research, sandbox execution,
-model integration, outreach and Vultr deployment are not implemented. This is not yet
-a complete hackathon entry. See [STATUS.md](STATUS.md).
+**Status: local execution slice plus application scaffold.** A CLI runs deterministic
+synthetic Python tasks in disposable Docker containers, validates artifacts, and saves
+execution records. Live research, model integration, outreach and Vultr deployment are
+not implemented. This is not an autonomous agent or a complete hackathon entry.
+See [STATUS.md](STATUS.md).
 
 ## Vultr Agent Rush
 
@@ -45,6 +47,64 @@ uv sync --locked
 npm --prefix frontend ci
 ```
 
+## Local execution
+
+Requires macOS/Linux, Python 3.12 and a trusted local Linux Docker daemon with cgroup v2
+and default seccomp enabled. The controller needs Docker access; tasks never receive it.
+Start Docker Desktop/Colima or Docker Engine, then run from the repository root:
+
+```bash
+docker info
+docker pull "$(cat infra/task-image.txt)"
+uv run python -m backend.app.execution run
+```
+
+The pinned official Python image is pulled explicitly; task execution never pulls images
+or installs packages. No cloud resources, model calls or credentials are required.
+The [original synthetic document](fixtures/extraction/document.txt) and
+[deterministic script](fixtures/extraction/extract.py) produce
+[this exact expected JSON](fixtures/extraction/expected.json), including a 1,600-cent total.
+This demonstrates real local execution of fixture code, not generated code or model quality.
+
+The command prints a JSON summary and the path to `.local/executions/<id>/record.json`.
+Successful runs also save `result.json`. Records include input/script/expected hashes,
+revision and dirty-tree status, Docker image identity, pre-task kernel limits, exit code,
+failure reason, validated artifacts and verified container absence. Exact synthetic
+inputs are saved alongside the record. See the [record contract](docs/execution-record.md)
+and [JSON Schema](docs/execution-record.schema.json). Everything generated stays ignored
+under `.local/`; no database or public execution endpoint exists.
+
+Run the labelled fault-injection/containment probes:
+
+```bash
+uv run python -m backend.app.execution probe all
+uv run python -m backend.app.execution probe timeout
+uv run python -m backend.app.execution probe incorrect
+```
+
+`probe all` checks 15 cases, then runs a valid extraction again. A probe command returns
+zero when its **expected** outcome and cleanup checks pass; individual execution records
+still say `failed` for intentionally invalid tasks. Probes cover incorrect JSON, size and
+output quotas, unsafe files, timeout, nonzero exit, memory exhaustion, blocked network and
+host-file access, environment allowlisting, filesystem capacity and process count.
+Network probes attempt TCP connections to a documentation address and the link-local
+metadata address without sending application data. The host canary is synthetic.
+
+Ctrl-C and SIGTERM trigger cleanup and an `interrupted` record. After SIGKILL, a controller
+crash, or daemon failure, restore Docker and run:
+
+```bash
+uv run python -m backend.app.execution cleanup
+```
+
+Recovery removes only containers labelled for this checkout and reconciles unfinished
+records. A checkout lock prevents concurrent controllers; new work refuses to start if
+abandoned task containers remain. Keep the checkout at the same path until recovery.
+Missing Docker, missing image, unsupported limits and failed cleanup are explicit failures;
+there is no host execution fallback. See [actual boundaries and limitations](SECURITY.md).
+
+## Development screen
+
 Terminal 1, from the repository root:
 
 ```bash
@@ -68,12 +128,22 @@ server-side configuration; the current scaffold does not read it or make model c
 uv run ruff check backend scripts
 uv run ruff format --check backend scripts
 uv run python -m compileall -q backend
+uv run python -m unittest discover -s backend/tests -v
 npm --prefix frontend run build
 python3 scripts/check_repository.py
 ```
 
-These check the scaffold, not agent quality, security containment or deployment.
-The GitHub workflow runs the same checks without credentials or paid services.
+These check the scaffold and offline validation/missing-Docker behavior. Two Docker test
+groups are skipped unless explicitly enabled. After pulling the image, run:
+
+```bash
+PROOFDESK_DOCKER_TESTS=1 uv run python -m unittest discover -s backend/tests -v
+```
+
+This additionally exercises actual containers, all probes, SIGINT/SIGTERM, forced-controller
+crash recovery and a valid task after each interruption. The GitHub workflow runs the offline
+checks without credentials, Docker image pulls or paid services. Local Docker observations
+are not evidence of Vultr deployment, agent quality or protection against every escape.
 
 ## How Vultr will power ProofDesk
 

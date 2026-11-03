@@ -3,8 +3,9 @@
 Read README.md, STATUS.md and docs/architecture.md first. This is a standalone,
 public MIT project for Vultr Agent Rush, provisionally targeting Blast Radius Zero.
 
-- Current implementation is a local bootstrap only. Do not describe planned agent,
-  security, deployment or submission behavior as verified.
+- Current implementation is a local deterministic execution CLI and web bootstrap.
+  Do not describe planned agent, security, deployment or submission behavior as verified;
+  local Docker observations do not establish Vultr deployment or general escape protection.
 - Author original code. Never copy private repositories, customer records, credentials
   or correspondence into this project. Record external sources in THIRD_PARTY.md.
 - All runtime agent model calls, including verification and drafting, must use Vultr

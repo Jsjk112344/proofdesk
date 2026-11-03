@@ -1,0 +1,7 @@
+SYNTHETIC EXAMPLE — no real company, customer, or transaction
+Document: DEMO-0042
+Supplier: Example Paper Laboratory
+Date: 2026-11-03
+Currency: USD
+Item: Test notebooks | Quantity: 3 | Unit cents: 450
+Item: Sample folders | Quantity: 2 | Unit cents: 125

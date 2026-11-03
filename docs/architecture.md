@@ -1,6 +1,29 @@
 # Architecture and first workflow
 
-This is the intended design. Only the health endpoint and bootstrap screen exist today.
+The product architecture below remains planned. The health endpoint, bootstrap screen
+and a separate local execution CLI exist today.
+
+## Implemented execution slice
+
+`python -m backend.app.execution` selects an original synthetic fixture or labelled probe.
+`controller.py` owns the fixed limits, expected output, serial lock, hashes, validation,
+atomic JSON records and cleanup. `Runner` accepts immutable script/input bytes and limits;
+the Docker implementation returns exit status, bounded logs, an untrusted archive and
+pre-task policy evidence. This interface does not authorize execution by a model.
+
+The runner creates a fresh container, checks Docker policy and actual kernel limits,
+then streams input/code through stdin to an isolated Python process. Only Docker client
+commands run on the host; task Python never does. A trusted pinned image supplies Python
+and tar. Artifact collection uses a bounded tar stream inside the task mount namespace
+because this local daemon's copy API could not read task tmpfs. Host validation reads the
+archive without extracting it and saves only exactly validated bytes at a fixed filename.
+The finalizer removes the whole container on success, failure, timeout or interruption.
+Explicit recovery handles abandoned containers/records after a hard crash.
+
+Records live in ignored `.local/executions/`, with no database, network service or model
+provider involved. See [the record contract](execution-record.md),
+[schema](execution-record.schema.json) and [implemented security limits](../SECURITY.md).
+The web API is intentionally disconnected from this local CLI.
 
 ## Product
 
