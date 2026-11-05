@@ -1,4 +1,4 @@
-# ProofDesk contributor instructions
+# SalesDesk contributor instructions
 
 Read README.md, STATUS.md and docs/architecture.md first. This is a standalone,
 public MIT project for Vultr Agent Rush, provisionally targeting Blast Radius Zero.

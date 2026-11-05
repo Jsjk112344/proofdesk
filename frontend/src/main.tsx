@@ -24,11 +24,11 @@ function App() {
   return (
     <main>
       <p className="status">Development scaffold · Vultr Agent Rush</p>
-      <h1>ProofDesk</h1>
+      <h1>SalesDesk</h1>
       <p className="intro">Research a prospect. Execute a useful demonstration. Prepare an evidenced approach.</p>
       <p>This repository is being built for Blast Radius Zero. Live research, sandbox execution and outreach are not implemented yet.</p>
       <p role="status">{apiStatus}</p>
-      <a href="https://github.com/Jsjk112344/proofdesk">View project and build status</a>
+      <a href="https://github.com/Jsjk112344/salesdesk">View project and build status</a>
     </main>
   );
 }

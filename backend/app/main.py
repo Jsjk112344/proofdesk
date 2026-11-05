@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI
 
-app = FastAPI(title="ProofDesk", version="0.1.0")
+app = FastAPI(title="SalesDesk", version="0.1.0")
 
 
 @app.get("/api/health")

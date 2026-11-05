@@ -34,3 +34,9 @@ authorized spending cap and cleanup ownership. Do not publish account/billing de
 Prove one bounded journey using permitted example inputs: sourced use case, demonstration
 execution, artifact verification and saved draft. Establish runner containment before
 allowing untrusted code. Select and evaluate Vultr models with an authorized call budget.
+
+## Product rename: 2026-11-05
+
+- Owner renamed the product and public repository to SalesDesk.
+- Public branding updated; previous dated records retain their original names.
+- This branding commit makes no claim about unpublished implementation work.

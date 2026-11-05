@@ -1,6 +1,6 @@
-# ProofDesk
+# SalesDesk
 
-[![Scaffold checks](https://github.com/Jsjk112344/proofdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Jsjk112344/proofdesk/actions/workflows/ci.yml)
+[![Scaffold checks](https://github.com/Jsjk112344/salesdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Jsjk112344/salesdesk/actions/workflows/ci.yml)
 
 A proposed sales-engineering agent that researches prospects, executes small technical
 demonstrations, and prepares outreach backed by inspectable evidence.
@@ -39,8 +39,8 @@ Prerequisites: Python 3.12, [uv](https://docs.astral.sh/uv/), Node.js 24 and npm
 No API key or cloud account is needed for this scaffold.
 
 ```bash
-git clone https://github.com/Jsjk112344/proofdesk.git
-cd proofdesk
+git clone https://github.com/Jsjk112344/salesdesk.git
+cd salesdesk
 uv sync --locked
 npm --prefix frontend ci
 ```
@@ -75,7 +75,7 @@ python3 scripts/check_repository.py
 These check the scaffold, not agent quality, security containment or deployment.
 The GitHub workflow runs the same checks without credentials or paid services.
 
-## How Vultr will power ProofDesk
+## How Vultr will power SalesDesk
 
 **Planned architecture, not deployed infrastructure:**
 
