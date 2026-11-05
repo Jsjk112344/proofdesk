@@ -77,11 +77,22 @@ def finish_without_interruption():
 
 def revision():
     def git(*args):
-        return subprocess.check_output(["git", *args], cwd=ROOT, timeout=5).decode().strip()
+        return (
+            subprocess.check_output(["git", *args], cwd=ROOT, timeout=5, stderr=subprocess.DEVNULL)
+            .decode()
+            .strip()
+        )
 
     try:
         return {"commit": git("rev-parse", "HEAD"), "dirty": bool(git("status", "--porcelain"))}
     except (OSError, subprocess.SubprocessError):
+        # A reviewed deployment tar has no .git; retain its recorded source baseline.
+        try:
+            data = json.loads((ROOT / "release.json").read_text())
+            if re.fullmatch(r"[0-9a-f]{40}", data["commit"]) and type(data["dirty"]) is bool:
+                return {"commit": data["commit"], "dirty": data["dirty"]}
+        except (OSError, ValueError, TypeError, KeyError):
+            pass
         return {"commit": None, "dirty": None}
 
 

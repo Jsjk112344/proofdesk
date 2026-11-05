@@ -37,6 +37,11 @@ def main():
         "--authorization", type=Path, help="Local exact approved model/budget plan"
     )
     generation.add_argument(
+        "--request-controls",
+        type=Path,
+        help="Separate approved restrictive reasoning controls; one attempt, same budget ledger",
+    )
+    generation.add_argument(
         "--fake-outcome",
         choices=["success", "correct-once", "fail-twice"],
         default="success",
@@ -61,12 +66,13 @@ def main():
                     ModelConfig,
                     VultrProvider,
                     fake_response,
+                    load_request_controls,
                 )
                 from ..generation.workflow import run_workflow
                 from .controller import ROOT
 
                 if args.provider == "fake":
-                    if args.authorization or args.model:
+                    if args.authorization or args.model or args.request_controls:
                         raise RunError("fake_provider_configuration_rejected")
                     config = ModelConfig("offline-extraction-fixture")
                     good = (ROOT / "fixtures/evaluation/offline-script.py").read_bytes()
@@ -93,7 +99,12 @@ def main():
                         config = ModelConfig(model or "")
                         budget = Budget()
                     provider = VultrProvider(auth)
-                path, record = run_workflow(runner, provider, config, budget)
+                controls = (
+                    load_request_controls(args.request_controls) if args.request_controls else None
+                )
+                path, record = run_workflow(
+                    runner, provider, config, budget, request_controls=controls
+                )
                 print(
                     json.dumps(
                         {

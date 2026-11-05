@@ -6,7 +6,7 @@ from dataclasses import asdict
 
 from ..execution.controller import ROOT, STORE, atomic_json, execute, now, revision
 from ..execution.runner import RunError, Task
-from .provider import generate
+from .provider import generate, validate_request_controls
 
 WORKFLOWS = STORE.parent / "workflows"
 # Policy/containment, output quotas, deadlines and cleanup failures are terminal.
@@ -83,7 +83,16 @@ def recover_workflows(store=WORKFLOWS):
     return recovered
 
 
-def run_workflow(runner, provider, config, budget, *, store=WORKFLOWS, execution_store=STORE):
+def run_workflow(
+    runner,
+    provider,
+    config,
+    budget,
+    *,
+    store=WORKFLOWS,
+    execution_store=STORE,
+    request_controls=None,
+):
     """Caller holds the checkout execution lock and installs signal handlers."""
     workflow_id = uuid.uuid4().hex
     directory = store / workflow_id
@@ -103,9 +112,11 @@ def run_workflow(runner, provider, config, budget, *, store=WORKFLOWS, execution
         "status": "running",
         "failure_reason": None,
         "attempts": [],
+        "request_controls": request_controls,
     }
     atomic_json(path, record)
     try:
+        validate_request_controls(request_controls, provider, config)
         if auth:
             record["authorization"]["ledger_id"] = auth.bind_budget(store.parent / "model-budgets")
             record["budget"] = budget.record()
@@ -124,7 +135,8 @@ def run_workflow(runner, provider, config, budget, *, store=WORKFLOWS, execution
                 + json.dumps(development_input, ensure_ascii=False),
             },
         ]
-        for number in (1, 2):
+        maximum_attempts = 1 if request_controls is not None else 2
+        for number in range(1, maximum_attempts + 1):
             attempt_dir = directory / f"attempt-{number}"
             attempt_dir.mkdir(mode=0o700)
             attempt = {
@@ -135,7 +147,12 @@ def run_workflow(runner, provider, config, budget, *, store=WORKFLOWS, execution
             record["attempts"].append(attempt)
             atomic_json(path, record)
             script, receipt = generate(
-                provider, config, budget, messages, attempt_dir / "generation.json"
+                provider,
+                config,
+                budget,
+                messages,
+                attempt_dir / "generation.json",
+                request_controls=request_controls,
             )
             record["budget"] = budget.record()
             atomic_json(path, record)
@@ -180,7 +197,7 @@ def run_workflow(runner, provider, config, budget, *, store=WORKFLOWS, execution
             if failure is None:
                 record["status"] = "succeeded"
                 break
-            if number == 2 or failure not in CORRECTABLE:
+            if number == maximum_attempts or failure not in CORRECTABLE:
                 raise RunError(failure)
             # No logs, observed output, expected answers or held-out input are fed
             # back. The model cannot inspect the controller's filesystem or policy.

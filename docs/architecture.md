@@ -1,94 +1,101 @@
-# Architecture and first workflow
+# Architecture and the prospect journey
 
-The full product architecture below remains planned. The health endpoint, bootstrap
-screen and a separate bounded generation/execution CLI exist today. Live model requests
-have not been verified.
+SalesDesk is a sales agent for technical sellers. The implemented product journey is:
+offering + prospect website → bounded public-page research → evidence brief → demonstration
+decision → optional sandboxed demonstration → editable, unsent outreach draft → human
+review bound to the exact draft version. It is privately deployed on the owner's Vultr VM.
 
-## Implemented execution slice
+Two live Vultr model requests (earlier code-generation checks) failed validation and no
+successful live inference has been observed yet. The journey therefore runs today in
+**rule-based mode**, which is labelled everywhere; live model mode is implemented behind the
+same validated contracts and awaits an authorized live run.
 
-`python -m backend.app.execution` selects an original synthetic fixture or labelled probe.
-`controller.py` owns the fixed limits, expected output, serial lock, hashes, validation,
-atomic JSON records and cleanup. `Runner` accepts immutable script/input bytes and limits;
-the Docker implementation returns exit status, bounded logs, an untrusted archive and
-pre-task policy evidence. This interface does not authorize execution by a model.
+## Components
 
-The runner creates a fresh container, checks Docker policy and actual kernel limits,
-then streams input/code through stdin to an isolated Python process. Only Docker client
-commands run on the host; task Python never does. A trusted pinned image supplies Python
-and tar. Artifact collection uses a bounded tar stream inside the task mount namespace
-because this local daemon's copy API could not read task tmpfs. Host validation reads the
-archive without extracting it and saves only exactly validated bytes at a fixed filename.
-The finalizer removes the whole container on success, failure, timeout or interruption.
-Explicit recovery handles abandoned containers/records after a hard crash.
+**React workspace** (`frontend/`): a landing form for the offering and prospect website
+with a labelled synthetic sample, then a prospect workspace with Research, Demonstration
+and Outreach views and a secondary Technical details view (saved events, model request
+diagnostics, sandbox evidence, extractor source, historical live inference checks). The
+generation mode of every brief and draft is shown as a badge.
 
-Records live in ignored `.local/executions/`, with no database or public network service.
-See [the record contract](execution-record.md),
-[schema](execution-record.schema.json) and [implemented security limits](../SECURITY.md).
-The web API is intentionally disconnected from this local CLI.
+**API** (`backend/app/main.py`): anonymous HttpOnly/SameSite session capabilities,
+same-origin JSON checks, bounded bodies, idempotent prospect creation, draft edits and
+reviews, cross-session 404s, and the retained extraction-run endpoints. One Uvicorn worker.
 
-## Implemented bounded generation workflow
+**Prospect store** (`backend/app/sales/prospects.py`): atomic `.local/prospects/<id>/`
+records holding offering, target (public URL or labelled sample), ownership hash, saved
+events, sources, brief, demonstration decision/result, draft versions, review state and
+sanitized model diagnostics. Quotas: one active job, five per session, twenty total.
 
-`generation/provider.py` implements the controller-side Vultr HTTPS adapter and an
-explicit offline fake provider. No other live provider is available. A trusted controller
-transport process makes one request under a total deadline and byte cap, without retries
-or redirects. Configuration, usage and worst-case reservations are persisted separately
-from sandbox evidence. Credentials remain in that controller boundary. The approval
-ledger survives reloads; failures retain reserved capacity.
+**Sales worker** (`backend/app/sales_worker.py` → `sales/agent.py`): a trusted
+subprocess per prospect that fetches pages, builds the brief, applies the demonstration
+rule, runs the sandbox through the existing execution controller, drafts, and saves
+progress after every stage. A restarted API marks abandoned jobs failed without rerunning.
 
-`generation/workflow.py` builds a prompt from the extraction contract and one synthetic
-development input, then requests source. Each script runs through the existing Docker
-controller against up to three fixed documents, including one held-out input. Expected
-answers are loaded only for local deterministic validation. One eligible failure can
-request a corrected script, evaluated again from the first case. Feedback contains the
-prior script and a generic failure code; no additional document or expected answer is
-sent. Any second failure, unsafe artifact, containment/infrastructure failure or cleanup
-failure terminates the workflow. Limits and validators are controller code, not model
-parameters. No provider-returned Python executes on the host.
+**Retrieval** (`sales/retrieval.py`): hostname-only URLs over http/https on default ports;
+all resolved addresses must be globally routable (private, loopback, link-local,
+multicast, reserved, unspecified, IPv4-mapped and 6to4/Teredo forms are refused, and one
+bad answer blocks the host); the TCP connection is pinned to the validated address with
+TLS verification against the hostname; at most three redirects, each re-validated; 512 KiB
+per page, HTML/text only, no compressed bodies, per-page and total deadlines; at most four
+same-site pages chosen by informational path hints. Pages are untrusted data.
 
-Workflow records and per-attempt generation receipts live under `.local/workflows/`.
-Execution record v2 links each task to its workflow/attempt and labels deterministic
-fixtures, offline provider fixtures and live Vultr-generated code distinctly. Recovery
-marks unfinished workflows/requests abandoned without repeating requests or refunding
-budgets. [Inference configuration and authorization](inference.md) documents the exact
-plan needed before live requests. Current observed results use only offline responses;
-there is no evidence of live inference quality or Vultr deployment yet.
+**Evidence** (`sales/evidence.py`): sources numbered in fetch order; claims are verbatim
+sentences ranked by document-handling and manual-work terms; company summary from the
+description or first descriptive sentence; fixed unknowns list; the demonstration decision
+is a controller rule over cited claims (`run`, `skip_irrelevant`,
+`skip_insufficient_evidence`). A retrieval failure yields the insufficient-evidence path.
 
-## Product
+**Contracts** (`sales/contracts.py`): separate validators for executable Python source,
+the research brief JSON and the outreach JSON. The research contract requires every
+source id to be a fetched source and every excerpt to be verbatim text from it, accepts a
+claim's restatement only when it is built from its own quotation's words and numbers
+(`text_kind: grounded_restatement`, or `verbatim`), keeps the company summary as a
+labelled `model_summary` interpretation, and refuses quantities in the summary,
+hypothesis, unknowns or relevance reason that no quotation supports. The outreach
+contract allows only known claim ids; a quantity in a paragraph must appear, counting the
+same thing, in an excerpt that paragraph cites, the offering or a verified demonstration
+summary; savings language, named greetings and demonstration mentions without a verified
+result are refused. Records carry `verification: verbatim_quotation` on quotations and
+`text_kind` on interpretations so the UI never presents a restatement as a verified fact.
+Rejections carry a bounded diagnostic (stage, field path, expected/observed types, head
+classification, quantity kind and attribution) and never the rejected text. These checks
+are lexical and attributional; they do not establish truth.
 
-A technical seller enters an offer and a small list of company websites. Research yields
-dated facts, an explicitly labelled fit hypothesis and unresolved questions. A supported
-use case can lead to a bounded document-extraction demonstration using permitted public
-or synthetic input. The final package includes sources, executed code, outputs, check
-results, limitations and an editable unsent introduction.
+**Provider** (`generation/provider.py`): one shared bounded transport, usage accounting
+and pessimistic reservations for all contracts; `complete()` dispatches one request and
+hands the assistant content to exactly one contract. The documented response `model`
+echo is recorded rather than rejected; `finish_reason`, reasoning presence and
+`completion_tokens_details.reasoning_tokens` are recorded. A replay provider serves
+previously accepted live responses for byte-identical requests without a charge.
 
-The workspace will show prospects, research/demo/outreach tabs, an evidence viewer and
-actual job progress. Failure to retrieve a source is not evidence of poor prospect fit.
-No fabricated qualification scores, contact details, benchmarks or savings.
+**Drafting** (`sales/drafting.py`): controller-owned greeting, sign-off placeholders and
+footnotes; a template draft in rule-based mode; prompts and rendering for live mode. A
+failed demonstration is described as left out; a skipped one is not mentioned.
 
-## Control and execution
+**Execution** (`execution/`): unchanged disposable Docker sandbox, limits, strict-JSON
+artifact validation against the expected answer as canonical JSON values, and cleanup
+verification, now also used for the demonstration step.
 
-The API authenticates users and owns access to saved jobs. A worker controller owns
-policy, permitted tools, spend limits, state transitions and retries. Model calls use
-Vultr Serverless Inference. Models cannot authorize new tools or budget increases.
+## Trust boundaries
 
-The controller sends constrained work to a dedicated execution service. Sandboxes run
-browser or generated-code tasks and return bounded artifacts. Credentials stay outside
-those environments. Screenshot review uses a compatible Vultr model; deterministic checks
-validate schemas and required output behavior independently of the model's self-report.
+- The controller (API, worker, CLI) owns policy, quotas, budgets, credentials and records.
+  Models propose; deterministic code decides. Page text and model output never authorize
+  tools, spending or sends; there are no sends.
+- The sales worker receives the inference credential only when the operator configures
+  live mode; the Docker task environment never does (`env -i` allowlist).
+- Only the fixture extractor and labelled synthetic documents enter the demonstration
+  sandbox. Prospect pages never do.
+- Review binds to the draft hash; an edit creates a new version and clears the review.
 
-Start with serial execution. Persist state before dispatch, make retries idempotent and
-recover abandoned jobs without silently repeating external actions. Store evidence and
-artifacts with their source, capture time, input versions and code revision.
+## Deployment
 
-## Intended deployment
+A single Ubuntu VM on Vultr runs the API, controller, retrieval and Docker daemon under a
+non-root controller user, bound to loopback; access is through an SSH tunnel. No public
+ingress, HTTPS, domain or inference credential is deployed. See [infra/README.md](../infra/README.md).
 
-Separate Vultr control and runner VMs. PostgreSQL and artifact storage stay in the Vultr
-architecture; choose local volumes versus managed services after measuring requirements.
-Model API credentials belong only to the controller. The public demo permits bounded
-sample jobs and requires quotas/access checks before expensive work.
+## Out of scope
 
-## Initial scope boundary
-
-One demonstration family, a small prospect set, saved evidence and exportable drafts.
-Prospect discovery at scale, CRM integrations, mailbox connections and automatic sending
-are later decisions. Publishing the repository does not authorize those operations.
+No CRM, Slack, mailbox connection, bulk lead discovery, autonomous sending, browser
+automation, paid search, new cloud services or generic agent framework. Only one
+demonstration family exists; other offerings get research and a draft only.

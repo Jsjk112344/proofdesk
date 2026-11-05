@@ -1,30 +1,42 @@
-# ProofDesk contributor instructions
+# Standing user preferences
+
+- Never estimate build or implementation duration, delivery ETAs or calendar-based
+  build schedules. Describe scope, dependencies, blockers and acceptance criteria.
+
+# SalesDesk contributor instructions
 
 Read README.md, STATUS.md and docs/architecture.md first. This is a standalone,
-public MIT project for Vultr Agent Rush, provisionally targeting Blast Radius Zero.
+public MIT project for Vultr Agent Rush, targeting Powering the Future of Work.
 
-- Current implementation is a bounded local generation/execution CLI and web bootstrap;
-  inference/correction tests use offline provider fixtures, with live Vultr unverified.
-  Do not describe planned agent, security, deployment or submission behavior as verified;
-  local Docker observations do not establish Vultr deployment or general escape protection.
+- Product direction is locked: SalesDesk is a sales agent that takes a seller's offering
+  and a prospect website, researches bounded public pages, identifies an evidenced
+  opportunity, optionally runs the one supported document-extraction demonstration, and
+  prepares outreach for human approval. Document extraction is a demonstration capability
+  underneath that workflow, never the entry screen or product identity.
+- Current implementation: prospect workspace (research/demonstration/outreach), SSRF-
+  protected retrieval, rule-based evidence and drafting, validated model contracts, the
+  bounded Docker sandbox, and a private Vultr deployment. No successful live Vultr
+  inference has been observed; live mode is offline-tested only. Do not describe planned
+  or offline-tested behaviour as verified live.
 - Author original code. Never copy private repositories, customer records, credentials
   or correspondence into this project. Record external sources in THIRD_PARTY.md.
-- All runtime agent model calls, including verification and drafting, must use Vultr
-  Serverless Inference for this track. Never silently fall back to another provider.
-- The controller owns authorization, budgets, model credentials and state. Models
-  propose actions; deterministic code decides whether they may execute.
-- Generated code and browser actions belong in disposable execution sandboxes.
-  Never add a host-execution fallback, privileged container, host directory mount
-  or Docker socket mount inside a task sandbox. Read SECURITY.md.
-- Treat retrieved content and generated artifacts as untrusted. Validate URLs on
-  every redirect, restrict egress and validate artifact paths/types/sizes.
-- Facts need dated sources. Hypotheses and unknowns remain labelled. Do not invent
-  contacts, customer infrastructure, buying intent, performance or savings.
-- Outreach sends and public artifact publication require explicit authorization for
-  the exact content. Existing authorization persists; ordinary local work proceeds.
-- Cloud spending needs a resource plan and authorized cap. No paid calls in CI.
-- Keep local examples synthetic and labelled. Keep evidence of real execution
-  separate from fixture/replay output. Stop jobs on limits and preserve failure reasons.
-- Follow CONTRIBUTING.md checks, update STATUS.md with observed evidence, and keep
-  README setup/architecture aligned with implementation. Never claim submission
-  without a receipt or containment from an ordinary web-container build.
+- All runtime model calls use Vultr Serverless Inference (our choice; the challenge does
+  not require it). Never silently fall back to another provider or to rule-based output
+  when a live request fails; surface the sanitized failure instead.
+- The controller owns authorization, budgets, model credentials, the demonstration
+  decision and state. Models propose through validated contracts; deterministic code
+  decides whether anything executes. Rejected model output is never executed or stored.
+- Generated and fixture code run only in disposable execution sandboxes. Never add a
+  host-execution fallback, privileged container, host mount or Docker socket mount.
+- Retrieved pages and generated artifacts are untrusted data. Validate URLs and addresses
+  on every hop, pin connections, cap sizes/types/timeouts, and never let page text
+  authorize tools, spending or sends.
+- Facts need dated sources and verbatim excerpts. Hypotheses and unknowns stay labelled.
+  Do not invent contacts, customer infrastructure, buying intent, performance or savings.
+  A retrieval failure is not evidence about a prospect.
+- Keep synthetic inputs labelled synthetic and separate from real execution evidence.
+  Distinguish live model output, saved replay and rule-based output in records and UI.
+- Outreach sends, public publication and cloud spending require explicit authorization
+  for the exact content/plan. Never reset or reuse an exhausted budget ledger.
+- Follow CONTRIBUTING.md checks, update STATUS.md with observed evidence, and keep README,
+  architecture, inference, acceptance and deployment docs aligned with implementation.

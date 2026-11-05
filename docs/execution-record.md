@@ -88,3 +88,20 @@ the ledger, without automatic resend. See [inference configuration](inference.md
 Offline receipts and generated-response fixture execution are real local orchestration
 and Docker observations, with synthetic usage and canned source. They do not establish
 model reasoning, live Vultr compatibility/billing, deployment or general escape protection.
+
+## Generation receipt v2 and prospect records (2026-11-05)
+
+`generation.json` now has `schema_version: 2` and names its `contract` (`python_source`,
+`research` or `outreach`). Added fields: `request_options` (`reasoning`, `response_format`),
+`response_keys`, `response_model`, `model_echo_matches`, `finish_reason`,
+`reasoning_present`, `reasoning_chars`, `reasoning_tokens`, `content_chars`,
+`content_head` and, on rejection, `diagnostic` (`stage`, `field`, `expected`, `observed`
+and bounded counts). `usage_kind` is `synthetic`, `provider_reported` or
+`replayed_provider_usage`. Rejected content is never saved.
+
+`.local/prospects/<uuid>/record.json` (schema version 1) stores offering, target, owner
+hash, saved events, sources (without text; text under `sources/sN.txt`), brief,
+demonstration decision/result with the linked execution id, draft versions with hashes,
+review state and sanitized model diagnostics. Live-mode receipts live under
+`generation/<contract>/`. Prospect records link to ordinary task execution records; the
+JSON Schema in this directory still describes task records only.

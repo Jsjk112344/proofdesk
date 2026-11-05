@@ -2,135 +2,105 @@
 
 ## Current status
 
-The HTTP application still exposes only a health endpoint and development screen.
-A separate local CLI executes deterministic fixtures and bounded provider-returned Python
-in Docker. A controller-side Vultr adapter is implemented; only offline response fixtures
-have been exercised. It has no authentication, research tools, public execution endpoint
-or send integration.
-Observed local checks are recorded in [STATUS.md](STATUS.md). This is not a production
-deployment, microVM boundary, or proof of protection against every container escape.
+The HTTP application is a prospect workspace: it fetches a bounded set of public pages for
+a user-supplied website (or reads labelled synthetic sample pages), builds an evidence
+brief, decides whether the one supported demonstration applies, runs that demonstration
+in the existing disposable Docker sandbox, and prepares an unsent draft for review. It is
+privately installed on the owner's Vultr VM, listening on loopback. Live model mode exists
+behind validated contracts but no successful live inference has been observed; the web
+deployment runs in rule-based mode with no credential. There are no uploads, arbitrary
+code, sends, CRM or mailbox integrations. Anonymous session capabilities scope records;
+user-account authentication is not implemented. Observed checks are in [STATUS.md](STATUS.md).
+This is not a production deployment or proof against every container escape.
 
-## Implemented local boundaries
+## Retrieval boundary (SSRF)
 
-- The controller owns task selection, limits, expected results, validation and records.
-  The CLI offers fixed fixtures/probes and a bounded extraction generator. Every task
-  uses a fresh named container and a digest-pinned official Python image, without pulls
-  at dispatch. Images declaring volumes are refused.
-- UID/GID 65532, all Linux capabilities dropped, `no-new-privileges`, Docker's default
-  seccomp, private PID/IPC/cgroup namespaces, read-only root filesystem, no privileged
-  mode, devices, bind mounts, volumes, Docker socket, credentials or host networking.
-  The trusted Docker daemon and controller are privileged parts of the boundary.
-- `--network=none`: loopback only. There is no browser, URL fetch or redirect handling
-  yet. This is not a general network proxy or SSRF implementation.
-- Processes run through `env -i` with only fixed PATH, LANG and nonexistent HOME.
-  No `.env`, controller environment, API key or cloud secret is passed to task processes.
-- Externally configured limits: 0.5 CPU bandwidth, 128 MiB RAM with no swap, 32 processes,
-  8 MiB `/work`, 1 MiB `/tmp`, 1 MiB shared memory, 1 MiB maximum regular-file size,
-  64 file descriptors and no core dumps. Writable task storage is tmpfs; root writes are
-  denied. tmpfs uses `noexec,nosuid,nodev`; Python can still interpret source files.
-- Before accepting task code, the runner requires Linux/cgroup v2/seccomp, inspects the
-  container policy, and verifies UID, environment, CPU/memory/swap/PID kernel values and
-  tmpfs capacities inside the container. An unsupported limit fails closed.
-- A controller monotonic deadline covers task dispatch and artifact collection: five
-  seconds. At expiry the Docker client is killed and the finalizer forcibly removes the
-  whole container, including descendants. Setup Docker commands have 15-second bounds;
-  cleanup uses up to two 10-second calls. Termination depends on a responsive daemon.
-- stdout/stderr are bounded together at 16 KiB; archive transport is bounded at 64 KiB.
-  Docker logging is disabled so task output cannot create unbounded daemon log files.
-  A limit breach rejects the task and initiates removal, never truncation-as-success.
-- Artifact tar streams are never extracted onto the host. The only accepted file path
-  is `out/result.json`, a nonempty regular file of at most 16 KiB. Other paths, symlinks,
-  hardlinks, devices, FIFOs, sparse files, duplicates and malformed data are rejected.
-  JSON rejects duplicate keys/nonfinite constants and must exactly match the controller's
-  expected structure, types and values. Exit zero alone never means success.
-- Only validated bytes are written to the fixed host filename `result.json`. The archive
-  is untrusted and collection is not an atomic filesystem snapshot: descendants may
-  still run while tar collects. Validation and saved-byte identity are the boundary.
-- Serial execution uses a checkout lock. SIGINT/SIGTERM finalize records and cleanup;
-  repeated signals are ignored during finalization. Success requires verified container
-  absence. Explicit `cleanup` reconciles SIGKILL/crash leftovers using a checkout-specific
-  label, never a global Docker prune. New tasks refuse existing labelled containers.
-- Task input/source has a 32 KiB per-field bound checked before content persistence.
-  Rejected tasks save only metadata, no content/hash, task logs, prior evidence or exit
-  code. They do not dispatch or consult reusable runner state. `cleanup.reason=not_started`
-  denotes a task that never started, not a Docker absence observation.
+- URLs must be `http`/`https` with a hostname (no userinfo, no IP literals, default ports
+  only, no `localhost`, `.local`, `.internal`, `.arpa` and similar suffixes, ≤ 2,048 chars).
+- Every address returned by DNS must be globally routable. Private, loopback, link-local,
+  multicast, reserved, unspecified, IPv4-mapped IPv6, 6to4 and Teredo addresses are refused,
+  and a single bad answer blocks the host (no rebinding through mixed answers).
+- The TCP connection is opened to the exact validated address; TLS verifies the hostname.
+  Each redirect (at most three) is re-validated and re-resolved. Off-site links are never
+  followed; discovered pages must be same-site.
+- Per page: 512 KiB body cap (declared and read), HTML/text content types only, no
+  compressed bodies, 10-second socket timeout; 45 seconds per prospect; at most four pages.
+- Page text is stored as evidence and treated as data. It never becomes an instruction,
+  tool authorization, budget change or send. A fetch failure or policy refusal is recorded
+  on the source and leads to the insufficient-evidence path, never to a verdict.
+- No authenticated scraping, browser automation, paid search or caching across users.
 
-## Inference and correction boundary
+## Workspace boundary
 
-- Only the controller's fixed `https://api.vultrinference.com/v1/chat/completions` endpoint
-  is used live, with TLS verification. Endpoint overrides, redirects and compressed
-  responses are refused. The HTTP transport does not consume proxy environment settings.
-  No SDK, hidden retries, tool invocation or alternate-provider fallback is implemented.
-- The credential is read only by the controller/its trusted transport process, never
-  put in request JSON, records, arguments, prompts or sandbox environment. The transport
-  process handles HTTPS only; generated Python still runs exclusively inside Docker.
-- An explicit model configuration binds total request deadline, input-token allowance,
-  completion-token cap (including reasoning) and response bytes. A killable transport
-  process covers DNS/TLS/headers/body under the total deadline, then terminates/joins.
-  Requests use nonstreaming responses; malformed, truncated, oversized, tool-call and
-  model-mismatched results fail closed. Missing/invalid usage stops execution. Integer
-  reported usage is retained even if it violates the configured bound.
-- Input allowance uses serialized UTF-8 request bytes plus 256 framing tokens as a
-  conservative estimate, not a model tokenizer implementation. Verify this assumption
-  against the selected model before approving live work. Output tokens are explicitly
-  capped in the API request. Provider-side enforcement/billing remains unverified.
-- A controller-owned exact approval plan and positive cap are required in addition to
-  a key. Each dispatch reserves the full input/output token and priced cost allowance
-  before sending. Failed, timed-out and uncertain requests never release it. A durable
-  approval ledger under `.local/model-budgets/` survives CLI restarts; corrupted or
-  exhausted ledgers fail closed. It is local bookkeeping, not an account-wide billing
-  control. Do not delete it to retry an approval. No paid calls occur in CI.
-- At most two model requests and two script attempts per workflow. Deterministic
-  validation owns expected answers. Only nonzero exits, missing/malformed JSON and
-  schema/content mismatches can request the one correction. Unsafe artifacts, resource
-  violations, policy/infrastructure failures and unverified cleanup are terminal.
-  No later document or request runs after a cleanup failure.
-- Only the development document enters generation prompts. Additional evaluation inputs
-  and all expected answers stay in the controller. Correction feedback includes source
-  and a generic failure reason, never logs or held-out input/output. Synthetic prompt
-  data is still untrusted; instructions inside it grant no authority.
-- Generation receipts, execution records and provenance distinguish offline canned
-  scripts from Vultr-generated scripts. A hard crash requires explicit cleanup; pending
-  requests/workflows become abandoned failures and are never automatically resent.
+- Prospect creation validates URL syntax and host policy in the API; address checks happen
+  in the worker. Offering text is bounded (20–1,500 chars); bodies are capped at 16 KiB.
+- Random 256-bit session cookies are HttpOnly and SameSite Strict; owners are stored as
+  hashes; another session receives 404 for a prospect, draft or review.
+- Same-origin JSON/custom-header checks, idempotent creation and edits by request id, one
+  active prospect job, five per session and twenty per checkout by default.
+- Review binds to the draft's SHA-256; an edit creates a new version, records the previous
+  one and clears the review. Stale reviews and edits are refused with
+  `draft_version_conflict`. Nothing is sent by SalesDesk.
+- The API launches a trusted worker subprocess with an allowlisted environment. The
+  inference credential is passed only when the operator configures live mode; the Docker
+  task environment never receives it (`env -i` allowlist, unchanged).
+- Only the fixture extractor and labelled synthetic documents enter the sandbox. Prospect
+  pages never do. Results are shown only when the saved artifact hash matches.
+- Worker loss is terminal; restart marks abandoned prospects failed without rerunning.
+  CSP forbids inline scripts and foreign resources; task text is escaped by React.
+
+## Model boundary
+
+- Three separate contracts validate model content: executable source, research JSON and
+  outreach JSON. Research citations must name fetched sources and quote verbatim text; a
+  claim's restatement may use only words and numbers from its own quotation, so an
+  unrelated assertion cannot be accepted because its quotation exists; summaries and the
+  hypothesis are kept as labelled interpretations and may not introduce quantities absent
+  from the quotations. Outreach may cite only known claims, may use a quantity (numeral,
+  written number, quantifier, percentage or amount) only when the same number counts the
+  same thing in an excerpt the paragraph cites, the offering or a verified demonstration,
+  cannot mention a demonstration unless verified, use savings or guarantee language, or
+  address a named person. These are lexical and attributional checks against captured
+  evidence; they do not establish truth. Fabricated citations stop the job.
+- Rejections record only a bounded diagnostic (stage, field path, expected/observed types,
+  head classification, counts). Rejected content is never stored, executed or shown.
+- The controller decides the demonstration from validated claims; the model's relevance
+  opinion is recorded, not obeyed. Prompts wrap offering and page text as data.
+- Requests use reasoning disabled and JSON-object output for the sales contracts, under a
+  plan-bound deadline, token caps and cost ceiling. No retries, no fallback provider.
+- Live spending requires an exact owner-approved plan and a controller credential. Each
+  request reserves its worst case in a durable local ledger before dispatch; failures never
+  refund; the exhausted earlier ledger is untouched. Replay serves only previously accepted
+  responses for byte-identical requests.
+
+## Execution boundary (unchanged)
+
+Fresh named container per task on a digest-pinned image; UID 65532, all capabilities
+dropped, `no-new-privileges`, default seccomp, private PID/IPC/cgroup namespaces,
+read-only root, `--network=none`, no mounts, devices, Docker socket or credentials;
+0.5 CPU, 128 MiB RAM without swap, 32 processes, bounded tmpfs, 16 KiB logs, 64 KiB
+archive, five-second deadline with forced removal; kernel limits read back before task
+code; only `out/result.json` ≤ 16 KiB accepted, parsed as strict JSON and compared with the
+expected answer as canonical JSON values (not original bytes); verified container absence
+required for success; explicit crash recovery.
+See [docs/execution-record.md](docs/execution-record.md).
 
 ## Local limitations
 
-The controller, checkout, Docker client/daemon, pinned image and host kernel are trusted.
-Ordinary Docker shares the daemon host kernel. The macOS observations used a Colima Linux
-VM and do not establish equivalent behavior on Vultr or another runtime. CPU quota was
-read back from cgroup v2; this is not a performance benchmark. Synthetic network and file
-probes are narrow observations, not exhaustive escape testing.
-
-SIGKILL, power loss or an unavailable daemon can prevent immediate cleanup. The idle
-container process sleeps for 60 seconds as a convenience, not a security watchdog.
-Restore the same Docker daemon/context and run recovery; retain the checkout path because
-labels derive from it. Recovery is not a background service. Unexpected internal failures save a stable
-reason; bounded diagnostics can be inspected locally. Logs and records remain untrusted
-data and must not be rendered as HTML or executed. Local record retention has no total
-quota yet; the operator owns `.local/` disk usage. No private inputs are supported.
-
-## Future trust boundaries
-
-- Controller: credentials, model requests, user/task authorization, budgets and persistence.
-- Runner: restricted execution service with approved images and bounded task parameters.
-- Task environments: disposable, unprivileged, no credentials or host/socket mounts.
-- Browser network: restricted public egress, DNS/IP and redirect checks, no access to
-  private networks or cloud metadata. Browser contexts alone are not the isolation boundary.
-- Code network: disabled unless a specifically approved operation needs a constrained path.
-- Artifacts: validate paths, symlinks, size, type and content before copying or rendering.
-  Generated HTML must not execute in the authenticated application's origin.
-
-CPU, memory, process count, wall time and output quotas must be enforced externally to
-the model. A finalizer and crash-recovery cleanup must remove task environments.
-Model output never authorizes spending, privilege expansion or outbound communication.
-Approval must bind to exact message/artifact versions. Changes invalidate that approval.
-
-Isolation does not establish model-provider data privacy. Minimize what is transmitted
-and document retention and inference data handling before accepting private inputs.
+The controller, checkout, Docker daemon, pinned image and host kernel are trusted. The
+Docker group on the VM has host-level authority and belongs only to the controller user.
+Observations come from ordinary Docker on macOS (Colima) and the Vultr VM; they are not a
+general escape guarantee and SalesDesk does not claim sandbox escape protection. Retrieval
+protects against private-network access from the controller host, not against a public
+site serving misleading content; such content is quoted verbatim with its source so a
+reviewer can judge it. Contract checks compare model wording with captured evidence; they
+cannot detect a grounded restatement whose word order or negation changes the meaning, a
+quantity reused for a different subject that shares a head word, or promises phrased
+outside the refused word list. Every draft is presented for human review for that reason.
+Local records have no aggregate retention quota. Hard crashes require explicit recovery.
 
 ## Reporting
 
 Use GitHub private vulnerability reporting for this repository when enabled. Avoid
 posting credentials, exploit payloads containing private data, or private records in
-public issues. If private reporting is unavailable, open an issue requesting a private
-contact route without vulnerability details.
+public issues.

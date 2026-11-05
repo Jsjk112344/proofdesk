@@ -1,164 +1,104 @@
-# ProofDesk
+# SalesDesk
 
-[![Scaffold checks](https://github.com/Jsjk112344/proofdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Jsjk112344/proofdesk/actions/workflows/ci.yml)
+Formerly ProofDesk. The app and repository are now SalesDesk. Existing Vultr resource
+names, the local checkout path, service/install paths, `PROOFDESK_*` settings, session
+cookies, request headers and execution labels retain their identifiers for compatibility.
+Historical records and authorization references remain unchanged.
 
-A proposed sales-engineering agent that researches prospects, executes small technical
-demonstrations, and prepares outreach backed by inspectable evidence.
+[![Scaffold checks](https://github.com/Jsjk112344/salesdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Jsjk112344/salesdesk/actions/workflows/ci.yml)
 
-**Status: bounded local generation/execution workflow plus application scaffold.** A CLI
-runs synthetic Python tasks in disposable Docker containers and validates artifacts.
-A controller-side Vultr adapter and one-correction workflow are implemented and tested
-with offline provider fixtures. Live inference and model quality remain unverified;
-research, outreach and Vultr deployment are not implemented. This is not a complete entry.
-See [STATUS.md](STATUS.md).
+A sales agent for technical sellers. Give it your offering and a prospect's website: it
+researches a bounded set of public pages, separates dated facts from a labelled hypothesis,
+decides whether its one supported technical demonstration is relevant, runs that
+demonstration in a disposable sandbox when it is, and prepares an editable outreach draft
+for a person to review. It never sends anything.
+
+**Status: prospect workspace implemented and privately deployed on the owner's Vultr VM.**
+The research → decision → demonstration → draft journey works end to end with real page
+retrieval and real Docker execution in **rule-based mode (no model call)**. Live model mode
+is implemented and tested offline against validated contracts, but **no successful live
+Vultr inference has been observed yet**: the two earlier code-generation requests failed
+validation and the approved budget is exhausted. A new live-validation plan is prepared and
+awaits authorization. See [STATUS.md](STATUS.md). This is not a complete hackathon entry.
 
 ## Vultr Agent Rush
 
-Target: **Blast Radius Zero**, November 3–8, 2026.
-The [official event](https://lablab.ai/ai-hackathons/vultr-hackathon) requires a public
-repository, a Vultr-hosted web app/backend, isolated execution, Vultr agent inference,
-and a video demonstrating containment. Submission is through LabLab.
+Selected challenge: **Powering the Future of Work**, November 3–8, 2026 (Online build
+phase; on-site showcase November 8). The [official event](https://lablab.ai/ai-hackathons/vultr-hackathon)
+asks for a realistic enterprise workflow with a Vultr VM backend and web application, a
+public repository, demo URL and video. For this challenge Vultr Serverless Inference and
+sandboxing are **optional**; SalesDesk uses Vultr inference and sandboxed execution as its
+own engineering choices, not because the challenge requires them. Submission is through
+LabLab; nothing has been submitted.
 
 Original project code is [MIT licensed](LICENSE). No proprietary application code or
 private customer data is included. [Provenance](docs/provenance.md) records the baseline;
-[THIRD_PARTY.md](THIRD_PARTY.md) covers dependencies.
+[THIRD_PARTY.md](THIRD_PARTY.md) covers dependencies and references.
 
-## Product scope
+## What a salesperson can do
 
-A salesperson supplies an offer and a small prospect list. The planned workflow is:
+1. Enter **your offering** and a **prospect website**, or pick the clearly labelled
+   synthetic sample scenario.
+2. Read a short **prospect brief**: what the company demonstrably does, relevant facts quoted
+   verbatim with source URL and capture time, a proposed opportunity labelled as a
+   **hypothesis**, and the unknowns the pages do not establish.
+3. See the **demonstration decision**: the supported document-extraction demonstration runs
+   only when fetched pages cite document-handling work; otherwise it is skipped with the
+   reason. When it runs, the workspace shows the verified result, what it actually proves,
+   and the sandbox evidence.
+4. Review an **editable draft** grounded in the cited facts and the demonstration outcome.
+   Mark the exact version reviewed, copy it or download it as text. Editing creates a new
+   version and clears the review. SalesDesk does not send email or connect to a CRM.
 
-1. Research public sources and distinguish facts from hypotheses.
-2. Identify a relevant documented use case or report insufficient evidence.
-3. Build a bounded document-extraction demonstration with permitted example inputs.
-4. Execute it in isolation and validate the resulting artifacts.
-5. Prepare a sourced outreach draft and exact-version review package.
+### Supported demonstration scope
 
-The initial implementation will support one demonstration family. It will not imply
-knowledge of a prospect's private infrastructure or financial savings.
+The first demo is written for a technical seller offering **document-workflow automation**.
+SalesDesk can demonstrate exactly one capability live: structured extraction from
+semi-structured business documents, executed on labelled synthetic documents in a
+disposable sandbox and validated against an expected answer. For other offerings it still
+researches and drafts, but it does not pretend to demonstrate the product, and it never runs
+anything on a prospect's own files. Three synthetic prospect sites under
+[fixtures/prospects](fixtures/prospects/README.md) exercise the relevant, irrelevant and
+insufficient-evidence paths.
+
+### What the controller checks, and what it does not
+
+SalesDesk links research to captured sources, checks demonstration outputs against
+expected results, and presents outreach for human review. Each check is mechanical and
+bounded; none of them establishes that a statement is true. The reviewer does that.
+
+| Mechanism | What it establishes | Limitation |
+| --- | --- | --- |
+| Quotation check: every excerpt must be verbatim text of a fetched source with its URL and capture time | The quoted sentence really appears on that page | It does not establish that the page is accurate, or that an attached restatement means the same thing |
+| Restatement grounding: a model claim's text may use only words and numbers from its own quotation (light stemming), else the response is rejected | An unrelated assertion cannot ride on a genuine quotation | Lexical, not semantic: word order or negation could still shift meaning, so the UI shows the quotation as the fact and labels the restatement |
+| Quantity attribution: numerals, written numbers, quantifiers, percentages and amounts in model prose must appear in cited evidence, the offering or a verified demonstration counting the same thing | A number cannot be invented or moved to a different subject | "one", ordinals and vague words such as "many" are not treated as quantities; a wrong but same-headed reuse passes |
+| Savings and demonstration wording: savings/ROI/guarantee words and demonstration mentions are refused unless supported | The draft cannot promise outcomes or describe a demonstration that did not verify | Pattern-based; paraphrased promises outside the word list pass |
+| Hypothesis labelling and unknowns | The opportunity is shown as a hypothesis next to what the pages do not say | The hypothesis is an opinion, checked only for unsupported quantities |
+| Retrieval failure handling | A blocked or failed fetch is a limitation, never evidence about the prospect | None of the pages fetched may describe the company well |
+| Demonstration validation: the sandbox output is parsed as strict JSON and compared with the expected answer as canonical JSON values; container removal is verified | The extractor produced the expected values for a labelled synthetic document | Values, not original bytes, are compared; it says nothing about the prospect's documents |
+| Page text as data | Instruction-shaped sentences on a page change no decision, spend or send | Misleading page content is quoted verbatim for the reviewer to judge |
 
 ## Local setup
 
-Prerequisites: Python 3.12, [uv](https://docs.astral.sh/uv/), Node.js 24 and npm.
-No API key or cloud account is needed for this scaffold.
+Prerequisites: Python 3.12, [uv](https://docs.astral.sh/uv/), Node.js 24 and npm. Docker
+is required for the demonstration step. No API key or cloud account is needed for the
+rule-based workspace.
 
 ```bash
-git clone https://github.com/Jsjk112344/proofdesk.git
-cd proofdesk
+git clone https://github.com/Jsjk112344/salesdesk.git
+cd salesdesk
 uv sync --locked
 npm --prefix frontend ci
-```
-
-## Local execution
-
-Requires macOS/Linux, Python 3.12 and a trusted local Linux Docker daemon with cgroup v2
-and default seccomp enabled. The controller needs Docker access; tasks never receive it.
-Start Docker Desktop/Colima or Docker Engine, then run from the repository root:
-
-```bash
 docker info
 docker pull "$(cat infra/task-image.txt)"
-uv run python -m backend.app.execution run
 ```
 
-The pinned official Python image is pulled explicitly; task execution never pulls images
-or installs packages. No cloud resources, model calls or credentials are required.
-The [original synthetic document](fixtures/extraction/document.txt) and
-[deterministic script](fixtures/extraction/extract.py) produce
-[this exact expected JSON](fixtures/extraction/expected.json), including a 1,600-cent total.
-This demonstrates real local execution of fixture code, not generated code or model quality.
-
-The command prints a JSON summary and the path to `.local/executions/<id>/record.json`.
-Successful runs also save `result.json`. Records include input/script/expected hashes,
-revision and dirty-tree status, Docker image identity, pre-task kernel limits, exit code,
-failure reason, validated artifacts and verified container absence. Exact synthetic
-inputs are saved alongside the record. See the [record contract](docs/execution-record.md)
-and [JSON Schema](docs/execution-record.schema.json). Everything generated stays ignored
-under `.local/`; no database or public execution endpoint exists.
-
-Run the labelled fault-injection/containment probes:
-
-```bash
-uv run python -m backend.app.execution probe all
-uv run python -m backend.app.execution probe timeout
-uv run python -m backend.app.execution probe incorrect
-```
-
-`probe all` checks 15 cases, then runs a valid extraction again. A probe command returns
-zero when its **expected** outcome and cleanup checks pass; individual execution records
-still say `failed` for intentionally invalid tasks. Probes cover incorrect JSON, size and
-output quotas, unsafe files, timeout, nonzero exit, memory exhaustion, blocked network and
-host-file access, environment allowlisting, filesystem capacity and process count.
-Network probes attempt TCP connections to a documentation address and the link-local
-metadata address without sending application data. The host canary is synthetic.
-
-Ctrl-C and SIGTERM trigger cleanup and an `interrupted` record. After SIGKILL, a controller
-crash, or daemon failure, restore Docker and run:
-
-```bash
-uv run python -m backend.app.execution cleanup
-```
-
-Recovery removes only containers labelled for this checkout and reconciles unfinished
-records. A checkout lock prevents concurrent controllers; new work refuses to start if
-abandoned task containers remain. Keep the checkout at the same path until recovery.
-Missing Docker, missing image, unsupported limits and failed cleanup are explicit failures;
-there is no host execution fallback. See [actual boundaries and limitations](SECURITY.md).
-
-## Bounded generation and evaluation
-
-The same Docker prerequisites apply. These commands make **no model or paid requests**:
-
-```bash
-uv run python -m backend.app.execution generate --provider fake
-uv run python -m backend.app.execution generate --provider fake --fake-outcome correct-once
-uv run python -m backend.app.execution generate --provider fake --fake-outcome fail-twice
-```
-
-`fake` supplies original canned Python responses through the bounded provider protocol.
-The returned script actually runs in Docker against three varied synthetic documents.
-The original input is the generation example; the other documents, including the held-out
-case, stay outside prompts. No expected answers enter initial or correction prompts.
-The last command intentionally exits 1 after two rejected attempts. Each attempt and each
-execution has its own evidence. This measures orchestration, not live model quality or
-statistical generalization; see the [evaluation fixtures](fixtures/evaluation/README.md).
-
-Only nonzero task exits, missing/malformed JSON artifacts and content/schema mismatches
-permit one correction. Correction feedback contains the previous script and a stable
-failure code, without logs, observed output, held-out input or expected values. A second
-failure, provider error, policy violation, quota/deadline or cleanup failure stops the
-workflow. Models cannot change the controller's limits or validation.
-
-The summary points to `.local/workflows/<id>/record.json`. Each `attempt-N/` stores a
-generation receipt, bounded request JSON and accepted source; task records stay under
-`.local/executions/`. Record v2 distinguishes deterministic fixtures, offline provider
-fixtures and Vultr-generated scripts. Oversized task input/source is rejected before
-contents are saved: only bounded metadata remains, with empty evidence and no exit code.
-
-Live inference uses only Vultr's fixed HTTPS chat-completions endpoint. No live spending
-is currently authorized. A key alone cannot enable requests. Before a live run, prepare
-and obtain approval of the [exact model/pricing plan](docs/inference.md), then supply its
-local approval file and a controller-only `VULTR_INFERENCE_API_KEY`:
-
-```bash
-uv run python -m backend.app.execution generate --provider vultr \
-  --authorization .local/approved-model-plan.json
-```
-
-There is no default live model and no automatic `.env` loading. The approval file binds
-the model, deadlines, response/token bounds, request count, prices and cost cap. The
-default plan bounds are two requests, 12,000 input plus 2,048 completion tokens each,
-30 seconds per request, 64 KiB response and 32 KiB source. Failed requests retain their
-full reservation; no SDK retries, redirects or provider fallback exist. A durable local
-approval ledger prevents reloading the same plan from resetting its allowance. Keep
-that ledger and checkout intact. Future live runs are separately labelled; none is
-claimed here. Provider compatibility, current prices and billing need live verification.
-
-## Development screen
+## Run the workspace
 
 Terminal 1, from the repository root:
 
 ```bash
-uv run uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000
+uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --workers 1
 ```
 
 Terminal 2:
@@ -167,10 +107,71 @@ Terminal 2:
 npm --prefix frontend run dev
 ```
 
-Open http://127.0.0.1:5173. The bootstrap screen checks `/api/health` through the
-Vite development proxy. API documentation is at http://127.0.0.1:8000/docs.
-The [environment example](.env.example) describes controller-only configuration. It is
-not loaded automatically; the web scaffold remains disconnected from execution/inference.
+Open http://127.0.0.1:5173. Build with `npm --prefix frontend run build` to serve the
+compiled app from http://127.0.0.1:8000 instead; restart the API after building. API
+documentation is at http://127.0.0.1:8000/docs.
+
+Research fetches up to four public pages per prospect over plain HTTPS/HTTP with SSRF
+protection: hostnames only, every resolved address must be globally routable, the
+connection is pinned to the validated address, each redirect is re-validated, and page
+count, size (512 KiB), timeout, and content type (HTML/text) are capped. There is no login,
+browser automation or paid search. The sample scenarios read synthetic pages from disk.
+
+The demonstration executes the labelled original fixture parser in a fresh Docker container
+through the existing execution controller; the result is parsed as strict JSON, compared
+with the expected answer as canonical JSON values, and the container's removal is verified. Anonymous session cookies scope prospect reads; one
+prospect job runs at a time, five per session and twenty total by default. Records persist
+under ignored `.local/prospects/` (`PROOFDESK_PROSPECT_STORE`), with the demonstration's
+task record under `.local/executions/`. Keep **one API worker**. The total prospect quota
+is `PROOFDESK_WEB_MAX_PROSPECTS` (default 20); live mode needs `PROOFDESK_SALES_LIVE_PLAN`
+plus the credential, as the table below describes. These variables are documented here
+because the session's permission policy refuses edits to `.env.example`.
+
+Generation modes are labelled throughout the UI and records:
+
+| Mode | When | What it means |
+| --- | --- | --- |
+| Rule-based, no model | Default | Claims are verbatim sentences matched by controller rules; the draft is a controller template. No model request. |
+| Live model | Operator sets `PROOFDESK_SALES_LIVE_PLAN` to an owner-approved plan and provides `VULTR_INFERENCE_API_KEY` to the API | The Vultr model proposes the brief and draft through validated JSON contracts; the controller still decides the demonstration. |
+| Saved replay | CLI `--provider replay` | A previously accepted live response is replayed for byte-identical requests. No request, no charge. |
+
+The extraction run endpoints (`/api/runs`) remain for the demonstration capability and
+existing records; they are not the product's entry point.
+
+## Operator CLI
+
+The same journey runs from a terminal and prints a JSON summary:
+
+```bash
+uv run python -m backend.app.sales run --sample harbor-vale-freight
+uv run python -m backend.app.sales run --url https://example.com/
+uv run python -m backend.app.sales cleanup
+```
+
+Live model mode requires an exact owner-approved plan and the controller credential; it
+makes at most one request per contract (research, outreach) with reasoning disabled and
+JSON-object output, no retries, and stops the prospect on any validation failure:
+
+```bash
+uv run --env-file .env python -m backend.app.sales run --sample harbor-vale-freight \
+  --provider vultr --authorization .local/approved-sales-plan.json
+```
+
+The bounded code-generation workflow from the earlier slice is unchanged:
+
+```bash
+uv run python -m backend.app.execution generate --provider fake
+uv run python -m backend.app.execution run
+uv run python -m backend.app.execution probe all
+uv run python -m backend.app.execution cleanup
+```
+
+Live inference uses only Vultr's fixed HTTPS chat-completions endpoint. The original
+two-request ledger is exhausted ($0.0040384 reserved under the $0.02 cap; both requests
+failed validation). A new, separate plan is proposed in [docs/inference.md](docs/inference.md)
+and no paid request is authorized until the owner approves it. Each plan binds model,
+deadlines, token and byte bounds, request count, rates and cost cap in a durable local
+ledger that reloading cannot reset.
 
 ## Checks
 
@@ -183,49 +184,45 @@ npm --prefix frontend run build
 python3 scripts/check_repository.py
 ```
 
-These check the scaffold, offline provider/workflow behavior, artifact validation and
-missing-Docker behavior. Four Docker test methods are skipped unless explicitly enabled.
-After pulling the image, run:
+The offline suite covers the SSRF policy with injected resolvers and connections, the
+research/outreach/source contracts and their sanitized diagnostics, reproduced live
+failure shapes, the full journey with a recording runner (relevant, irrelevant, sparse,
+blocked, hostile-page and failed-demonstration cases), live-mode validation with fixture
+responses, ownership, quotas, idempotency, draft versions and review, plus the earlier
+execution and generation checks. Five Docker test methods are skipped unless enabled:
 
 ```bash
 PROOFDESK_DOCKER_TESTS=1 uv run python -m unittest discover -s backend/tests -v
 ```
 
-This additionally exercises actual containers, all probes, generated-response fixtures,
-correction bounds, input-rejection reuse, SIGINT/SIGTERM, forced-controller crash recovery
-and a valid task after each interruption. The GitHub workflow runs the offline
-checks without credentials, Docker image pulls or paid services. Local Docker observations
-are not evidence of Vultr deployment, agent quality or protection against every escape.
+UI interaction checks run in a disposable, network-disabled browser container against a
+mocked API built from recording-runner journeys. They establish interaction behaviour only,
+not retrieval, execution or inference:
 
-## How Vultr will power ProofDesk
+```bash
+docker build -t proofdesk-ui-check - < infra/browser-test.Dockerfile
+uv run python -m scripts.check_browser
+```
 
-**Planned architecture, not deployed infrastructure:**
+Screenshots and the bounded report stay ignored under `.local/browser/`.
+
+## Architecture on Vultr
 
 ```mermaid
 flowchart TB
-  User[Browser] --> App[React and Python API on Vultr]
-  App --> Controller[Controller: job state, policy and budgets]
-  Controller <--> Inference[Vultr Serverless Inference]
-  Controller --> Runner[Restricted execution service on Vultr]
-  Runner --> Browser[Disposable Playwright sandbox]
-  Runner --> Code[Disposable Python sandbox]
-  Browser --> Validation[Artifact validation]
-  Code --> Validation
-  Validation --> Store[Evidence and results on Vultr]
+  User[Browser] --> App[React workspace and FastAPI on the Vultr VM]
+  App --> Controller[Controller: prospects, policy, budgets, records]
+  Controller --> Retrieval[Bounded public-page retrieval with SSRF checks]
+  Controller <--> Inference[Vultr Serverless Inference, validated contracts]
+  Controller --> Sandbox[Disposable Docker sandbox for the demonstration]
+  Sandbox --> Validation[Canonical-JSON artifact validation and cleanup check]
+  Validation --> Store[Prospect and execution records]
   Store --> App
 ```
 
-Cloud Compute will host the web app, API, controller and execution service. Serverless
-Inference is the only implemented live provider adapter and will provide every runtime
-agent model call through
-`https://api.vultrinference.com/v1`, including planning, code generation, review and
-outreach drafting. Model selection requires task-specific evaluation.
-
-The controller will retain credentials. Sandboxes will receive limited inputs, enforce
-resource/network limits, and be destroyed after tasks. Any model-dependent sample work
-will use controlled controller operations, never API keys inside the sandbox.
-PostgreSQL and artifact storage on Vultr are planned for saved work.
-
+The web app, API, controller, retrieval and sandbox run on one Vultr Cloud Compute VM;
+Serverless Inference is the only live model adapter. Credentials stay with the controller.
 See [architecture](docs/architecture.md), [security boundaries](SECURITY.md),
-[deployment plan](infra/README.md), [acceptance criteria](docs/acceptance.md), and the
-[submission checklist](docs/hackathon.md). Public demo, video and slides are pending.
+[private deployment](infra/README.md), [inference diagnostics and plan](docs/inference.md),
+[acceptance criteria](docs/acceptance.md), the [forward plan](docs/plan.md) and the
+[submission checklist](docs/hackathon.md).

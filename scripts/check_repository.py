@@ -1,5 +1,6 @@
 """Check tracked publication files without displaying possible secret values."""
 
+import argparse
 import re
 import subprocess
 from pathlib import Path
@@ -19,7 +20,11 @@ PRIVATE_PARTS = {".venv", "node_modules", ".local", "uploads", "artifacts"}
 
 
 def main() -> int:
-    tracked = subprocess.check_output(["git", "ls-files", "-z"], cwd=ROOT).split(b"\0")
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--worktree", action="store_true", help="Include intended untracked files")
+    args = parser.parse_args()
+    flags = ["--cached", "--others", "--exclude-standard"] if args.worktree else []
+    tracked = subprocess.check_output(["git", "ls-files", "-z", *flags], cwd=ROOT).split(b"\0")
     failures = []
     paths = [Path(item.decode()) for item in tracked if item]
     if not paths:
@@ -53,7 +58,7 @@ def main() -> int:
         print(failure)
     if failures:
         return 1
-    print(f"Checked {len(paths)} tracked files: publication patterns and local links passed.")
+    print(f"Checked {len(paths)} files: publication patterns and local links passed.")
     print("This bounded check is not a comprehensive secret or security audit.")
     return 0
 

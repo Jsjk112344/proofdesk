@@ -1,136 +1,140 @@
-# Bounded inference and a future live-run plan
+# Inference: contracts, diagnostics, observed outcomes and the next plan
 
-Implemented 2026-11-03: controller-side Vultr chat-completions adapter and bounded
-extraction workflow. Observed tests use offline canned responses only. No live model
-has been selected, no credentials are needed for offline work, and authorized spend is
-**$0**. The web API does not expose this workflow.
+Vultr Serverless Inference is SalesDesk's chosen live model adapter. It is an
+implementation choice; Powering the Future of Work does not require inference. No other
+provider is implemented and there is no fallback. Nothing in this document authorizes a
+paid request.
+
+## Separate validated contracts
+
+One bounded transport, usage accounting and budget ledger serve three contracts. Each
+request names its contract in the receipt and only that validator sees the content.
+
+| Contract | Used by | Request options | Accepts |
+| --- | --- | --- | --- |
+| `python_source` | CLI code-generation workflow | optional `reasoning` controls | Non-empty source without NUL bytes or a leading Markdown fence, ≤ 32 KiB; still runs only in the sandbox |
+| `research` | Prospect research step | `reasoning: {"enabled": false}`, `response_format: {"type": "json_object"}` | Brief JSON whose source ids are fetched sources and whose excerpts are verbatim page text; each claim's text must be a restatement built only from its own quotation's words and numbers (`interpretation_not_grounded` otherwise); summary, hypothesis, unknowns and relevance reason may not contain quantities absent from the quotations (`unsupported_quantity`) |
+| `outreach` | Prospect drafting step | same | Body paragraphs citing only known claim ids; a quantity (numeral, written number, quantifier, percentage, amount) must appear counting the same thing in an excerpt the paragraph cites, the offering or a verified demonstration (`unsupported_quantity` with `quantity_kind` and `attribution`); no savings language, named greetings or demo mentions without a verified demonstration |
+
+Sales prose never passes through the source validator and source never parses as sales
+JSON. In live mode the controller re-derives claim strength from the validated excerpts and
+applies its own demonstration rule; the model's `demo_relevance` is recorded, not obeyed.
+
+## Sanitized diagnostics
+
+Receipts (`generation.json`, schema version 2) record, for every request: `contract`,
+`request_options`, `http_status`, `response_bytes`, `response_sha256`, `response_keys`,
+`provider_response_id`, `response_model`, `model_echo_matches`, `finish_reason`,
+`reasoning_present`, `reasoning_chars`, `reasoning_tokens` (from
+`completion_tokens_details`), `content_chars`, `content_head`
+(`empty`, `markdown_fence`, `json_like`, `python_like` or `prose`), `usage`, `usage_kind`
+and, on rejection, a `diagnostic` with `stage` (`envelope`, `usage`, `choice`, `message`,
+`content`, `contract`), `field` path, `expected`, `observed` type or marker and bounded
+counts (for quantities: `quantity_kind` and `attribution`, either `no_matching_number` or
+`number_in_other_context`; for restatements: `ungrounded_lexemes`). Content, prompts and
+credentials are never written to a diagnostic. Known failure shapes are reproduced offline
+in `backend/tests/test_sales.py` (`DiagnosticTests`, `ContractTests`).
+
+## Documented protocol compatibility changes (2026-11-05)
+
+Checked against the [official chat-completion contract](https://api.vultrinference.com/docs/reference/create-chat-completion)
+and [reasoning concept](https://api.vultrinference.com/docs/concepts/reasoning):
+
+- The response `model` "may differ from request". The adapter now records the echo and
+  `model_echo_matches` instead of rejecting a mismatch as malformed. A non-string model is
+  still malformed.
+- Reasoning text arrives in `message.reasoning`; `completion_tokens` includes reasoning
+  tokens and `completion_tokens_details.reasoning_tokens` reports them. Both are recorded.
+  The documented way to disable thinking, `reasoning: {"enabled": false}`, is used for the
+  sales contracts; `effort` `minimal`/`low` with a bounded `max_tokens` remains allowed.
+- `response_format: {"type": "json_object"}` is a documented parameter and is used for the
+  JSON contracts. No other response-format shape is permitted.
+
+Validation was not weakened elsewhere: Markdown fences, tool calls, missing usage,
+inconsistent totals, non-`stop` finish reasons and oversize bodies still fail closed, and
+rejected content is never executed or stored.
+
+## Observed live outcomes — 2026-11-05 (code-generation workflow, before these changes)
+
+| Request | Workflow ID | Provider result | Reported usage | Execution |
+| --- | --- | --- | --- | --- |
+| Initial | `985e8177be3b44828a04507c6e00d57e` | HTTP 200, `provider_incomplete_response` | 360 input + 4,096 completion | None |
+| Separately approved follow-up | `6a7535b5c2714dfc948fc31d4b7e4fc0` | HTTP 200, `provider_malformed_response` | 348 input + 1,091 completion | None |
+
+The first response reached the whole 4,096-token completion cap with `finish_reason` other
+than `stop`; with the new receipt fields a repeat would also show whether reasoning tokens
+consumed the cap. The second response was rejected by the then-current validator, which
+did not retain content or a field-level diagnostic. **Its root cause remains unknown.** The
+documented model-echo behaviour above is one documented possibility among several
+(fence, empty content, tool call, usage shape) and has not been established as the cause.
+
+Ledger `95977722843a1e73f60b836ec4898f6400702edc8028f4bf4d15fb245736a8e6` records 2
+requests, 32,192 reserved tokens and **$0.0040384** reserved under the $0.02 cap; the
+usage-priced estimate is $0.0011082. It is exhausted, was not reset, deleted or reused,
+and is not a billing receipt.
+
+## Consolidated live-debug and evaluation proposal (awaiting authorization)
+
+This single proposal supersedes the four-request and sixteen-request files of 2026-11-05,
+which remain historical, unapproved proposals. Rates were re-read from the public catalog
+on 2026-11-05 (receipt `.local/live-preflight/catalog-receipt-2026-11-05-session3.json`,
+byte-identical to the earlier receipt): `qwen3.8-flash-next`, $0.10 / $0.20 per million
+input/output tokens, 262,144-token context, `reasoning` and `response_format` supported.
+
+| Setting | Proposed value |
+| --- | --- |
+| Model | `qwen3.8-flash-next` (no fallback, no other model) |
+| Per request | 60 s deadline, 16,000 input / 2,048 completion tokens (byte-based admission), 65,536-byte response, reasoning disabled, JSON-object output, temperature 0 |
+| Per-request worst case | 18,048 tokens, **$0.0020096** |
+| Batch 1: live debugging | Sample scenario `harbor-vale-freight`: research + outreach, with up to two further attempts of each contract after a diagnosed rejection; ≤ 6 requests, ceiling $0.015 |
+| Batches 2–4: usefulness evaluation | Three synthetic scenarios (6), public sites 1–3 (6), public sites 4–5 (4); 16 requests, ceilings $0.015 / $0.015 / $0.01 |
+| Envelope (aggregate) | **22 requests, 397,056 tokens, worst case $0.0442112, requested ceiling $0.05**, enforced across all batches by the envelope ledger |
+| Retries | None at transport or HTTP level; every attempt is one counted request; a rejected response stops that prospect |
+| Permitted adjustments without new authorization | Prompt wording; `reasoning` disabled or low/minimal with ≤ 1,024 tokens; `response_format` json_object/text; completion cap 1,024–4,096 and input allowance ≤ 16,000 within the same envelope |
+| Not permitted | Other models, non-zero temperature, provider fallback, resetting or deleting any ledger, plans that do not name the envelope, public live mode |
+
+Files (ignored, unapproved, `approval_reference` empty): `proposed-live-envelope-2026-11-05.json`
+and `proposed-batch-{1-live-debug,2-evaluation-a,3-evaluation-b,4-evaluation-c}-2026-11-05.json`
+under `.local/live-preflight/`. The owner approves by writing the same reference into the
+envelope block and into each batch file that is approved; unapproved batches stay empty and
+the controller refuses them. Until then live mode sends nothing: a missing plan or credential
+stops before dispatch with `live_plan_not_configured`, `missing_vultr_credentials` or
+`live_spending_not_authorized`.
+
+### Aggregate envelope enforcement
+
+A plan file may carry an `envelope` block (`reference`, `max_requests`, `max_total_tokens`,
+`ceiling_usd`). `Authorization.bind_budget` binds the envelope ledger
+(`.local/model-budgets/envelope-<identity>.json`) before the plan ledger; every reservation
+is checked and written against the envelope first under a file lock, then against the plan,
+so batching cannot exceed the owner's total and a plan with changed model settings reopens
+the same aggregate ledger with its counters intact. Failures never refund; a tampered or
+inconsistent envelope ledger stops with `model_envelope_ledger_invalid`; exhaustion stops with
+`model_envelope_exhausted` before any request is sent. Receipts and prospect records carry
+the envelope state next to the plan budget. The offline test
+`test_envelope_aggregates_batches_and_never_resets` covers two plans sharing an envelope, a
+third plan with different model settings, reopening, tampering and plan-file loading.
+
+After an approved run: preserve the prospect record, its `generation/*/generation.json`
+receipts, both ledgers and any sandbox evidence; label outputs `live_model`; never relabel
+rule-based or replayed output as live. A rejected response is a diagnostic result and leaves
+the Phase 2 milestone incomplete.
 
 ## Wire protocol and limits
 
-The only live endpoint is `https://api.vultrinference.com/v1/chat/completions`, with a
-controller-only bearer credential. The standard-library HTTPS transport performs one
-POST, verifies TLS, does not use environment proxies, never follows redirects, and has
-no SDK/automatic retries or fallback. A separate trusted controller process enforces the
-total request deadline, including DNS, TLS, headers and body, then terminates/joins it.
-It never executes returned source. Ending a client request does not prove provider-side
-cancellation or eliminate a charge.
+The only live endpoint is `https://api.vultrinference.com/v1/chat/completions` with a
+controller-only bearer credential. The standard-library HTTPS transport performs one POST,
+verifies TLS, ignores environment proxies, never follows redirects and has no SDK or
+automatic retries. A killable controller process enforces the total deadline including DNS,
+TLS, headers and body. `ModelConfig` bounds: deadline 1–60 s, input allowance 256–32,768,
+completion cap 1–4,096, response 1,024–131,072 bytes. A plan may hold up to six requests
+and 131,072 reserved tokens. Input admission uses serialized UTF-8 bytes plus 256 tokens
+as a pessimistic token estimate, not a tokenizer. Each request reserves its worst case
+before dispatch; failures never refund.
 
-`ModelConfig` requires an explicit model identifier. Defaults/bounds:
+## Official references
 
-| Setting | Default | Permitted range |
-| --- | --- | --- |
-| Total request deadline | 30 seconds | 1–60 seconds |
-| Input token allowance | 12,000 | 256–32,768 |
-| Completion token cap | 2,048 | 1–4,096 |
-| Response body cap | 65,536 bytes | 1,024–131,072 bytes |
-| Generated Python cap | 32,768 bytes | Fixed task-source limit |
-| Requests per workflow | At most 2 | Budget can reduce to 1 |
-| Script evaluation attempts | At most 2 | Second only after eligible failure |
-
-The input admission check conservatively requires serialized UTF-8 request size plus
-256 framing tokens to fit the input allowance. This is an estimate, not a tokenizer.
-Verify the chosen model's tokenizer/framing against this assumption before approving
-live requests. All input is synthetic text, with no media or provider tools.
-`max_completion_tokens` explicitly bounds reasoning plus visible completion; responses
-must finish with `stop`. Actual provider enforcement and billing have not been tested.
-
-A response must be bounded strict JSON with one assistant source-string choice, the
-requested model ID, no tool calls, a bounded response ID and integer usage counts.
-The controller rejects Markdown fences, empty/NUL source, overlong scripts, missing
-usage, inconsistent totals and reported token-limit breaches. It records valid integer
-usage even on a breach, and never executes that response. Unknown usage remains null;
-full reservations remain charged against the local allowance. Protocol-valid Python
-with a syntax/runtime error is evaluated in Docker, never compiled or executed on host.
-
-## Evaluation and correction
-
-Generation sees one synthetic development document and a generic extraction contract.
-The same source is evaluated in fresh Docker containers against three controller-owned
-cases. Additional documents and all expected answers stay outside model prompts.
-No validator results are accepted from model self-report. Public synthetic fixtures
-are not a statistically independent benchmark or evidence of live model quality.
-
-Only `task_nonzero_exit`, `artifact_schema_or_content_mismatch`, `malformed_artifact`
-and `missing_artifact` permit one correction. Feedback includes the prior script and
-stable failure code. It excludes logs, actual output, expected JSON and additional
-inputs. Every attempt starts evaluation from the first case. A second failure stops.
-Timeouts, quotas, unsafe artifacts, policy/infrastructure and cleanup failures stop
-immediately; no later document or model call runs. Fixture commands retain their behavior.
-
-## Before a paid request
-
-Prepare one exact plan for owner approval, using current official model availability
-and prices. This document is a template, not approval or a current price quotation.
-
-1. Choose one available text/code-capable Vultr model ID; confirm context capacity,
-   token accounting and `max_completion_tokens` support. Keep provider/model fallback off.
-2. Record dated official input and output USD-per-million rates, including reasoning,
-   cache assumptions, taxes/fees or subscription commitments if applicable. Use conservative
-   upper rates; do not rely on unredeemed credits or presumed free failures.
-3. Bind exact `ModelConfig`, maximum requests, total reserved tokens and positive cost
-   cap. With the default bounds, at most two requests reserve **28,096 tokens**:
-   24,000 input and 4,096 completion. There are no transport retries; the correction is
-   the second request. HTTP errors, timeouts and uncertain requests retain reservations.
-4. Compute the conservative API ceiling as
-   `2 * (12000 * input_rate + 2048 * output_rate) / 1000000` USD, rounded upward with
-   room for applicable billing terms. Any subscription/provisioning cost needs separate
-   authorization; this CLI provisions nothing. Decrease request/token counts if needed.
-5. Obtain only missing approval for that exact plan and cap. Save it locally with a
-   unique approval reference; keep the API key in the controller environment, outside
-   the file. Do not generate an approval reference on the owner's behalf.
-
-The local approval JSON must contain exactly these fields; the placeholders below are
-intentionally invalid and must be replaced only after pricing verification and approval:
-
-```json
-{
-  "config": {
-    "model": "REPLACE_WITH_VERIFIED_MODEL_ID",
-    "deadline_seconds": 30,
-    "max_input_tokens": 12000,
-    "max_output_tokens": 2048,
-    "max_response_bytes": 65536
-  },
-  "budget": {
-    "max_requests": 2,
-    "max_total_tokens": 28096,
-    "ceiling_usd": "REPLACE_WITH_APPROVED_CAP",
-    "input_usd_per_million": "REPLACE_WITH_VERIFIED_RATE",
-    "output_usd_per_million": "REPLACE_WITH_VERIFIED_RATE"
-  },
-  "approval_reference": "REPLACE_WITH_EXACT_OWNER_APPROVAL_REFERENCE",
-  "pricing_source": "REPLACE_WITH_OFFICIAL_PRICING_URL",
-  "pricing_checked_at": "YYYY-MM-DD"
-}
-```
-
-All config/budget fields are required. Decimal prices/cap must be finite and positive;
-requests cannot exceed two. `--model` or `VULTR_INFERENCE_MODEL`, if supplied, must match
-this plan. `VULTR_INFERENCE_BASE_URL`, if supplied, must equal the fixed Vultr base URL.
-The CLI does not auto-load `.env` files. Missing configuration/credentials/approval stops
-without sending. No paid calls are made by tests or CI.
-
-Each request reserves its worst-case tokens and cost **before dispatch**, retaining the
-reservation on all failures. The approval identity hashes its exact config, budget and
-approval/pricing metadata. Its atomic ledger lives in `.local/model-budgets/<hash>.json`;
-reusing the plan, even in another CLI invocation, restores consumed allowance. It is
-local to this checkout and trusted controller; retain the checkout/ledger, do not copy
-an approval to another checkout to reset spend. This is not an account-wide billing cap.
-Deleting/modifying local state is outside the threat model. Raw provider errors are not
-saved, and no billing refund is inferred from them. Actual token usage is recorded
-separately from pessimistic reservations. No cloud resources require teardown here.
-
-After an authorized live run, preserve its separately labelled workflow/execution
-records, real provider usage, validation results and cleanup evidence. Do not relabel
-an offline fixture pass as live evidence. A hard crash requires `cleanup`, which marks
-pending work abandoned without resending requests or refunding uncertain reservations.
-
-## Official technical references
-
-Checked 2026-11-03 for implementation; no snippets copied:
-
-- [Vultr chat-completion request/response contract](https://api.vultrinference.com/docs/reference/create-chat-completion)
-- [Vultr request/context/output limits](https://api.vultrinference.com/docs/concepts/limits)
-- [Vultr quickstart and usage accounting](https://api.vultrinference.com/docs/get-started/quickstart)
-
-Model availability and prices must be refreshed before requesting live authorization.
+Checked 2026-11-05: [chat-completion contract](https://api.vultrinference.com/docs/reference/create-chat-completion),
+[reasoning](https://api.vultrinference.com/docs/concepts/reasoning),
+[limits](https://api.vultrinference.com/docs/concepts/limits),
+[public model metadata](https://api.vultrinference.com/v1/models/qwen3.8-flash-next).

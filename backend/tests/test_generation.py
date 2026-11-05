@@ -24,6 +24,7 @@ from backend.app.generation.provider import (
     _http_worker,
     fake_response,
     generate,
+    validate_request_controls,
     vultr_transport,
 )
 from backend.app.generation.workflow import cases, recover_workflows, run_workflow
@@ -142,6 +143,54 @@ class GenerationTests(unittest.TestCase):
             self.assertEqual(
                 sha256((execution.parent / "script.py").read_bytes()), run["script_sha256"]
             )
+
+    def test_followup_controls_reuse_consumed_ledger_and_allow_one_attempt(self):
+        budget = Budget(
+            ceiling_usd="0.02", input_usd_per_million="0.1", output_usd_per_million="0.2"
+        )
+        auth = Authorization(
+            CONFIG,
+            budget,
+            "owner-original",
+            "https://api.vultrinference.com/docs/models",
+            "2026-11-05",
+        )
+        identity = auth.bind_budget(self.root / "model-budgets")
+        budget.reserve(CONFIG)  # Previous incomplete response remains charged.
+        calls = []
+
+        def transport(key, payload, config):
+            calls.append(json.loads(payload))
+            return fake_response(BAD)
+
+        provider = VultrProvider(auth, key="synthetic", transport=transport)
+        controls = {
+            "approval_reference": "owner-followup",
+            "parent_approval_reference": "owner-original",
+            "model": CONFIG.model,
+            "reasoning": {"effort": "low", "max_tokens": 512},
+        }
+        _, record = run_workflow(
+            RecordingRunner(["incorrect"]),
+            provider,
+            CONFIG,
+            budget,
+            store=self.workflows,
+            execution_store=self.executions,
+            request_controls=controls,
+        )
+        self.assertEqual(record["failure_reason"], "artifact_schema_or_content_mismatch")
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(calls[0]["reasoning"], controls["reasoning"])
+        self.assertEqual(record["authorization"]["ledger_id"], identity)
+        self.assertEqual(record["budget"]["reserved_requests"], 2)
+        self.assertEqual(len(list((self.root / "model-budgets").glob("*.json"))), 1)
+        for bad in (
+            dict(controls, parent_approval_reference="other"),
+            dict(controls, reasoning={"effort": "low", "max_tokens": CONFIG.max_output_tokens}),
+        ):
+            with self.assertRaisesRegex(RunError, "invalid_request_controls"):
+                validate_request_controls(bad, provider, CONFIG)
 
     def test_incorrect_output_then_only_one_correction(self):
         runner, provider, path, record = self.run_loop(
@@ -345,7 +394,7 @@ class ProviderTests(unittest.TestCase):
             mutations.append((WireResponse(200, json.dumps(value).encode()), reason))
 
         changed(lambda d: d.pop("usage"))
-        changed(lambda d: d.update(model="other-provider-model"))
+        changed(lambda d: d.update(model=["not", "a", "string"]))
         changed(lambda d: d["usage"].update(prompt_tokens=True))
         changed(lambda d: d["usage"].update(total_tokens=1), "provider_usage_limit")
         changed(
@@ -382,6 +431,15 @@ class ProviderTests(unittest.TestCase):
     def test_usage_and_explicit_output_limit_are_recorded(self):
         provider, path, record = self.request(fake_response(GOOD))
         self.assertEqual(record["status"], "succeeded")
+        self.assertTrue(record["model_echo_matches"])
+        self.assertEqual(record["contract"], "python_source")
+        # The official contract documents that the response model may differ from the
+        # request; the echo is recorded, not treated as malformed.
+        _, echo_path, echo = self.request(fake_response(GOOD, model="served-alias"))
+        self.assertEqual(echo["status"], "succeeded")
+        self.assertFalse(echo["model_echo_matches"])
+        self.assertEqual(echo["response_model"], "served-alias")
+        self.assertTrue((echo_path / "script.py").exists())
         self.assertEqual(
             record["usage"], {"prompt_tokens": 100, "completion_tokens": 500, "total_tokens": 600}
         )
@@ -435,6 +493,125 @@ class ProviderTests(unittest.TestCase):
         with self.assertRaisesRegex(RunError, "ledger_invalid"):
             reopened.bind(ledger)
 
+    def test_envelope_aggregates_batches_and_never_resets(self):
+        """Two plans under one envelope cannot exceed its total; reopening keeps counters."""
+        from backend.app.generation.provider import Envelope
+
+        def plan(reference, requests=2):
+            return Authorization(
+                ModelConfig("qwen3.8-flash-next", max_input_tokens=16000),
+                Budget(
+                    max_requests=requests,
+                    max_total_tokens=131072,
+                    ceiling_usd="0.01",
+                    input_usd_per_million="0.1",
+                    output_usd_per_million="0.2",
+                ),
+                reference,
+                "https://api.vultrinference.com/v1/models",
+                "2026-11-05",
+                Envelope(
+                    reference="synthetic-envelope",
+                    max_requests=3,
+                    max_total_tokens=1048576,
+                    ceiling_usd="0.05",
+                ),
+            )
+
+        ledgers = self.root / "ledgers"
+        first = plan("batch-a")
+        first.bind_budget(ledgers)
+        for _ in range(2):
+            _, _, record = self.request(
+                WireResponse(500, b""), config=first.config, budget=first.budget
+            )
+            self.assertEqual(record["failure_reason"], "provider_http_error")
+        self.assertEqual(record["envelope"]["reserved_requests"], 2)
+        self.assertEqual(record["envelope"]["reserved_usd"], "0.0040192")
+        # A second plan with its own two-request budget gets only the envelope's remainder.
+        second = plan("batch-b")
+        second.bind_budget(ledgers)
+        provider, _, ok = self.request(
+            fake_response(GOOD), config=second.config, budget=second.budget
+        )
+        self.assertEqual(ok["status"], "succeeded")
+        self.assertEqual(ok["envelope"]["reserved_requests"], 3)
+        provider, _, stopped = self.request(
+            fake_response(GOOD), config=second.config, budget=second.budget
+        )
+        self.assertEqual(stopped["failure_reason"], "model_envelope_exhausted")
+        self.assertFalse(provider.requests)
+        self.assertEqual(stopped["budget"]["reserved_requests"], 1)  # The plan did not consume.
+        # Reopening either plan, or a third plan with a changed model config, reloads the
+        # same aggregate ledger; nothing is refunded and nothing new is allowed.
+        third = Authorization(
+            ModelConfig("qwen3.8-flash-next", max_input_tokens=8000, max_output_tokens=1024),
+            Budget(
+                max_requests=2,
+                max_total_tokens=131072,
+                ceiling_usd="0.01",
+                input_usd_per_million="0.1",
+                output_usd_per_million="0.2",
+            ),
+            "batch-c",
+            "https://api.vultrinference.com/v1/models",
+            "2026-11-05",
+            Envelope(
+                reference="synthetic-envelope",
+                max_requests=3,
+                max_total_tokens=1048576,
+                ceiling_usd="0.05",
+            ),
+        )
+        third.bind_budget(ledgers)
+        self.assertEqual(third.envelope.requests, 3)
+        provider, _, refused = self.request(
+            fake_response(GOOD), config=third.config, budget=third.budget
+        )
+        self.assertEqual(refused["failure_reason"], "model_envelope_exhausted")
+        self.assertFalse(provider.requests)
+        # A different envelope reference is a different ledger file; a tampered ledger stops.
+        path = ledgers / ("envelope-" + third.envelope.identity() + ".json")
+        self.assertTrue(path.exists())
+        path.write_text(json.dumps({**json.loads(path.read_text()), "reserved_requests": 9}))
+        with self.assertRaisesRegex(RunError, "model_envelope_ledger_invalid"):
+            plan("batch-d").bind_budget(ledgers)
+        with self.assertRaisesRegex(RunError, "invalid_envelope"):
+            Envelope(reference="", max_requests=1, max_total_tokens=1, ceiling_usd="0.01")
+        with self.assertRaisesRegex(RunError, "invalid_envelope"):
+            Envelope(reference="x", max_requests=65, max_total_tokens=1, ceiling_usd="0.01")
+        # A plan file may carry the envelope block; other keys are still refused.
+        file = self.root / "plan.json"
+        file.write_text(
+            json.dumps(
+                {
+                    "config": asdict(first.config),
+                    "budget": {
+                        "max_requests": 2,
+                        "max_total_tokens": 131072,
+                        "ceiling_usd": "0.01",
+                        "input_usd_per_million": "0.1",
+                        "output_usd_per_million": "0.2",
+                    },
+                    "approval_reference": "batch-e",
+                    "pricing_source": "https://api.vultrinference.com/v1/models",
+                    "pricing_checked_at": "2026-11-05",
+                    "envelope": {
+                        "reference": "synthetic-envelope-2",
+                        "max_requests": 22,
+                        "max_total_tokens": 397056,
+                        "ceiling_usd": "0.05",
+                    },
+                }
+            )
+        )
+        loaded = Authorization.load(file)
+        self.assertEqual(loaded.envelope.max_requests, 22)
+        self.assertEqual(loaded.record()["envelope"]["reference"], "synthetic-envelope-2")
+        file.write_text(json.dumps({**json.loads(file.read_text()), "extra": 1}))
+        with self.assertRaisesRegex(RunError, "invalid_live_authorization"):
+            Authorization.load(file)
+
     def test_model_and_budget_configuration_rejected(self):
         for config in (
             {"model": ""},
@@ -445,7 +622,7 @@ class ProviderTests(unittest.TestCase):
             with self.subTest(config=config), self.assertRaises(RunError):
                 ModelConfig(**config)
         for budget in (
-            {"max_requests": 3},
+            {"max_requests": 7},
             {"ceiling_usd": "NaN"},
             {"input_usd_per_million": "-1"},
         ):

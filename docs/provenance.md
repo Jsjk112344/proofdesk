@@ -2,7 +2,7 @@
 
 ## Baseline, 2026-11-03
 
-ProofDesk starts in an empty standalone repository. The initial contribution comprises
+SalesDesk starts in an empty standalone repository. The initial contribution comprises
 new project documentation, a React/Vite bootstrap page, a FastAPI health endpoint,
 dependency locks and CI/repository checks. It contains no working agent or sandbox.
 Code and documentation were authored with AI assistance in collaboration with the owner.
