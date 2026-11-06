@@ -34,13 +34,21 @@ export function LegacyApp() {
         if (data.seeded_demo) {
           try {
             for (let attempt = 0; attempt < 90; attempt++) {
-              const seed = await post<{ ready: boolean; stage: string }>("/api/demo/seed", { request_id: newId() });
+              const seed = await post<{ ready: boolean; stage: string }>(
+                "/api/demo/seed",
+                { request_id: newId() },
+              );
               if (seed.ready) break;
-              if (attempt === 89) throw new Error("Example preparation is still running. Reload to check saved progress.");
-              await new Promise(resolve => setTimeout(resolve, 1000));
+              if (attempt === 89)
+                throw new Error(
+                  "Example preparation is still running. Reload to check saved progress.",
+                );
+              await new Promise((resolve) => setTimeout(resolve, 1000));
               if (cancelled) return;
             }
-          } catch (e) { setError((e as Error).message); }
+          } catch (e) {
+            setError((e as Error).message);
+          }
         }
         await refresh();
       } catch (e) {
@@ -68,7 +76,8 @@ export function LegacyApp() {
         : route.name === "new"
           ? "New analysis plan"
           : route.name === "experiment"
-            ? overview?.plans.find((p) => p.id === route.id)?.title || "Analysis"
+            ? overview?.plans.find((p) => p.id === route.id)?.title ||
+              "Analysis"
             : "Home";
   return (
     <div className="shell">
@@ -80,27 +89,69 @@ export function LegacyApp() {
           SalesDesk
         </a>
         <nav className="nav" aria-label="Main">
-          <a className={`nav-item ${route.name === "home" || route.name === "new" || route.name === "experiment" ? "current" : ""}`} href="#/">
+          <a
+            className={`nav-item ${route.name === "home" || route.name === "new" || route.name === "experiment" ? "current" : ""}`}
+            href="#/"
+          >
             See what worked
           </a>
-          <a className={`nav-item ${route.name === "queue" ? "current" : ""}`} href="#/queue">
+          <a
+            className={`nav-item ${route.name === "queue" ? "current" : ""}`}
+            href="#/queue"
+          >
             Action queue
-            {overview && overview.tasks.some((t) => ["pending_review", "ready_for_review"].includes(t.status)) && (
-              <span className="nav-count">{overview.tasks.filter((t) => ["pending_review", "ready_for_review"].includes(t.status)).length}</span>
-            )}
+            {overview &&
+              overview.tasks.some((t) =>
+                ["pending_review", "ready_for_review"].includes(t.status),
+              ) && (
+                <span className="nav-count">
+                  {
+                    overview.tasks.filter((t) =>
+                      ["pending_review", "ready_for_review"].includes(t.status),
+                    ).length
+                  }
+                </span>
+              )}
           </a>
-          <a className={`nav-item ${route.name === "prospects" ? "current" : ""}`} href="#/prospects">
+          <a
+            className={`nav-item ${route.name === "prospects" ? "current" : ""}`}
+            href="#/prospects"
+          >
             Starting from zero
           </a>
         </nav>
-        <div className="side-label row-between">Saved analyses <a className="side-add" href="#/experiments/new" aria-label="New analysis plan">+</a></div>
+        <div className="side-label row-between">
+          Saved analyses{" "}
+          <a
+            className="side-add"
+            href="#/experiments/new"
+            aria-label="New analysis plan"
+          >
+            +
+          </a>
+        </div>
         <nav className="side-list" aria-label="Saved analyses">
-          {(!overview || overview.plans.length === 0) && <p className="side-empty">No analysis plan yet in this session.</p>}
+          {(!overview || overview.plans.length === 0) && (
+            <p className="side-empty">No analysis plan yet in this session.</p>
+          )}
           {overview?.plans.map((p) => (
-            <a key={p.id} className={`side-item ${route.name === "experiment" && route.id === p.id ? "current" : ""}`} href={`#/experiments/${p.id}`}>
-              <span className={`dot ${p.latest_run?.status === "succeeded" ? "ready" : p.latest_run?.status === "failed" ? "failed" : ""}`} aria-hidden="true" />
+            <a
+              key={p.id}
+              className={`side-item ${route.name === "experiment" && route.id === p.id ? "current" : ""}`}
+              href={`#/experiments/${p.id}`}
+            >
+              <span
+                className={`dot ${p.latest_run?.status === "succeeded" ? "ready" : p.latest_run?.status === "failed" ? "failed" : ""}`}
+                aria-hidden="true"
+              />
               <span className="side-name">{p.title}</span>
-              <span className="side-status">{p.tasks[0] ? taskLabel(p.tasks[0]) : p.latest_run ? p.latest_run.status : "saved"}</span>
+              <span className="side-status">
+                {p.tasks[0]
+                  ? taskLabel(p.tasks[0])
+                  : p.latest_run
+                    ? p.latest_run.status
+                    : "saved"}
+              </span>
             </a>
           ))}
         </nav>
@@ -110,7 +161,9 @@ export function LegacyApp() {
           <span>
             Workspace <span className="slash">/</span> {title}
           </span>
-          <span className="preview-tag">{publicDemo ? "Public demo" : "Private preview"}</span>
+          <span className="preview-tag">
+            {publicDemo ? "Public demo" : "Private preview"}
+          </span>
         </header>
         <main>
           {error && (
@@ -133,11 +186,24 @@ export function LegacyApp() {
           ) : route.name === "prospects" ? (
             <ProspectsWorkspace workspace={workspace} />
           ) : route.name === "queue" ? (
-            <QueueView overview={overview} onChange={async () => void (await refresh())} onError={setError} />
+            <QueueView
+              overview={overview}
+              onChange={async () => void (await refresh())}
+              onError={setError}
+            />
           ) : route.name === "new" ? (
-            <NewPlanForm overview={overview} onCreated={async () => void (await refresh())} onError={setError} />
+            <NewPlanForm
+              overview={overview}
+              onCreated={async () => void (await refresh())}
+              onError={setError}
+            />
           ) : route.name === "experiment" ? (
-            <ExperimentView key={route.id} planId={route.id} onChanged={async () => void (await refresh())} onError={setError} />
+            <ExperimentView
+              key={route.id}
+              planId={route.id}
+              onChanged={async () => void (await refresh())}
+              onError={setError}
+            />
           ) : (
             <ExperimentsHome overview={overview} />
           )}

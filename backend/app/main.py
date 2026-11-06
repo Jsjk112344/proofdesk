@@ -1,11 +1,8 @@
-"""SalesDesk API: campaign-evaluation experiments plus the supporting prospect workspace.
+"""SalesDesk dealer-group workspace with retained unlinked campaign/prospect routes.
 
-The experiment workspace opens a pinned historical campaign dataset, saves an analysis
-plan, runs the fixed analysis program in the disposable sandbox through a durable job,
-shows validated results with an interpretation, and lets a person edit, approve and
-schedule a next-experiment packet. The prospect workspace (research, demonstration,
-unsent draft) remains a supporting route. No uploads, arbitrary code, sends, raw-dataset
-downloads or CRM/mailbox integrations exist over HTTP.
+Session capabilities and same-origin writes protect CSV imports, nightly review jobs,
+version-bound approvals and downloads. Vultr workers own execution; browsers only read,
+edit and approve. Nothing sends customer messages or connects to a live CRM/DMS.
 """
 
 import os
@@ -134,6 +131,8 @@ def create_app(jobs=None, prospects=None, experiments=None, dealer_store=None):
         experiments = request.app.state.experiments
         return {
             "service": "salesdesk",
+            "product_surface": "dealer_group_workspace",
+            "dealer_concurrency": request.app.state.dealer_scheduler.concurrency,
             "status": "experiment_workspace",
             "generation_mode": service.mode(),
             "experiments_generation_mode": experiments.mode(),

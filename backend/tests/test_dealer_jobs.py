@@ -61,4 +61,7 @@ class DealerJobTests(unittest.TestCase):
             tampered = copy.deepcopy(value)
             tampered["k"]["cold_leads"] += 1
             self.assertRaises(Rejected, reconcile, tampered, typed_input(group, "r02"), raw)
+            bad_score = copy.deepcopy(value)
+            bad_score["r"][0][2][0][1][0] += 1
+            self.assertRaises(Rejected, reconcile, bad_score, typed_input(group, "r02"), raw)
             self.assertEqual(parent["kind"], "dealer_rollup")

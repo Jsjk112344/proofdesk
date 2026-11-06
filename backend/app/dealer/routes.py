@@ -97,6 +97,12 @@ def register(app, owner, body):
             group = store.group(conn, identity)
             parent = store.latest_review(conn, identity)
             jobs = store.jobs(conn, identity)
+            staged_reports = [
+                __import__("json").loads(row["report"])
+                for row in conn.execute(
+                    "SELECT report FROM dealer_imports WHERE owner=?", (identity,)
+                )
+            ]
         children = [j for j in jobs if parent and j["payload"].get("parent_id") == parent["id"]]
         content = group["content"]
         results = {
@@ -202,7 +208,7 @@ def register(app, owner, body):
             if parent
             else None,
             rollup=rollup,
-            validation=content["validation"],
+            validation=staged_reports or content["validation"],
             assumptions=dict(
                 floorplan_daily_rate=content["floorplan_daily_rate"],
                 match_distance_miles=content["match_distance_miles"],

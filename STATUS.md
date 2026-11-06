@@ -1012,3 +1012,11 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   Mobile has no overflow or page errors. Existing campaign/prospect browser tests also
   pass through retained unlinked routes. A local HTTP request-id issue was fixed with
   crypto.getRandomValues; strict session initialization now shares one bootstrap request.
+- Full local direct-browser acceptance passed: actual 24-child review (15.382 s measured
+  from browser click to visible group result), real mid-progress screenshot, Sandy/Maria,
+  approve all, three downloads, reload, cross-session refusal, recurring toggle persistence,
+  data templates and validation, desktop/mobile without page errors. No mocked API or
+  asset overrides. Evidence: `.local/dealer-browser-journey-final/dealer-browser-check.json`.
+- Group briefing input now sorts rooftop ties by id before serialization. Canonicalizing
+  these inputs required additional accepted group requests; final accounting follows the
+  deployment check. All rooftop replay requests remained exact matches.

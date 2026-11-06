@@ -1,5 +1,5 @@
 [Unit]
-Description=SalesDesk private sales workspace (research, demonstration, unsent draft)
+Description=SalesDesk dealer-group analyst and durable workflow workers
 After=network-online.target docker.service
 Requires=docker.service
 
@@ -12,6 +12,7 @@ WorkingDirectory=/opt/proofdesk
 Environment=HOME=/var/lib/proofdesk
 Environment=PROOFDESK_ALLOWED_HOSTS=127.0.0.1,localhost
 Environment=PROOFDESK_WEB_MAX_RUNS=20
+Environment=SALESDESK_DEALER_CONCURRENCY=6
 ExecStart=/opt/proofdesk/.venv/bin/python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --workers 1 --no-access-log
 Restart=on-failure
 RestartSec=3
@@ -23,7 +24,7 @@ PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
 ReadWritePaths=/opt/proofdesk/.local /var/lib/proofdesk
-MemoryMax=384M
+MemoryMax=1536M
 TasksMax=128
 
 [Install]
