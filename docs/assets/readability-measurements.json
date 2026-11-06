@@ -3,33 +3,34 @@
     "width": 1440,
     "height": 900
   },
+  "public_url": "https://salesdesk.149.28.51.139.sslip.io",
   "before_source": "Fresh browser, public VM serving previous UI",
-  "after_source": "Fresh browser, real public backend with local frontend asset overrides",
-  "deployed": false,
-  "deployment_blocker": "SSH to 149.28.51.139:22 times out; HTTPS remains healthy",
-  "release_sha256": "cc3bbbe06cace1365ee9076187f1c640cf331e17eb0dd4f9dd8c0d82755ad997",
+  "after_source": "Fresh browser directly against the deployed public VM; no local overrides or mocked API responses",
+  "deployed": true,
+  "runtime_source_commit": "ecf37140d07994d4930e84f701a41a1b57729554",
+  "release_sha256": "27c29612c0933663f7176836ec0d69b24e259c645ae5603881819f1981e72c4c",
   "heights": {
     "home": {
       "before": 900,
-      "after_preview": 900,
+      "after": 900,
       "primary_button_top": 273.73,
       "primary_button_bottom": 306.52
     },
     "campaign-before": {
       "before": 4048,
-      "after_preview": 1037,
+      "after": 1037,
       "primary_button_top": 387.28,
       "primary_button_bottom": 420.06
     },
     "campaign-after": {
       "before": 4366,
-      "after_preview": 1078,
+      "after": 1078,
       "primary_button_top": 385.83,
       "primary_button_bottom": 419.3
     },
     "prospect": {
       "before": 1452,
-      "after_preview": 900,
+      "after": 900,
       "primary_button_top": 234.05,
       "primary_button_bottom": 266.83
     }
@@ -41,10 +42,15 @@
     "desktop and mobile without page overflow or page errors"
   ],
   "screenshots": {
-    "readability-home.png": "7232ba1abf7fc1d40d04b0011327491dc07055dafcb38f4861163f9be3c790c7",
-    "readability-campaign-before.png": "be31388f1313f865ebff1337eb3fcaf7d4dcdb65d2ea63826a3a59fc2b0e2266",
     "readability-campaign-after.png": "9b7b0bf0d86a0e505d6a0d399ffb2d5e39fda71ff3cfa659c4e1a19d0ae926e9",
-    "readability-prospect.png": "86f01abd4af1d26f767c4cfd41051ed614facd37b5822cb633209f24afd2b928",
-    "readability-mobile.png": "341905a64727d3b1fe9db54ce862707c1bf07abf6c0538b35bfec37baaec352f"
+    "readability-campaign-before.png": "be31388f1313f865ebff1337eb3fcaf7d4dcdb65d2ea63826a3a59fc2b0e2266",
+    "readability-home.png": "7232ba1abf7fc1d40d04b0011327491dc07055dafcb38f4861163f9be3c790c7",
+    "readability-mobile.png": "341905a64727d3b1fe9db54ce862707c1bf07abf6c0538b35bfec37baaec352f",
+    "readability-prospect.png": "6feb91bd1859317d33a3682fd4fc031315124b321e3df58610c0f790c93fbf5d",
+    "salesdesk-home.png": "7232ba1abf7fc1d40d04b0011327491dc07055dafcb38f4861163f9be3c790c7",
+    "salesdesk-mobile.png": "341905a64727d3b1fe9db54ce862707c1bf07abf6c0538b35bfec37baaec352f",
+    "salesdesk-prospect.png": "6feb91bd1859317d33a3682fd4fc031315124b321e3df58610c0f790c93fbf5d",
+    "salesdesk-ready.png": "9b7b0bf0d86a0e505d6a0d399ffb2d5e39fda71ff3cfa659c4e1a19d0ae926e9",
+    "salesdesk-result.png": "be31388f1313f865ebff1337eb3fcaf7d4dcdb65d2ea63826a3a59fc2b0e2266"
   }
 }

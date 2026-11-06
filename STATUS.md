@@ -3,12 +3,12 @@
 Product name: **SalesDesk** (renamed from ProofDesk on 2026-11-05). Existing operational
 identifiers and dated historical entries retain their original names.
 
-Current checkpoint: **The compact demo frontend is implemented and verified against the
-real public backend, but its deployment is blocked by SSH access.** The public URL still
-serves the prior presentation release. SSH to 149.28.51.139:22 repeatedly times out;
-HTTPS remains healthy. The new answer/draft hero layouts, collapsed supporting detail,
-primary actions and screenshots are ready; see docs/demo-readability.md. Video recording,
-PDF export and official submission remain open; no submission receipt exists.
+Current checkpoint: **The compact demo UI is deployed and directly verified on public
+HTTPS.** SSH access worked on retry. The answer/draft heroes, single primary actions,
+compact activity and collapsed supporting detail are live; all four requested desktop
+screens and mobile have fresh deployed screenshots. Browser and real HTTP journey checks
+passed without frontend overrides. See docs/demo-readability.md. Video recording, PDF
+export and official submission remain open; no submission receipt exists.
 
 Public URL: https://salesdesk.149.28.51.139.sslip.io
 
@@ -894,3 +894,42 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
 - Remaining: restore SSH, install/checksum/verify the release, take direct deployed browser
   screenshots and rerun the journey on that release. Untracked session prompts and the root
   screenshot remain untouched. Do not describe the new UI as live until verified.
+
+
+## Compact UI deployment retry succeeded: 2026-11-06
+
+- SSH worked on the owner's retry request. Rebuilt the committed source `ecf3714`,
+  uploaded the allowlisted archive, verified its checksum and all 67 installed file hashes,
+  took a rollback snapshot, resynced locked runtime dependencies and restarted proofdesk.
+  Stores, raw dataset, caches, budget ledgers and root-owned configuration were preserved.
+- Release archive SHA-256:
+  `27c29612c0933663f7176836ec0d69b24e259c645ae5603881819f1981e72c4c`.
+  HTTPS health reports public demo/live analyst mode; runtime source is
+  `ecf37140d07994d4930e84f701a41a1b57729554`.
+- Fresh external Chromium acceptance passed directly against the deployed URL, with no
+  local asset overrides, mocked API responses or TLS exceptions. Verified one filled
+  primary action above fold; answer and rates; compact/active/completed stepper behavior;
+  preparation → ready/download in the answer card; collapsed analysis and supporting
+  inputs; reload and download; editing removes the prior packet from the current approval
+  slot; exact-version draft review and invalidation; Research/Demonstration/Verification;
+  and desktop/mobile without horizontal overflow or page errors.
+- Direct deployed heights at 1440×900: home 900 px;
+  campaign before approval 1037 px;
+  campaign after approval 1078 px;
+  prospect 900 px. Before heights were
+  900 / 4,048 / 4,366 / 1,452 px. All primary actions are visible without scrolling.
+- Updated both readability-*.png and canonical salesdesk-*.png screenshots in docs/assets
+  from the direct deployed browser. Receipt: docs/assets/readability-measurements.json.
+  Browser evidence: .local/demo-readability/final/measurements.json. The former preview
+  documentation is updated to distinguish this direct public acceptance from the earlier
+  local-asset preview and the resolved SSH blocker.
+- Real HTTP journey passed again on this release: genuine Docker statistics, identical
+  artifacts on rerun, refusal of an old approval version, scheduled packet completion,
+  Markdown download, review completion and cross-session 404s. Evidence:
+  .local/demo-readability/deployed-journey.json. Build passed on retry; the unchanged
+  frontend's mocked-browser suite had already passed before deployment.
+- No application/backend changes in this retry; no validators, contracts, jobs, sandbox,
+  replay, approval binding, quotas, budgets or saved-data semantics changed. Verification
+  used normal fresh demo sessions and accepted caches; no new paid requests were needed.
+  The deployment blocker is resolved. Untracked session prompts and root screenshot remain
+  untouched. Narrated recording, slide PDF and official submission remain outstanding.
