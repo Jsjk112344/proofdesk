@@ -3,6 +3,7 @@
 import fcntl
 import json
 import os
+import uuid
 from pathlib import Path
 
 from ..execution.controller import ROOT, now
@@ -17,6 +18,10 @@ referenced by an exact supplied [metric:KEY] or [field:KEY] placeholder. Never w
 currency signs, percentages, written number words, guarantees, discount or ROI promises,
 or send/sent/sending language. Do not invent facts, outcomes, names, features or contacts.
 Use at most twenty-five words per headline, finding, reason or recommendation.
+NEVER write quantity words: zero, two, three, four, five, six, seven, eight, nine, ten,
+several, dozens, half, quarter, twice, double, triple, hundred, thousand, million.
+Choose findings by copying supplied safe_findings verbatim; do not reword them.
+The count of leads in the input must never be spelled out in findings or a headline.
 """
 ROOFTOP = """Return exactly {"headline":string,"findings":[string],"follow_ups":[
 {"lead_id":string,"stock_no":string,"reason":string,"sms":string,
@@ -51,6 +56,11 @@ def messages(kind, result, group):
         data_label=group["data_label"],
     )
     if kind == "rooftop_brief":
+        payload["safe_findings"] = [
+            "[metric:cold_leads] cold leads need a fresh manager review.",
+            "[metric:matched_leads] at-risk leads have matching available vehicles.",
+            "[metric:aged_60] aged units are available for matching.",
+        ]
         payload["top_leads"] = [
             dict(
                 lead_id=lead["lead_id"],
@@ -65,6 +75,12 @@ def messages(kind, result, group):
         ]
         payload["allowed_message_words"] = sorted(MESSAGE_WORDS)
     else:
+        payload["safe_findings"] = [
+            "[metric:cold_leads] cold leads need attention across the group.",
+            "[metric:matched_leads] at-risk leads have matching vehicles.",
+            "[metric:aged_matched] aged units match at-risk leads.",
+            "Listed figures imply [metric:recoverable_gross] estimated recoverable gross.",
+        ]
         payload["rooftops"] = result["rooftops"]
         payload["sources"] = result["sources"]
     return [
@@ -122,7 +138,7 @@ def interpret(kind, result, group, job, root):
             reading=value,
             created_at=now(),
         )
-    path = Path(root) / "generation" / job["id"]
+    path = Path(root) / "generation" / job["id"] / uuid.uuid4().hex
     path.mkdir(parents=True, exist_ok=True, mode=0o700)
     plans = os.environ.get("SALESDESK_DEALER_LIVE_PLANS")
     if not plans:

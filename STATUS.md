@@ -963,3 +963,26 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   tokens, with separate six-request plans per rooftop/group. Existing ledgers stay intact.
   Authenticated model catalog checked 2026-11-06: qwen3.8-flash-next, $0.10 input and
   $0.20 output per million tokens; JSON output, reasoning disabled. No new VM/paid service.
+
+## Dealer analyst live acceptance: step 4, 2026-11-06
+
+- Both new Qwen contracts accepted live for the full sample: **24 rooftop briefs and
+  one group brief**. Maria's follow-up uses the matched silver RAV4 facts and her CR-V
+  trade through controller-rendered placeholders. Only curated validated facts/metrics
+  enter inference, never uploaded raw rows, notes, contact details or salesperson names.
+- Prompt pass 1 accepted 20 rooftops and rejected four findings for written quantities.
+  Prompt pass 2 supplied safe finding patterns; all 24 rooftops and the group passed.
+  Validators were not relaxed. Rejected response contents were neither saved nor executed.
+- Accounting: **49 live requests**, **45 accepted responses**, **4 rejected requests**;
+  accepted provider usage totals **$0.0132054 estimated token cost**. Four rejected-call
+  usage receipts were overwritten by the initial operator harness; they are accounted
+  pessimistically at **$0.0080384**, giving **$0.0212438** accepted-plus-uncertain estimate.
+  All 49 reservations remain charged: **$0.0984704** under the new $0.15 envelope.
+  Token estimates are separate from account compute billing. The harness now retains a
+  unique attempt receipt directory; exhausted ledgers were never reset or reused.
+- Accepted exact-input responses are in ignored `.local/replays/`; the complete accepted
+  sample review is in `.local/dealer-sample-review.json`. These are actual Docker metrics
+  and live inference responses, not fabricated progress or fixture model outputs.
+- Contract tests cover unknown leads/stock/metric references, literal quantities,
+  unsupported features and sends. Backend suite, frontend build and browser checks passed
+  at the step 4 checkpoint. Deployment replay verification remains to be performed.
