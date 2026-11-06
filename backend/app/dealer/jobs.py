@@ -49,6 +49,12 @@ class DealerScheduler(Scheduler):
                 recover(runner_for(self.store, jid), directory)
         return {"reconciled_jobs": len(ids)}
 
+    def tick(self):
+        from .schedule import dispatch_due
+
+        dispatch_due(self.store)
+        return super().tick()
+
     def _launch(self, job_id, token):
         allowed = {
             "PATH",
@@ -85,8 +91,20 @@ def run_job(store, job_id, token, *, runner=None, interpreter=None):
             group = store.group(conn, job["owner"])
             if job["payload"]["group_sha256"] != group["sha256"]:
                 raise RunError("dealer_data_changed")
+            if job["kind"] == "dealer_rooftop" and job["payload"].get("program_sha256") != sha256(
+                PROGRAM.read_bytes()
+            ):
+                raise RunError("analysis_program_changed")
             store.heartbeat(conn, job, token, LEASE_SECONDS, stage="started")
-        if job["kind"] == "dealer_rooftop":
+        if job.get("outcome") and job["outcome"].get("result_path"):
+            store.result(job)  # Verify the previously committed artifact hash.
+            if job["kind"] == "dealer_handoff":
+                from .handoff import checked_rows
+
+                with store.reading() as conn:
+                    checked_rows(store, conn, job)
+            result = job["outcome"]
+        elif job["kind"] == "dealer_rooftop":
             result = rooftop(store, job, token, group["content"], runner, interpreter)
         elif job["kind"] == "dealer_rollup":
             result = rollup(store, job, token, group["content"], interpreter)
@@ -97,6 +115,16 @@ def run_job(store, job_id, token, *, runner=None, interpreter=None):
         else:
             raise RunError("invalid_job_kind")
         _finish(store, job_id, token, "succeeded", outcome=result)
+        if job["kind"] == "dealer_rollup":
+            from .schedule import next_due
+
+            with store.transaction() as conn:
+                saved = store.job(conn, job_id)
+                if saved["status"] == "succeeded":
+                    conn.execute(
+                        "UPDATE dealer_schedules SET next_due=? WHERE owner=? AND enabled=1",
+                        (next_due(), job["owner"]),
+                    )
     except KeyboardInterrupt:
         _interrupted(store, job_id, token)
     except (RunError, Rejected) as exc:
@@ -123,7 +151,9 @@ def save_result(store, job, token, result):
         if path.exists() and path.read_bytes() != raw:
             raise RunError("artifact_already_saved")
         path.write_bytes(raw)
-        return dict(result_path=str(path.relative_to(store.root)), result_sha256=sha256(raw))
+        outcome = dict(result_path=str(path.relative_to(store.root)), result_sha256=sha256(raw))
+        conn.execute("UPDATE jobs SET outcome=? WHERE id=?", (dump(outcome), job["id"]))
+        return outcome
 
 
 def rooftop(store, job, token, group, runner, interpreter):
@@ -155,7 +185,22 @@ def rooftop(store, job, token, group, runner, interpreter):
     result["program_sha256"] = sha256(PROGRAM.read_bytes())
     # Prior-night data are separately sandboxed and reconciled, never a host fallback.
     previous = typed_input(group, rid, previous=True)
-    if previous:
+    prior_parent = job["payload"].get("previous_parent_id")
+    prior_metrics = None
+    if prior_parent:
+        with store.reading() as conn:
+            candidates = [
+                j
+                for j in store.jobs(conn, job["owner"])
+                if j["payload"].get("parent_id") == prior_parent
+                and j["payload"].get("rooftop_id") == rid
+                and j["status"] == "succeeded"
+            ]
+        if candidates:
+            prior_metrics = store.result(candidates[0])["metrics"]
+    if prior_metrics is not None:
+        result["previous_metrics"] = prior_metrics
+    elif previous:
         heartbeat(store, job, token, "comparing_previous_night")
         previous_raw = json.dumps(previous, separators=(",", ":"), sort_keys=True).encode()
         _, prior = execute(

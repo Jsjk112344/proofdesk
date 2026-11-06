@@ -986,3 +986,19 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
 - Contract tests cover unknown leads/stock/metric references, literal quantities,
   unsupported features and sends. Backend suite, frontend build and browser checks passed
   at the step 4 checkpoint. Deployment replay verification remains to be performed.
+
+## Dealer approvals and recurrence: step 5, 2026-11-06
+
+- Ranked follow-ups materialize from accepted results. Qwen drafts cover the top leads;
+  remaining leads use explicit controller-template provenance. A failed live brief never
+  silently becomes a rule-based response.
+- Approve/all binds draft hash, version and immutable lead/unit snapshot. Editing message
+  text clears approval; preparation and every download recheck the exact versions.
+  Per-store durable worker output includes follow-ups.md, crm-tasks.csv (today's task due
+  date) and transfer-requests.csv. CSV formula cells are escaped. Nothing is sent.
+- The API scheduler dispatches recurring 2 AM America/Denver reviews. The next due time is
+  recomputed after a run, with session expiry and run quotas. Saved review snapshots supply
+  subsequent deltas. Nightly scheduling continues when the browser is closed.
+- Handoff tests passed: task generation, exact-version refusal after edit, cross-session
+  access refusal, formula escaping and Mountain Time recurrence. Backend suite, frontend
+  build and retained browser check passed at this checkpoint; new dealer UI is in progress.

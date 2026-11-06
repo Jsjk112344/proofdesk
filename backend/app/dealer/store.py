@@ -3,6 +3,7 @@
 import json
 import os
 from datetime import UTC, datetime
+from pathlib import Path
 
 from ..execution.artifacts import sha256
 from ..execution.controller import ROOT, now
@@ -17,6 +18,14 @@ CREATE TABLE IF NOT EXISTS dealer_groups (
 CREATE TABLE IF NOT EXISTS dealer_imports (
  owner TEXT NOT NULL, kind TEXT NOT NULL, content TEXT NOT NULL, report TEXT NOT NULL,
  PRIMARY KEY(owner,kind));
+CREATE TABLE IF NOT EXISTS dealer_followups (
+ id TEXT PRIMARY KEY, owner TEXT NOT NULL, source TEXT NOT NULL, rooftop_id TEXT NOT NULL,
+ lead_id TEXT NOT NULL, snapshot TEXT NOT NULL, content TEXT NOT NULL,
+ version INTEGER NOT NULL, sha256 TEXT NOT NULL, status TEXT NOT NULL, approval TEXT,
+ UNIQUE(owner,source,lead_id));
+CREATE TABLE IF NOT EXISTS dealer_schedules (
+ owner TEXT PRIMARY KEY, enabled INTEGER NOT NULL, next_due TEXT, expires_at TEXT,
+ last_error TEXT);
 """
 
 
@@ -159,7 +168,15 @@ class DealerStore(Store):
                 raise RunError("dealer_quota_reached")
             plan = self.ensure_plan(conn, group)
             stamp = now()
-            payload = dict(group_sha256=group["sha256"], mode=mode)
+            previous = self.latest_review(conn, owner, group["sha256"])
+            payload = dict(
+                group_sha256=group["sha256"],
+                mode=mode,
+                program_sha256=sha256(Path(__file__).with_name("analysis_program.py").read_bytes()),
+                previous_parent_id=previous["id"]
+                if previous and previous["status"] == "succeeded"
+                else None,
+            )
             parent = self.insert_job(
                 conn,
                 owner=owner,
@@ -191,10 +208,10 @@ class DealerStore(Store):
             raise RunError("saved_artifact_hash_mismatch")
         return json.loads(raw)
 
-    def latest_review(self, conn, owner):
+    def latest_review(self, conn, owner, group_sha256=None):
         row = conn.execute(
             "SELECT id FROM jobs WHERE owner=? AND kind='dealer_rollup' "
-            "ORDER BY created_at DESC LIMIT 1",
-            (owner,),
+            "AND json_extract(payload,'$.group_sha256')=? ORDER BY created_at DESC LIMIT 1",
+            (owner, group_sha256 or self.group(conn, owner)["sha256"]),
         ).fetchone()
         return self.job(conn, row["id"], owner) if row else None
