@@ -32,7 +32,13 @@ def strict_json(data: bytes):
     return json.loads(data, object_pairs_hook=pairs, parse_constant=invalid_constant)
 
 
-def validate(archive: bytes, expected: dict) -> bytes:
+def validate(archive: bytes, expected: dict, checker=None) -> bytes:
+    """Return the accepted artifact bytes.
+
+    By default the parsed JSON must equal `expected` as canonical JSON values. A `checker`
+    callable replaces that comparison for contracts whose values are not known in advance
+    (the analysis-result contract); it must raise Rejected on any mismatch.
+    """
     if len(archive) > ARCHIVE_LIMIT:
         raise Rejected("archive_too_large")
     found = None
@@ -61,9 +67,11 @@ def validate(archive: bytes, expected: dict) -> bytes:
         if found is None:
             raise Rejected("missing_artifact")
         actual = strict_json(found)
+        if checker is not None:
+            checker(actual)
         # Canonical JSON equality also distinguishes true/1 and 1/1.0. This fixed
         # fixture contract is stricter than a general structural schema check.
-        if json.dumps(actual, sort_keys=True) != json.dumps(expected, sort_keys=True):
+        elif json.dumps(actual, sort_keys=True) != json.dumps(expected, sort_keys=True):
             raise Rejected("artifact_schema_or_content_mismatch")
     except (tarfile.TarError, UnicodeError, ValueError, RecursionError) as exc:
         if isinstance(exc, Rejected):

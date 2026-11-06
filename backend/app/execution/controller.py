@@ -6,6 +6,7 @@ import os
 import re
 import signal
 import subprocess
+import threading
 import uuid
 from contextlib import contextmanager
 from copy import deepcopy
@@ -18,6 +19,14 @@ from .runner import LABEL, DockerRunner, Limits, RunError, Runner, Task, limits_
 ROOT = Path(__file__).resolve().parents[3]
 STORE = ROOT / ".local" / "executions"
 TASK_BYTES = 32768
+# Narrow extension for the fixed analysis program: a larger typed input (never a script)
+# and a longer wall clock, still inside the same container policy and fsize ulimit.
+ANALYSIS_INPUT_BYTES = 1024 * 1024
+ANALYSIS_LIMITS = Limits(wall_seconds=30)
+VALIDATIONS = {
+    None: "exact_controller_schema_and_content",
+    "analysis_result_contract_v1": "analysis_result_contract_v1",
+}
 
 
 def now():
@@ -52,11 +61,20 @@ def docker_runner():
     )
 
 
+def _main_thread():
+    # Signal handlers can only be installed from a process main thread; an in-process
+    # test launch from another thread runs without them.
+    return threading.current_thread() is threading.main_thread()
+
+
 @contextmanager
 def interruptions():
     def stop(signum, frame):
         raise KeyboardInterrupt
 
+    if not _main_thread():
+        yield
+        return
     previous = {sig: signal.signal(sig, stop) for sig in (signal.SIGINT, signal.SIGTERM)}
     try:
         yield
@@ -67,6 +85,9 @@ def interruptions():
 
 @contextmanager
 def finish_without_interruption():
+    if not _main_thread():
+        yield
+        return
     previous = {sig: signal.signal(sig, signal.SIG_IGN) for sig in (signal.SIGINT, signal.SIGTERM)}
     try:
         yield
@@ -106,13 +127,26 @@ def execute(
     limits=None,
     source_kind="deterministic_synthetic_fixture",
     generation=None,
+    validator=None,
+    validation=None,
+    task_bytes=TASK_BYTES,
 ):
+    """Run one task in a fresh sandbox and validate its single artifact.
+
+    `validator` (with its `validation` label) replaces exact comparison with `expected`
+    for contracts whose values are computed, not known beforehand. `task_bytes` bounds
+    the input only; scripts are always limited to TASK_BYTES.
+    """
     limits = limits or Limits()
+    if validation not in VALIDATIONS or (validator is None) != (validation is None):
+        raise RunError("invalid_validation_contract")
+    if type(task_bytes) is not int or not TASK_BYTES <= task_bytes <= ANALYSIS_INPUT_BYTES:
+        raise RunError("invalid_task_input_limit")
     run_id = uuid.uuid4().hex
     name = "proofdesk-" + run_id
     directory = store / run_id
     directory.mkdir(parents=True, mode=0o700)
-    rejected = len(task.script) > TASK_BYTES or len(task.input) > TASK_BYTES
+    rejected = len(task.script) > TASK_BYTES or len(task.input) > task_bytes
     expected_bytes = json.dumps(expected, sort_keys=True).encode()
     record = {
         "schema_version": 2,
@@ -130,7 +164,7 @@ def execute(
         "expected_sha256": None if rejected else sha256(expected_bytes),
         "dispatched": False,
         "input_rejection": (
-            {"input_bytes": len(task.input), "script_bytes": len(task.script), "limit": TASK_BYTES}
+            {"input_bytes": len(task.input), "script_bytes": len(task.script), "limit": task_bytes}
             if rejected
             else None
         ),
@@ -162,7 +196,7 @@ def execute(
         (directory / "task.log").write_bytes(result.logs)
         if result.exit_code:
             raise RunError("task_nonzero_exit")
-        artifact = validate(result.archive, expected)
+        artifact = validate(result.archive, expected, validator)
         (directory / "result.json").write_bytes(artifact)
         record["validated_artifacts"] = [
             {
@@ -170,7 +204,7 @@ def execute(
                 "media_type": "application/json",
                 "size_bytes": len(artifact),
                 "sha256": sha256(artifact),
-                "validation": "exact_controller_schema_and_content",
+                "validation": VALIDATIONS[validation],
             }
         ]
         record["status"] = "succeeded"

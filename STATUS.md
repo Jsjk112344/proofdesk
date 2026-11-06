@@ -631,3 +631,16 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   run with `PROOFDESK_ANALYSIS_LIVE_PLAN`; (2) hostname decision and approval of
   docs/public-demo.md for public activation; (3) commit the reviewed working tree on
   `feat/local-execution-slice` and plan the public push; (4) record the video.
+
+## Hackathon phase 2 activation attempt
+
+- Existing VM is in EWR (New Jersey), hostname proofdesk-web, instance metadata id
+  113716844. No new VM provisioned. Caddy installed; public-demo and live plans configured
+  through root-owned systemd configuration; credentials excluded from release and logs.
+- Selected hostname: salesdesk.149.28.51.139.sslip.io, DNS resolves to the existing VM.
+- Host firewall permits TCP 80/443, Caddy listens on both, API stays on loopback.
+- External connections still time out and ACME validation reports connection timeout.
+  Public HTTPS is NOT verified. Owner asked to open the upstream Vultr firewall or locate
+  management credentials; only the inference key is configured locally.
+- Public URL is pending external ingress, not ready for judges. Subsequent UI work may
+  proceed while the external firewall is corrected; activation acceptance remains open.

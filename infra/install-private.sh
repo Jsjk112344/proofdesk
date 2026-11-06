@@ -19,7 +19,7 @@ python3 -m venv .tools
 .tools/bin/pip -q install uv==0.12.10
 .tools/bin/uv sync --locked --no-dev --python /usr/bin/python3
 docker pull "$(cat infra/task-image.txt)"
-install -d -m 0700 -o proofdesk -g proofdesk .local .local/executions .local/web-runs
+install -d -m 0700 -o proofdesk -g proofdesk .local .local/executions .local/web-runs .local/experiments .local/data-research/hillstrom
 chown -R proofdesk:proofdesk .local
 install -m 0644 infra/proofdesk.service /etc/systemd/system/proofdesk.service
 systemctl daemon-reload

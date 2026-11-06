@@ -340,10 +340,18 @@ class DockerRunner:
     def cleanup(self, name: str) -> dict:
         try:
             # Name is reserved and persisted before create. Removal also works
-            # after a client timeout where create may have reached the daemon.
-            command([self.docker, "rm", "--force", "--volumes", name], timeout=10)
-            remaining = self.call("ps", "-aq", "--filter", f"name=^/{name}$", timeout=10).strip()
-            return {"removed": not remaining, "reason": None if not remaining else "still_present"}
+            # after a client timeout where create may have reached the daemon. A killed
+            # client can leave the daemon finishing `create` a moment later, so a container
+            # still present after removal is removed again, a bounded number of times.
+            for attempt in range(4):
+                command([self.docker, "rm", "--force", "--volumes", name], timeout=10)
+                remaining = self.call(
+                    "ps", "-aq", "--filter", f"name=^/{name}$", timeout=10
+                ).strip()
+                if not remaining:
+                    return {"removed": True, "reason": None}
+                time.sleep(0.25 * (attempt + 1))
+            return {"removed": False, "reason": "still_present"}
         except (RunError, OSError):
             return {"removed": False, "reason": "docker_unavailable_or_cleanup_failed"}
 
