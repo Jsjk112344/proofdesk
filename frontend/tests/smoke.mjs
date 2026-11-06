@@ -297,7 +297,7 @@ const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
 const checks = [];
 try {
-  await page.goto("http://127.0.0.1:8080/#/");
+  await page.goto("http://127.0.0.1:8080/#/legacy");
   await page.getByRole("heading", { name: "Sell more: Your AI sales analyst" }).waitFor();
   await page.getByRole("button", { name: "Analyse a campaign" }).waitFor();
   await page.getByRole("link", { name: "Research a prospect" }).waitFor();

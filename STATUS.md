@@ -1002,3 +1002,7 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
 - Handoff tests passed: task generation, exact-version refusal after edit, cross-session
   access refusal, formula escaping and Mountain Time recurrence. Backend suite, frontend
   build and retained browser check passed at this checkpoint; new dealer UI is in progress.
+- Group screen acceptance: direct local browser against the real API (no mocks or asset
+  overrides) passed at 1440×900: hero, real stat strip, regional SVG map and first tile row
+  above the fold; 24 tiles; exactly one primary action. Mobile has no horizontal overflow
+  or page errors. Screenshots are in ignored `.local/dealer-browser/` pending deployment.
