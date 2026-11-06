@@ -8,16 +8,15 @@
 Read README.md, STATUS.md and docs/architecture.md first. This is a standalone,
 public MIT project for Vultr Agent Rush, targeting Powering the Future of Work.
 
-- Product direction (owner instruction, 2026-11-05, supersedes the earlier lock): SalesDesk
-  helps a sales team use evidence, statistics and AI reasoning to choose an improvement,
-  approve next actions, run scheduled work and measure results inside SalesDesk. The entry
-  screen is the experiment workspace: a pinned historical campaign dataset → saved analysis
-  plan → sandboxed statistics on a Vultr-hosted worker → labelled interpretation →
-  human-approved next action → scheduled packet preparation → reviewable result. The
-  prospect workspace (research, optional document-extraction demonstration, unsent draft) is a
-  supporting route for a future prospective experiment, never the entry screen. Slack,
-  HubSpot and every other external business integration are deferred; no CRM account,
-  Slack workspace or connector is needed or planned for this entry.
+- Product direction (owner instruction, 2026-11-06): **SalesDesk — Sell more: Your AI sales analyst.** Every night, it works every lead across every rooftop. The enterprise customer is a multi-rooftop automotive dealer group. SalesDesk reviews open leads and inventory in parallel per dealership, finds leads going cold, matches cars in stock (including sister stores), prioritises aged inventory, drafts follow-ups and gives store managers a ranked morning approval queue. Group leadership sees the regional roll-up. The platform is industry-agnostic; automotive is the first vertical. The agent does the work; people approve. No long forms.
+- Sample dealer-group data is synthetic, uses a fictional group and fictional people,
+  real vehicle makes/models only as product names, and is labelled "Sample dealer group"
+  in UI and records.
+- Uploaded lead/inventory/rooftop files are untrusted, session-scoped, size-capped,
+  never sent to the model as raw rows, and never committed.
+- No integration with VinSolutions, DealerSocket, CDK, Reynolds, Salesforce or HubSpot
+  is claimed. Data enters by CSV export; live CRM/DMS connection is described as next.
+- Nothing is sent to customers. Approved follow-ups become tasks and drafts for salespeople.
 - Current implementation: experiment workspace (importer, SQLite store, durable jobs with
   leases, analysis program in the Docker sandbox, validated metrics, rule-based or
   contract-validated model interpretation, tasks/approvals/packets), prospect workspace,
@@ -70,7 +69,7 @@ public MIT project for Vultr Agent Rush, targeting Powering the Future of Work.
   rule is suspended until the deadline.
 - Keep every safety contract, sandbox rule and validation as implemented. Only the
   authorization gates for spend and publication are lifted.
-- Product direction (supersedes the 2026-11-05 lock): SalesDesk is one product with two
-  entry doors, "See what worked" (experiment workspace) and "Starting from zero"
-  (prospects workspace), sharing one analyst loop: measure/research → propose next move
-  → human approves → Vultr worker prepares it while the user is away.
+- The dealer-group product direction above supersedes earlier campaign/prospect entry
+  directions. Preserve their code and routes, unlinked from the primary navigation.
+- Standing user preference takes precedence over the historical duration-rule suspension:
+  never estimate build duration or delivery ETAs. Fixed owner-supplied deadlines remain.
