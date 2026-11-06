@@ -654,3 +654,10 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   passed through SSH forwarding: real Docker statistics, accepted saved replay, stale
   approval refusal, identical artifacts, packet completion while absent and isolation.
   This proves the VM workflow, not external ingress or a browser interaction.
+
+## Hackathon phase 4
+
+- Home now presents the supplied sales-analyst pitch, two entry cards, large dashboard
+  numbers, saved campaigns and a working new-plan link. Dataset moved below the fold.
+- Production build, backend suite (94, six Docker skips), and real VM HTTP journey passed.
+  The journey used public-mode limits and accepted replay with real Docker execution.

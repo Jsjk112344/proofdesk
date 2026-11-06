@@ -1203,3 +1203,18 @@ table.list td {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+.home-hero { padding: 1.5rem 0 1rem; max-width: 75ch; }
+.home-hero h1 { font-size: 2.5rem; }
+.entry-doors { margin: 1rem 0 2rem; }
+.entry-door { display: flex; flex-direction: column; align-items: flex-start; gap: .8rem; padding: 1.8rem; }
+.entry-door h2 { font-size: 1.4rem; line-height: 1.3; }
+.entry-door .hint { margin-top: auto; padding-top: .5rem; }
+.dashboard-stats { margin: 2rem 0; }
+.dashboard-stats .stat strong { font-size: 2.5rem; font-variant-numeric: tabular-nums; }
+.dashboard-stats .stat:last-child strong { font-size: 1.5rem; }
+.saved-home { margin-top: 2rem; }
+.below-fold { margin-top: 6rem; }
+.verification { margin: 1rem 0; }
+.verification > summary { cursor: pointer; color: var(--ink-2); padding: .8rem 0; }
+@media (max-width: 700px) { .home-hero h1 { font-size: 1.9rem; } .entry-door { padding: 1.2rem; } }

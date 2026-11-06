@@ -361,110 +361,66 @@ function ProvenanceBadge({ provenance }: { provenance: string }) {
 
 // ---------------------------------------------------------------- Home / overview
 export function ExperimentsHome({ overview }: { overview: Overview }) {
-  const dataset = overview.datasets[0];
-  const pending = overview.tasks.filter((t) => t.status === "pending_review").length;
-  const ready = overview.tasks.filter((t) => t.status === "ready_for_review").length;
-  const active = overview.jobs.filter((j) => ACTIVE_JOB.includes(j.status)).length;
-  return (
-    <>
-      <div className="heading">
-        <h1>Did these e-mails create additional purchases, and what should we test next?</h1>
-        <p className="lede">
-          SalesDesk evaluates a real historical campaign with saved plans, sandboxed statistics
-          and a labelled interpretation, then turns the result into an approved next move that
-          a worker prepares while you are away. Every number traces to a validated artifact.
-        </p>
-        {overview.public_demo && (
-          <p className="public-note" role="note">
-            <Badge tone="synthetic">Public demo</Badge> Anonymous visitors get an isolated
-            workspace with small quotas. The dataset is the public benchmark; records here are
-            demonstration data and nothing is sent anywhere.
-          </p>
-        )}
-      </div>
-      <div className="stack">
-        {dataset ? (
-          <DatasetCard dataset={dataset} compact />
-        ) : (
-          <Empty title="No dataset imported." text="Run the importer from the README to add the pinned public benchmark." />
-        )}
-        <section className="panel">
-          <div className="row-between">
-            <h2>Saved analyses</h2>
-            <a className="primary button-link" href="#/experiments/new">
-              New analysis plan
-            </a>
-          </div>
-          {overview.plans.length === 0 ? (
-            <p className="muted">
-              No analysis plan yet in this session. Save a fixed comparison to run the sandboxed
-              statistics.
-            </p>
-          ) : (
-            <div className="table-scroll">
-              <table className="list">
-                <thead>
-                  <tr>
-                    <th>Plan</th>
-                    <th>Comparison</th>
-                    <th>Runs</th>
-                    <th>Latest result</th>
-                    <th>Next move</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {overview.plans.map((p) => (
-                    <tr key={p.id}>
-                      <td>
-                        <a href={`#/experiments/${p.id}`}>{p.title}</a>
-                        <div className="muted">v{p.version} · {stamp(p.created_at)}</div>
-                      </td>
-                      <td>
-                        {p.comparison.treatment} vs {p.comparison.control}
-                      </td>
-                      <td>{p.runs}</td>
-                      <td>
-                        {p.latest_run ? (
-                          <>
-                            <Badge tone={TONES[p.latest_run.status] || "warn"}>{p.latest_run.status}</Badge>{" "}
-                            {p.latest_run.interpretation_provenance && (
-                              <ProvenanceBadge provenance={p.latest_run.interpretation_provenance} />
-                            )}
-                          </>
-                        ) : (
-                          <span className="muted">not run</span>
-                        )}
-                        {p.active_jobs > 0 && <Badge tone="running">working</Badge>}
-                      </td>
-                      <td>
-                        {p.tasks.length ? p.tasks.map((t, i) => <Badge key={i} tone={TONES[t] || "warn"}>{taskLabel(t)}</Badge>) : <span className="muted">none</span>}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </section>
-        <section className="panel">
-          <div className="row-between">
-            <h2>Action queue</h2>
-            <a href="#/queue">Open the queue</a>
-          </div>
-          <div className="metric-grid">
-            <Stat label="Awaiting approval" value={String(pending)} />
-            <Stat label="Ready for review" value={String(ready)} />
-            <Stat label="Scheduled or running jobs" value={String(active)} />
-            <Stat label="Interpretation mode" value={PROVENANCE[overview.generation_mode]?.label || overview.generation_mode} />
-          </div>
-          <p className="muted">
-            Jobs are claimed and run by the API process on the server, not by this browser. Close
-            the tab and the work still finishes; results and failures stay here.
-          </p>
-        </section>
-      </div>
-    </>
-  );
+  const [opening, setOpening] = useState(false);
+  const [error, setError] = useState("");
+  async function openCampaign() {
+    if (overview.plans[0]) return go(`/experiments/${overview.plans[0].id}`);
+    setOpening(true);
+    try {
+      const plan = await post<Plan>("/api/experiments/plans", {
+        dataset_id: overview.datasets[0]?.id, title: "Mens e-mail versus no e-mail",
+        question: "Did these e-mails create additional purchases, and what should we test next?",
+        comparison: { treatment: "mens_email", control: "no_email" },
+        bootstrap: { seed: 20080320, resamples: 2000 },
+        exploratory_breakdowns: ["newbie", "channel"], request_id: newId(),
+      });
+      go(`/experiments/${plan.id}`);
+    } catch (e) { setError((e as Error).message); }
+    finally { setOpening(false); }
+  }
+  const analysed = overview.plans.filter(p => p.latest_run?.status === "succeeded").length;
+  const awaiting = overview.plans.filter(p => p.proposal_version > 0 &&
+    !p.tasks.some(t => ["approved", "scheduled", "running", "ready_for_review", "completed"].includes(t))).length;
+  return <>
+    <div className="heading home-hero">
+      <h1>Sell more: Your AI sales analyst</h1>
+      <p className="lede">SalesDesk measures what your last campaign actually did, proposes your next move,
+        and prepares it for your approval, on Vultr, with every number verified.</p>
+    </div>
+    {error && <p className="alert" role="alert">{error}</p>}
+    <div className="two entry-doors">
+      <section className="panel entry-door">
+        <h2>Have past campaigns? See what worked.</h2>
+        <p>Find the result, understand the uncertainty and choose your next move.</p>
+        <button className="primary" disabled={opening || !overview.datasets.length} onClick={() => void openCampaign()}>
+          {opening ? "Opening…" : "Analyse a campaign"}
+        </button>
+        <p className="hint">Demo uses a real 64,000-customer e-mail campaign. Bring your own data: coming next.</p>
+      </section>
+      <section className="panel entry-door">
+        <h2>Starting from zero? Let's find your first customers.</h2>
+        <p>Research a prospect and return to an evidence-backed brief and a draft ready for your approval.</p>
+        <a className="primary button-link" href="#/prospects">Research a prospect</a>
+        <p className="hint">Start with the pre-filled document-workflow offering and Harbor Vale example.</p>
+      </section>
+    </div>
+    <div className="metric-grid dashboard-stats">
+      <Stat label="Campaigns analysed" value={String(analysed)} />
+      <Stat label="Next moves awaiting approval" value={String(awaiting)} />
+      <Stat label="Ready for review" value={String(overview.tasks.filter(t => t.status === "ready_for_review").length)} />
+      <Stat label="Analyst mode" value={(PROVENANCE[overview.generation_mode]?.label || overview.generation_mode).replace("Analyst: ", "")} />
+    </div>
+    <section className="panel saved-home">
+      <div className="row-between"><h2>Campaigns</h2><a href="#/experiments/new">New analysis plan</a></div>
+      {overview.plans.length ? <ul className="plain">{overview.plans.map(p => <li key={p.id}>
+        <a href={`#/experiments/${p.id}`}>{p.title}</a> · {p.latest_run ? p.latest_run.status : "Saved plan"}
+      </li>)}</ul> : <p>Your first campaign analysis will appear here.</p>}
+      <a href="#/queue">Open action queue</a>
+    </section>
+    <div className="below-fold">{overview.datasets[0] && <details className="verification"><summary>Verification: benchmark dataset</summary>
+      <DatasetCard dataset={overview.datasets[0]} />
+    </details>}</div>
+  </>;
 }
 
 function Stat({ label, value }: { label: string; value: string }) {
