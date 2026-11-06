@@ -734,7 +734,7 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
       <AnalystActivity steps={steps} />
       {task && ["scheduled", "running", "ready_for_review", "completed"].includes(task.status) && <section className="panel walk-away" role="status">
         <h2>{task.packet_artifact_id ? "Ready for review" : "Preparing your packet on Vultr, you can close this tab"}</h2>
-        <p className="muted">{stamp(task.updated_at)}</p>
+        <p className="muted">{stamp(task.updated_at)}{task.title.startsWith("Demo example:") ? " · Seeded demo example with an example approval" : ""}</p>
         {task.packet_artifact_id && <><PacketSummary artifactId={task.packet_artifact_id} />
           <a className="primary button-link" href={`/api/experiments/artifacts/${task.packet_artifact_id}/packet.md`}>Download packet (.md)</a></>}
       </section>}

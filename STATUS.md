@@ -677,3 +677,17 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   a test selector that matched both disclosed and collapsed diagnostics.
 - Owner reports upstream firewall updated. Public HTTP now responds; certificate retry is
   deferred until the ACME retry window after earlier connection failures. HTTPS pending.
+
+## Hackathon phase 6
+
+- Public sessions initialize one benchmark analysis, example approval/ready packet and
+  Harbor Vale prospect with an unsent draft via normal operations and workers. Stable
+  operation keys prevent duplicates; seed consumes the existing session quotas.
+- Initialization never re-approves visitor edits or revives cancelled work. Example
+  approval is labelled. Private mode refuses the endpoint. Public forms expose working
+  synthetic-scenario controls rather than disabled real-website controls.
+- Build, 96 backend tests (six Docker skips), disposable browser checks, required real
+  HTTP journey and a separate real Docker seed journey passed. Seed evidence:
+  `.local/live-preflight/phase6-seed-evidence.json`; one plan/run/task/prospect, two jobs,
+  accepted replay for analysis and prospect, ready packet, repeat initialization unchanged,
+  cross-session 404. Accepted live responses retain Replay labels in new sessions.

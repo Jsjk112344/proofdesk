@@ -18,6 +18,7 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.staticfiles import StaticFiles
 
+from .demo import seed_demo
 from .execution.artifacts import sha256, strict_json
 from .execution.controller import ROOT
 from .execution.runner import RunError
@@ -152,6 +153,7 @@ def create_app(jobs=None, prospects=None, experiments=None):
                 "limits": experiments.limits,
                 "datasets": [d["id"] for d in experiments.datasets()],
             },
+            "seeded_demo": experiments.public_demo and service.public_demo,
             "capability": SUPPORTED_CAPABILITY,
             "default_offering": DEFAULT_OFFERING,
             "max_offering_chars": MAX_OFFERING,
@@ -168,6 +170,11 @@ def create_app(jobs=None, prospects=None, experiments=None):
                 "max_pages_per_prospect": 4,
             },
         }
+
+    @app.post("/api/demo/seed")
+    async def seed_public_session(request: Request):
+        await body(request, ("request_id",))
+        return seed_demo(request.app.state.experiments, request.app.state.prospects, owner(request))
 
     @app.post("/api/prospects", status_code=202)
     async def start_prospect(request: Request):

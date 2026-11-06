@@ -1,7 +1,7 @@
 import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./style.css";
-import { api, Badge } from "./shared";
+import { api, Badge, newId, post } from "./shared";
 import { ProspectsWorkspace, type Workspace } from "./prospects";
 import {
   ExperimentsHome,
@@ -38,6 +38,17 @@ function App() {
         const data = await api<Workspace>("/api/workspace");
         if (cancelled) return;
         setWorkspace(data);
+        if (data.seeded_demo) {
+          try {
+            for (let attempt = 0; attempt < 90; attempt++) {
+              const seed = await post<{ ready: boolean; stage: string }>("/api/demo/seed", { request_id: newId() });
+              if (seed.ready) break;
+              if (attempt === 89) throw new Error("Example preparation is still running. Reload to check saved progress.");
+              await new Promise(resolve => setTimeout(resolve, 1000));
+              if (cancelled) return;
+            }
+          } catch (e) { setError((e as Error).message); }
+        }
         await refresh();
       } catch (e) {
         if (!cancelled) setError((e as Error).message);
@@ -125,7 +136,7 @@ function App() {
           )}
           {loading ? (
             <p className="loading" role="status">
-              Opening your workspace…
+              Preparing your SalesDesk workspace on Vultr…
             </p>
           ) : !workspace || !overview ? (
             <div className="empty">

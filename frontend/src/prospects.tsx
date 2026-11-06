@@ -11,6 +11,7 @@ type Check = {
   usage: { prompt_tokens: number; completion_tokens: number };
 };
 export type Workspace = {
+  seeded_demo?: boolean;
   experiments?: { generation_mode: string; limits: Record<string, number>; datasets: string[] };
   capability: Capability;
   default_offering: string;
@@ -258,6 +259,7 @@ function Landing({
             {offering.length} / {workspace.max_offering_chars} characters. The first demo is
             written for a technical seller offering document-workflow automation.
           </p>
+          {!publicDemo && <>
           <label htmlFor="url">Prospect website</label>
           <input
             id="url"
@@ -276,17 +278,12 @@ function Landing({
               ? "Real-website research is switched off in this public demo. Use a synthetic scenario below."
               : `Up to ${workspace.limits.max_pages_per_prospect} public pages are fetched over plain HTTP with private-network, redirect, size and type limits. No login, no browser automation.`}
           </p>
+          </>}
           <div className="compose-actions">
-            <button
-              className="primary"
-              type="submit"
-              disabled={disabled || publicDemo || !url.trim()}
-            >
-              {starting ? "Starting…" : "Research this prospect"}
-            </button>
+            {!publicDemo && <button className="primary" type="submit" disabled={disabled || !url.trim()}>{starting ? "Starting…" : "Research this prospect"}</button>}
             {primary && (
               <button
-                className="secondary"
+                className={publicDemo ? "primary" : "secondary"}
                 type="button"
                 disabled={disabled}
                 onClick={() => void start({ sample: primary.id })}
@@ -390,7 +387,7 @@ function ProspectView({
 }) {
   const [tab, setTab] = useState<"research" | "demo" | "outreach" | "details">("research");
   const active = isActive(prospect);
-  const mode = prospect.generation.mode;
+  const mode = prospect.draft?.provenance || prospect.brief?.provenance || prospect.generation.mode;
   return (
     <>
       <div className="prospect-head">
@@ -630,7 +627,7 @@ function DemoTab({ prospect }: { prospect: Prospect }) {
     return (
       <Empty
         title="No decision yet."
-        text="The demonstration decision follows research. It is made by a controller rule over cited facts."
+        text="The demonstration decision follows the prospect brief."
       />
     );
   }
@@ -1120,8 +1117,7 @@ export function ProspectsWorkspace({ workspace }: { workspace: Workspace }) {
           </button>
         ))}
         <p className="muted small-note">
-          Supporting route: research, an optional sandboxed demonstration and an unsent draft for a
-          future prospective experiment. Nothing is sent.
+          Research your first customers and prepare an unsent introduction for review.
         </p>
       </aside>
       <div className="prospects-main">

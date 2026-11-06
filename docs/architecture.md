@@ -112,3 +112,17 @@ No CRM, Slack, mailbox connection, bulk lead discovery, autonomous sending, brow
 paid search, new cloud services, GPU dependency, uplift models, bandits, automatic targeting,
 arbitrary agent code execution or generic agent framework. One dataset, one fixed analysis
 program and two job kinds exist.
+
+## Seeded public examples
+
+The browser initializes a public session through same-origin POST `/api/demo/seed` before
+showing the dashboard. Repeated calls use stable operation keys with the existing services:
+one plan, one Docker analysis job, one example task/approval/packet job and one prospect.
+The normal scheduler and prospect worker do the work; the endpoint polls saved progress
+and never runs a host analysis. Accepted identical model responses replay through validation.
+One example consumes one plan, run, task, prospect and two jobs from that session's normal
+quotas; no limits are reset or bypassed. New analysis plans and prospects remain available.
+
+The seeded approval is labelled as a demo example. Reload never approves visitor changes,
+revives cancelled work, launches a campaign or sends the prospect draft. Session ownership
+applies to every generated record and packet. Private mode cannot invoke initialization.
