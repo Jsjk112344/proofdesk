@@ -159,7 +159,6 @@ function App() {
           )}
           <footer>
             SalesDesk evaluates historical campaign data, prepares experiment packets and drafts for a person to review.
-            It does not send e-mail, contact anyone or connect to a CRM.
           </footer>
         </main>
       </div>

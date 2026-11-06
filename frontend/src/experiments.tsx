@@ -723,7 +723,7 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
           <p className="lede small">
             Plan v{detail.plan.version} · {detail.plan.spec.comparison.treatment} vs {detail.plan.spec.comparison.control} ·{" "}
             <Badge tone={detail.dataset.synthetic ? "synthetic" : "ok"}>{detail.dataset.synthetic ? "Synthetic fixture" : "Public benchmark"}</Badge>{" "}
-            <Badge tone="hypothesis">Retrospective re-analysis</Badge>
+
           </p>
         </div>
         <div className="head-actions">
@@ -764,12 +764,56 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
         {task.packet_artifact_id && <PacketSummary artifactId={task.packet_artifact_id} />}
       </section>}
       <details className="verification"><summary>Verification: source, execution and model receipts</summary>
+        <Badge tone="hypothesis">Retrospective re-analysis</Badge>
+        {run?.metrics && <section className="panel"><h2>Metric references</h2>
+          <dl className="facts">{run.metrics.map(metric => <div key={metric.id}><dt>{metric.label}</dt><dd className="metric-id">{metric.id}{metric.exploratory ? " · exploratory" : ""}</dd></div>)}</dl>
+        </section>}
+        {run && <ExploratoryBreakdowns run={run} />}
         <SourceTab detail={detail} /><TechnicalTab detail={detail} run={run} />
         <WorkTab detail={detail} onChange={async () => { await load(); await onChanged(); }} onError={onError} />
       </details>
 
     </>
   );
+}
+
+function ExploratoryBreakdowns({ run }: { run: Run }) {
+  const exploratory = (run.metrics || []).filter(x => x.exploratory);
+  return <>{exploratory.length > 0 && (
+        <section className="panel">
+          <h2>
+            Exploratory breakdowns <Badge tone="hypothesis">descriptive, not confirmatory</Badge>
+          </h2>
+          <div className="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Breakdown</th>
+                  <th>Purchase rate</th>
+                  <th>Denominator</th>
+                  <th>Metric id</th>
+                </tr>
+              </thead>
+              <tbody>
+                {exploratory.map((x) => (
+                  <tr key={x.id}>
+                    <td>{x.label}</td>
+                    <td>{pct(x.value as number)}</td>
+                    <td>
+                      {num(x.denominator?.events ?? 0)} of {num(x.denominator?.n ?? 0)}
+                    </td>
+                    <td className="hash">{x.id}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="muted">
+            Pre-declared slices of the planned comparison with no intervals. Many slices invite chance findings; nothing
+            here is presented as confirmed.
+          </p>
+        </section>
+      )}</>;
 }
 
 function MetricCard({ metric, emphasis = false }: { metric: Metric; emphasis?: boolean }) {
@@ -780,10 +824,6 @@ function MetricCard({ metric, emphasis = false }: { metric: Metric; emphasis?: b
       <span className="metric-def">
         {metric.definition}
         {metric.interval_method ? ` · interval: ${metric.interval_method.replaceAll("_", " ")}` : ""}
-      </span>
-      <span className="metric-id">
-        {metric.id}
-        {metric.exploratory ? " · exploratory" : ""}
       </span>
     </div>
   );
@@ -899,7 +939,6 @@ function ResultsTab({ detail, run, working }: { detail: PlanDetail; run: Run | n
   const m = byId(run.metrics);
   const artifact = run.artifact_id || "";
   
-  const exploratory = run.metrics.filter((x) => x.exploratory);
   const groups = (prefix: string) => [m[`treatment.${prefix}`], m[`control.${prefix}`]].filter(Boolean);
   return (
     <div className="stack">
@@ -938,41 +977,6 @@ function ResultsTab({ detail, run, working }: { detail: PlanDetail; run: Run | n
           under Next move as labelled assumptions.
         </p>
       </section>
-      {exploratory.length > 0 && (
-        <section className="panel">
-          <h2>
-            Exploratory breakdowns <Badge tone="hypothesis">descriptive, not confirmatory</Badge>
-          </h2>
-          <div className="table-scroll">
-            <table>
-              <thead>
-                <tr>
-                  <th>Breakdown</th>
-                  <th>Purchase rate</th>
-                  <th>Denominator</th>
-                  <th>Metric id</th>
-                </tr>
-              </thead>
-              <tbody>
-                {exploratory.map((x) => (
-                  <tr key={x.id}>
-                    <td>{x.label}</td>
-                    <td>{pct(x.value as number)}</td>
-                    <td>
-                      {num(x.denominator?.events ?? 0)} of {num(x.denominator?.n ?? 0)}
-                    </td>
-                    <td className="hash">{x.id}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="muted">
-            Pre-declared slices of the planned comparison with no intervals. Many slices invite chance findings; nothing
-            here is presented as confirmed.
-          </p>
-        </section>
-      )}
       <details className="verification"><summary>Verification</summary><section className="panel">
         <h2>Provenance of every number above</h2>
         <dl className="facts">

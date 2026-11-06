@@ -132,7 +132,8 @@ uv run python -m scripts.check_browser
   It has a cached-response secondary label and makes no fresh model request. Browser tests use separate mocks.
 - A packet is preparation for human review. No campaign has been launched by SalesDesk and
   historical incremental spend is not SalesDesk revenue. Missing inputs remain visible.
-- No outreach is sent. No CRM, Slack, upload or mailbox integration exists.
+- SalesDesk does not send e-mail, contact anyone or connect to a CRM.
+  No Slack, upload or mailbox integration exists.
 - Each anonymous public session has up to three plans, six runs, six tasks, three queued
   jobs, and three prospects. Seeding uses one plan/run/task/prospect and two jobs. Due times
   are bounded to the next day. Records are isolated by an HttpOnly session cookie.
