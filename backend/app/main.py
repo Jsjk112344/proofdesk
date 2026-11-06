@@ -18,6 +18,8 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.staticfiles import StaticFiles
 
+from .dealer.routes import register as register_dealer
+from .dealer.store import DealerStore
 from .demo import seed_demo
 from .execution.artifacts import sha256, strict_json
 from .execution.controller import ROOT
@@ -35,12 +37,14 @@ NOT_FOUND = {
     "execution_not_found",
     "experiment_not_found",
     "dataset_not_found",
+    "dealer_not_found",
 }
 QUOTA = {
     "web_run_quota_reached",
     "prospect_quota_reached",
     "experiment_quota_reached",
     "experiment_queue_full",
+    "dealer_quota_reached",
 }
 
 
@@ -74,9 +78,10 @@ async def body(request, fields, *, limit=2048):
         raise HTTPException(400, "invalid_request") from None
 
 
-def create_app(jobs=None, prospects=None, experiments=None):
+def create_app(jobs=None, prospects=None, experiments=None, dealer_store=None):
     @asynccontextmanager
     async def lifespan(app):
+        app.state.dealer_store = dealer_store or DealerStore()
         app.state.jobs = jobs or Jobs()
         app.state.prospects = prospects or Prospects()
         app.state.experiments = experiments or Experiments()
@@ -373,6 +378,8 @@ def create_app(jobs=None, prospects=None, experiments=None):
         service = request.app.state.jobs
         service.reconcile()
         return service.public(service.read(run_id), owner(request))
+
+    register_dealer(app, owner, body)
 
     dist = ROOT / "frontend/dist"
     if dist.is_dir():
