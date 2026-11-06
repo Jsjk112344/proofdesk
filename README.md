@@ -10,13 +10,13 @@ Historical records and authorization references remain unchanged.
 [![Scaffold checks](https://github.com/Jsjk112344/salesdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Jsjk112344/salesdesk/actions/workflows/ci.yml)
 
 SalesDesk helps a sales team use evidence, statistics and AI reasoning to choose an
-improvement, approve the next action, run scheduled work on a Vultr VM and measure the result,
+improvement, approve the next move, run scheduled work on a Vultr VM and measure the result,
 all inside one workspace. The first complete experiment answers a sales manager's question on
 a genuine public dataset: **did these e-mails create additional purchases, and what should we
 test next?** It reproduces a historical randomized e-mail campaign, then prepares an approved
-next-experiment packet through a durable scheduled job.
+next-move packet through a durable scheduled job.
 
-**Status: experiment workspace implemented, verified locally with real Docker execution on the
+**Status: See what worked implemented, verified locally with real Docker execution on the
 genuine dataset, and privately deployed on the owner's Vultr VM** (see [STATUS.md](STATUS.md)
 for the observed checkpoint). The interpretation step runs in **rule-based mode (no model)** by
 default; live model mode is implemented behind a validated analysis contract but **no successful
@@ -56,7 +56,7 @@ customer data is included. [Provenance](docs/provenance.md) records the baseline
    labelled interpretation: rule-based by default, or the Vultr model under contract when
    authorized (numbers are rendered in code from validated metric ids; a failed live step is shown
    as failed and never replaced).
-5. **Edit and approve the proposed next experiment**: hypothesis, variants, audience
+5. **Edit and approve the proposed next move**: hypothesis, variants, audience
    requirements, unit of randomization, primary outcome, observation window, decision rule and
    missing inputs, plus entered scenario assumptions (audience size, margin, cost) and sample-size
    inputs that stay visually separate from measurements. Approval binds to the exact proposal and
@@ -68,7 +68,7 @@ customer data is included. [Provenance](docs/provenance.md) records the baseline
    approval, scheduled, running, ready for review, completed, cancelled and failed work, with
    attempts and failures preserved.
 
-The prospect workspace (offering + prospect website → sourced brief → demonstration decision →
+The Starting from zero (offering + prospect website → sourced brief → demonstration decision →
 sandboxed demonstration → unsent draft → version-bound review) remains available under
 **Prospects** as a supporting route for a future prospective experiment.
 
@@ -85,7 +85,7 @@ walkthrough around the actual product.
 | Interpretation contract: numbers only through `[metric:ID]` placeholders rendered in code; raw digits, ROI/profit wording, unknown ids and actions against the historical records are refused | A model cannot invent a figure, promise an outcome or propose contacting the anonymous records | Lexical checks; a grounded but wrong reading can still pass, which is why provenance and alternatives are shown |
 | Version-bound approval: proposal hash + artifact hash + plan hash; stale approvals are refused by the worker | Prepared packets correspond to what a person approved | It does not make the packet a launch or the review complete |
 | Durable jobs: atomic lease claims, conditional writes, unique artifacts per job, one bounded requeue | Work survives browser closure and a worker restart without duplicate results | Bounded by the quotas; a job can still end failed, which is recorded |
-| Prospect checks (quotation, grounding, quantity attribution, savings wording, demonstration validation) | Unchanged from the prospect workspace | Lexical, not semantic; see docs/architecture.md |
+| Prospect checks (quotation, grounding, quantity attribution, savings wording, demonstration validation) | Unchanged from the Starting from zero | Lexical, not semantic; see docs/architecture.md |
 
 ## Local setup
 
@@ -152,9 +152,9 @@ Interpretation modes are labelled throughout the UI, records and packets:
 
 | Mode | When | What it means |
 | --- | --- | --- |
-| Rule-based, no model | Default | Controller text built from interval positions of validated metrics. No model request. |
-| Live model | Operator sets `PROOFDESK_ANALYSIS_LIVE_PLAN` to an owner-approved plan and provides `VULTR_INFERENCE_API_KEY` to the API | The Vultr model proposes the reading through the validated analysis contract; the controller renders every number. A failed request is shown as failed. |
-| Saved replay | CLI only | A previously accepted live response replayed for identical requests. No request, no charge. |
+| Analyst: Rule-based | Default | Controller text built from interval positions of validated metrics. No model request. |
+| Analyst: Live | Operator sets `PROOFDESK_ANALYSIS_LIVE_PLAN` to an owner-approved plan and provides `VULTR_INFERENCE_API_KEY` to the API | The Vultr model proposes the reading through the validated analysis contract; the controller renders every number. A failed request is shown as failed. |
+| Analyst: Replay | CLI only | A previously accepted live response replayed for identical requests. No request, no charge. |
 
 The prospect endpoints (`/api/prospects`) and the extraction run endpoints (`/api/runs`) remain
 for the supporting workflow and existing records.

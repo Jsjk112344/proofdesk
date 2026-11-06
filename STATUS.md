@@ -644,3 +644,13 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   management credentials; only the inference key is configured locally.
 - Public URL is pending external ingress, not ready for judges. Subsequent UI work may
   proceed while the external firewall is corrected; activation acceptance remains open.
+
+## Hackathon phase 3
+
+- Analyst badges, two-door vocabulary and Verification disclosures applied; internal
+  identifiers and routes preserved. Existing green workspace identity retained.
+- Frontend production build passed; 94 backend tests passed with six explicit Docker
+  skips. Repository/link check passed. Real HTTP journey on the public-mode Vultr runtime
+  passed through SSH forwarding: real Docker statistics, accepted saved replay, stale
+  approval refusal, identical artifacts, packet completion while absent and isolation.
+  This proves the VM workflow, not external ingress or a browser interaction.

@@ -1,101 +1,102 @@
-# Architecture and the prospect journey
+# Architecture: the experiment journey and the supporting prospect journey
 
-SalesDesk is a sales agent for technical sellers. The implemented product journey is:
-offering + prospect website → bounded public-page research → evidence brief → demonstration
-decision → optional sandboxed demonstration → editable, unsent outreach draft → human
-review bound to the exact draft version. It is privately deployed on the owner's Vultr VM.
+SalesDesk's entry screen is the See what worked. The implemented journey is:
+pinned historical campaign dataset → saved analysis plan → durable job claimed by the
+server's scheduler → fixed analysis program in the disposable Docker sandbox → validated,
+reconciled metrics → labelled interpretation (rule-based, or the Vultr model under contract) →
+human-edited and approved next-move proposal → internal task → scheduled packet
+preparation that survives browser closure and worker restart → downloadable packet for human
+review. The prospect journey (offering + website → research → demonstration decision → unsent
+draft → version-bound review) is a supporting route. Both are privately deployed on the owner's
+Vultr VM.
 
-Two live Vultr model requests (earlier code-generation checks) failed validation and no
-successful live inference has been observed yet. The journey therefore runs today in
-**rule-based mode**, which is labelled everywhere; live model mode is implemented behind the
-same validated contracts and awaits an authorized live run.
+No successful live Vultr inference has been observed for any contract. Interpretation runs in
+**rule-based mode** by default and is labelled everywhere; live mode is implemented behind the
+analysis contract and awaits an authorized run.
 
 ## Components
 
-**React workspace** (`frontend/`): a landing form for the offering and prospect website
-with a labelled synthetic sample, then a prospect workspace with Research, Demonstration
-and Outreach views and a secondary Technical details view (saved events, model request
-diagnostics, sandbox evidence, extractor source, historical live inference checks). The
-generation mode of every brief and draft is shown as a badge.
+**React workspace** (`frontend/src/`): `main.tsx` is the shell with hash routes (`#/`
+overview, `#/experiments/new`, `#/experiments/<id>`, `#/queue`, `#/prospects`);
+`experiments.tsx` holds the overview, plan form, experiment detail (Results, Interpretation,
+Next move, Scheduled work, Plan and source, Verification) and the action queue;
+`prospects.tsx` is the Starting from zero moved mostly verbatim. Charts are inline SVG with
+denominators, interval methods and artifact provenance in their captions.
 
 **API** (`backend/app/main.py`): anonymous HttpOnly/SameSite session capabilities,
-same-origin JSON checks, bounded bodies, idempotent prospect creation, draft edits and
-reviews, cross-session 404s, and the retained extraction-run endpoints. One Uvicorn worker.
+same-origin JSON checks, bounded bodies, idempotent writes by request id, cross-session 404s.
+Experiment endpoints under `/api/experiments` (datasets, plans, runs, proposals, tasks, approve,
+schedule, cancel, complete, jobs, artifacts, packet download); prospect and extraction endpoints
+unchanged. The lifespan starts the scheduler thread; one Uvicorn worker.
 
-**Prospect store** (`backend/app/sales/prospects.py`): atomic `.local/prospects/<id>/`
-records holding offering, target (public URL or labelled sample), ownership hash, saved
-events, sources, brief, demonstration decision/result, draft versions, review state and
-sanitized model diagnostics. Quotas: one active job, five per session, twenty total.
+**Experiment store** (`backend/app/experiments/store.py`): versioned SQLite under ignored
+`.local/experiments/` with datasets, plans and plan versions, jobs, runs, artifacts, proposals,
+tasks and operation keys. Parameterized SQL, `BEGIN IMMEDIATE` transactions, WAL, owner hashes
+on every row, unique operation keys per request, unique artifact per job. Prospect JSON stores
+and execution records are untouched.
 
-**Sales worker** (`backend/app/sales_worker.py` → `sales/agent.py`): a trusted
-subprocess per prospect that fetches pages, builds the brief, applies the demonstration
-rule, runs the sandbox through the existing execution controller, drafts, and saves
-progress after every stage. A restarted API marks abandoned jobs failed without rerunning.
+**Ingestion** (`experiments/ingestion.py`): pinned source definition, bounded checksum-verified
+fetch, strict typed importer, manifest with aggregates and limitations, typed analysis input.
+See [experiments.md](experiments.md).
 
-**Retrieval** (`sales/retrieval.py`): hostname-only URLs over http/https on default ports;
-all resolved addresses must be globally routable (private, loopback, link-local,
-multicast, reserved, unspecified, IPv4-mapped and 6to4/Teredo forms are refused, and one
-bad answer blocks the host); the TCP connection is pinned to the validated address with
-TLS verification against the hostname; at most three redirects, each re-validated; 512 KiB
-per page, HTML/text only, no compressed bodies, per-page and total deadlines; at most four
-same-site pages chosen by informational path hints. Pages are untrusted data.
+**Analysis program** (`experiments/analysis_program.py`): fixed, versioned, standard-library
+script executed only inside the sandbox; Wilson, Newcombe, seeded customer-level bootstrap,
+descriptive exploratory cells; deterministic output.
 
-**Evidence** (`sales/evidence.py`): sources numbered in fetch order; claims are verbatim
-sentences ranked by document-handling and manual-work terms; company summary from the
-description or first descriptive sentence; fixed unknowns list; the demonstration decision
-is a controller rule over cited claims (`run`, `skip_irrelevant`,
-`skip_insufficient_evidence`). A retrieval failure yields the insufficient-evidence path.
+**Contracts** (`experiments/contracts.py`): plan validation (original arms only), the
+analysis-result contract with reconciliation against the importer and the controller's own
+statistics, metric derivation and formatting, the model analysis contract (placeholders only,
+no raw numbers, no ROI wording, no action against the historical records), proposal and task
+validation, task and job state machines.
 
-**Contracts** (`sales/contracts.py`): separate validators for executable Python source,
-the research brief JSON and the outreach JSON. The research contract requires every
-source id to be a fetched source and every excerpt to be verbatim text from it, accepts a
-claim's restatement only when it is built from its own quotation's words and numbers
-(`text_kind: grounded_restatement`, or `verbatim`), keeps the company summary as a
-labelled `model_summary` interpretation, and refuses quantities in the summary,
-hypothesis, unknowns or relevance reason that no quotation supports. The outreach
-contract allows only known claim ids; a quantity in a paragraph must appear, counting the
-same thing, in an excerpt that paragraph cites, the offering or a verified demonstration
-summary; savings language, named greetings and demonstration mentions without a verified
-result are refused. Records carry `verification: verbatim_quotation` on quotations and
-`text_kind` on interpretations so the UI never presents a restatement as a verified fact.
-Rejections carry a bounded diagnostic (stage, field path, expected/observed types, head
-classification, quantity kind and attribution) and never the rejected text. These checks
-are lexical and attributional; they do not establish truth.
+**Reasoning** (`experiments/reasoning.py`): the rule-based reading, prompts, and the live step
+through the shared provider transport with its budget ledgers and receipts. The model sees
+metrics and limitations only.
 
-**Provider** (`generation/provider.py`): one shared bounded transport, usage accounting
-and pessimistic reservations for all contracts; `complete()` dispatches one request and
-hands the assistant content to exactly one contract. The documented response `model`
-echo is recorded rather than rejected; `finish_reason`, reasoning presence and
-`completion_tokens_details.reasoning_tokens` are recorded. A replay provider serves
-previously accepted live responses for byte-identical requests without a charge.
+**Jobs** (`experiments/jobs.py`, `worker.py`): `Scheduler` (API thread; reconcile lost workers,
+claim one due job under a lease, launch a worker subprocess with an allowlisted environment)
+and `run_job` (analysis or packet assembly, lease re-validated before every write, bounded
+requeue after interruption or lost lease, failure recorded). `execution/controller.py` gained a
+narrow extension: an optional result validator with its label, a 1 MiB typed-input cap for the
+analysis profile and a 30 s wall clock; scripts stay capped at 32 KiB and the container policy is
+unchanged.
 
-**Drafting** (`sales/drafting.py`): controller-owned greeting, sign-off placeholders and
-footnotes; a template draft in rule-based mode; prompts and rendering for live mode. A
-failed demonstration is described as left out; a skipped one is not mentioned.
+**Packet** (`experiments/packet.py`): assembly from the artifact, accepted interpretation,
+approved proposal, task and dataset provenance; readiness checks; scenario and sample size only
+from entered inputs; Markdown rendering; no model call.
 
-**Execution** (`execution/`): unchanged disposable Docker sandbox, limits, strict-JSON
-artifact validation against the expected answer as canonical JSON values, and cleanup
-verification, now also used for the demonstration step.
+**Service** (`experiments/service.py`): owner-scoped operations, quotas (private and public),
+approval binding, invalidation on edit, due-time horizon, views.
+
+**Prospect workspace** (`backend/app/sales/`, `web_jobs.py`, `web_worker.py`): unchanged;
+see the component descriptions in git history and [inference.md](inference.md).
 
 ## Trust boundaries
 
-- The controller (API, worker, CLI) owns policy, quotas, budgets, credentials and records.
-  Models propose; deterministic code decides. Page text and model output never authorize
-  tools, spending or sends; there are no sends.
-- The sales worker receives the inference credential only when the operator configures
-  live mode; the Docker task environment never does (`env -i` allowlist).
-- Only the fixture extractor and labelled synthetic documents enter the demonstration
-  sandbox. Prospect pages never do.
-- Review binds to the draft hash; an edit creates a new version and clears the review.
+- The controller (API, scheduler, workers, CLI) owns policy, quotas, budgets, credentials,
+  records and state. Models propose through validated contracts; deterministic code decides
+  what executes. A model cannot change source rows, methods, confidence levels, allocation,
+  task approval or job destinations.
+- Only the fixed analysis program and the typed derivative enter the analysis sandbox; the
+  raw CSV never leaves ignored storage. The worker receives the inference credential only when
+  live mode is configured; Docker sandboxes never do.
+- Every number shown comes from a validated artifact or an explicitly labelled entered
+  assumption. Approval binds to hashes; editing invalidates; the worker re-checks before
+  assembling. Jobs survive restarts through leases, bounded requeue and unique artifacts.
+- Anonymous sessions isolate plans, runs, tasks, jobs and artifacts; public demo mode adds
+  smaller quotas and a shorter due horizon and keeps live mode off.
 
 ## Deployment
 
-A single Ubuntu VM on Vultr runs the API, controller, retrieval and Docker daemon under a
-non-root controller user, bound to loopback; access is through an SSH tunnel. No public
-ingress, HTTPS, domain or inference credential is deployed. See [infra/README.md](../infra/README.md).
+A single Ubuntu VM on Vultr runs the API with its scheduler thread, workers, the SQLite store
+and the Docker daemon under a non-root controller user, bound to loopback; access is through an
+SSH tunnel. The dataset is placed on the VM outside the bundle. No public ingress, HTTPS, domain
+or inference credential is deployed. See [infra/README.md](../infra/README.md) and
+[public-demo.md](public-demo.md).
 
 ## Out of scope
 
-No CRM, Slack, mailbox connection, bulk lead discovery, autonomous sending, browser
-automation, paid search, new cloud services or generic agent framework. Only one
-demonstration family exists; other offerings get research and a draft only.
+No CRM, Slack, mailbox connection, bulk lead discovery, autonomous sending, browser automation,
+paid search, new cloud services, GPU dependency, uplift models, bandits, automatic targeting,
+arbitrary agent code execution or generic agent framework. One dataset, one fixed analysis
+program and two job kinds exist.
