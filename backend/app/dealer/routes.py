@@ -82,6 +82,7 @@ def register(app, owner, body):
             )
             else "deterministic"
         )
+        request.app.state.dealer_store.seed(owner(request))
         job = request.app.state.dealer_store.start_review(
             owner(request), data["request_id"], mode=mode
         )

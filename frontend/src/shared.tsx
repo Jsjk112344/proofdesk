@@ -32,7 +32,7 @@ export const displayCurrency = (text: string) => text.replace(
     try { return money(Number(cents), currency); } catch { return original; }
   },
 );
-export const newId = () => crypto.randomUUID().replaceAll("-", "");
+export const newId = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), value => value.toString(16).padStart(2, "0")).join("");
 
 export function Badge({ tone, children }: { tone: string; children: ReactNode }) {
   return <span className={`badge ${tone}`} title={tone === "saved_replay" ? "cached response: previously accepted for identical inputs; no new request was made." : undefined}>{children}</span>;

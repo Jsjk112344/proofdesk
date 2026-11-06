@@ -81,7 +81,7 @@ def messages(kind, result, group):
             "[metric:aged_matched] aged units match at-risk leads.",
             "Listed figures imply [metric:recoverable_gross] estimated recoverable gross.",
         ]
-        payload["rooftops"] = result["rooftops"]
+        payload["rooftops"] = sorted(result["rooftops"], key=lambda roof: roof["rooftop_id"])
         payload["sources"] = result["sources"]
     return [
         dict(role="system", content=SYSTEM + (ROOFTOP if kind == "rooftop_brief" else GROUP)),

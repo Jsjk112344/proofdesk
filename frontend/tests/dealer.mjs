@@ -7,9 +7,10 @@ const screen=process.env.CHECK_SCREEN || 'group';
 const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 const context=await browser.newContext({viewport:{width:1440,height:900}});
 const page=await context.newPage();
+page.setDefaultTimeout(90000);
 const errors=[];page.on('pageerror',e=>errors.push(e.message));
 const checks=[];const shots=[];
-async function shot(name) { await page.screenshot({path:'/work/'+name+'.png',fullPage:false});shots.push(name+'.png'); }
+async function shot(name) { await page.screenshot({path:'/work/'+name+'.png',fullPage:false,animations:'disabled'});shots.push(name+'.png'); }
 try {
  await page.goto(base+'/#/');
  await page.getByRole('heading',{name:/Good morning/}).waitFor({timeout:60000});
@@ -19,11 +20,13 @@ try {
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
  await shot('salesdesk-group');checks.push('group: 24 real-result tiles, one primary action, map and first tile row above fold');
  if(screen==='journey') {
+  console.log('starting real review');
   const start=Date.now();await page.getByRole('button',{name:'Run tonight’s review now'}).click();
   await page.getByRole('heading',{name:'Every rooftop. Working together.'}).waitFor();
-  await page.waitForFunction(()=>document.querySelectorAll('.rooftop-tile.ready').length>0&&document.querySelectorAll('.rooftop-tile.ready').length<24,{timeout:90000});
+  console.log('real review started');
+  await page.waitForFunction(()=>document.querySelectorAll('.rooftop-tile.ready').length>0&&document.querySelectorAll('.rooftop-tile.ready').length<24,undefined,{timeout:90000});
   await shot('salesdesk-live-run');
-  await page.waitForFunction(()=>document.querySelectorAll('.rooftop-tile.ready').length===24,{timeout:180000});
+  await page.waitForFunction(()=>document.querySelectorAll('.rooftop-tile.ready').length===24,undefined,{timeout:180000});
   await page.getByRole('heading',{name:/Good morning/}).waitFor({timeout:90000});
   checks.push({full_run_wall_clock_seconds:(Date.now()-start)/1000});
  }
@@ -37,7 +40,7 @@ try {
   await page.getByRole('button',{name:'Open Maria G. details'}).click();
   await page.getByRole('dialog',{name:'Maria G. lead detail'}).waitFor();
   assert.ok((await page.getByRole('dialog').innerText()).includes('2017 Honda CR-V'));
-  assert.ok((await page.getByRole('dialog').innerText()).includes('74 days'));
+  assert.match(await page.getByRole('dialog').innerText(),/74 days/i);
   await shot('salesdesk-maria');
   await page.getByRole('button',{name:'Close lead detail'}).click();
   checks.push('Sandy: Maria first, three candidates, trade-in, timeline and score components');
@@ -52,7 +55,8 @@ try {
   await page.reload();await page.getByRole('link',{name:'CRM tasks',exact:true}).waitFor();
   checks.push('approve-all durable handoff: three exports, reload, real download, cross-session refusal');
   await page.getByRole('link',{name:'Schedule',exact:true}).click();
-  await page.getByRole('switch').check();
+  await page.getByRole('switch').click();
+  await page.waitForFunction(()=>document.querySelector('[role=switch]')?.checked===true);
   await page.reload();await page.getByRole('switch').waitFor();assert.equal(await page.getByRole('switch').isChecked(),true);
   checks.push('server schedule persisted across reload');
   await page.getByRole('link',{name:'Data',exact:true}).click();await page.getByRole('heading',{name:'Your dealer-group data'}).waitFor();

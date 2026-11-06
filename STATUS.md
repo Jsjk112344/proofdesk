@@ -1006,3 +1006,9 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   overrides) passed at 1440×900: hero, real stat strip, regional SVG map and first tile row
   above the fold; 24 tiles; exactly one primary action. Mobile has no horizontal overflow
   or page errors. Screenshots are in ignored `.local/dealer-browser/` pending deployment.
+- Store/lead UI acceptance: direct local browser passed for Sandy. Header, four KPI
+  values and first two follow-up cards fit 1440×900. Maria's drawer shows the sold blue
+  RAV4, CR-V trade, silver 74-day match, three scored candidates and message previews.
+  Mobile has no overflow or page errors. Existing campaign/prospect browser tests also
+  pass through retained unlinked routes. A local HTTP request-id issue was fixed with
+  crypto.getRandomValues; strict session initialization now shares one bootstrap request.
