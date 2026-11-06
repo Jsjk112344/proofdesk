@@ -15,8 +15,8 @@ import {
 
 const MODE_LABEL: Record<string, string> = {
   deterministic: "Analyst: Rule-based",
-  live_model: "Analyst: Live",
-  saved_replay: "Analyst: Replay",
+  live_model: "Analyst: Qwen 3.8 on Vultr Inference",
+  saved_replay: "Analyst: Qwen 3.8 on Vultr Inference",
 };
 
 function App() {

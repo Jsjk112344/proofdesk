@@ -27,7 +27,7 @@ export const money = (cents: number, currency: string) =>
 export const newId = () => crypto.randomUUID().replaceAll("-", "");
 
 export function Badge({ tone, children }: { tone: string; children: ReactNode }) {
-  return <span className={`badge ${tone}`}>{children}</span>;
+  return <span className={`badge ${tone}`} title={tone === "saved_replay" ? "cached response: previously accepted for identical inputs; no new request was made." : undefined}>{children}</span>;
 }
 
 export function Empty({ title, text }: { title: string; text: string }) {
@@ -46,14 +46,14 @@ export const MODES: Record<string, { label: string; detail: string }> = {
       "Claims are verbatim sentences from fetched pages and the draft is a controller template. No model request was made.",
   },
   live_model: {
-    label: "Analyst: Live",
+    label: "Analyst: Qwen 3.8 on Vultr Inference",
     detail:
       "The brief and draft were proposed by the Vultr model under an owner-approved budget. Quotations were checked against the fetched pages; restatements, the hypothesis and the draft were checked for unsupported quantities and claims, not for truth.",
   },
   saved_replay: {
-    label: "Analyst: Replay",
+    label: "Analyst: Qwen 3.8 on Vultr Inference",
     detail:
-      "A previously accepted live model response was replayed for identical inputs. No new request was made.",
+      "cached response: a previously accepted live model response for identical inputs. No new request was made.",
   },
   human_edited: { label: "Edited by you", detail: "You changed this version." },
 };

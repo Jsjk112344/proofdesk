@@ -298,10 +298,10 @@ const PROVENANCE: Record<string, { label: string; detail: string }> = {
     detail: "Controller text built from the interval positions of validated metrics. No model request was made.",
   },
   live_model: {
-    label: "Analyst: Live",
+    label: "Analyst: Qwen 3.8 on Vultr Inference",
     detail: "The Vultr model proposed this reading from validated aggregate metrics; every number was rendered by the controller from metric ids, and the text was checked for raw numbers, ROI wording and actions against the historical records, not for truth.",
   },
-  saved_replay: { label: "Analyst: Replay", detail: "A previously accepted live response replayed for identical inputs." },
+  saved_replay: { label: "Analyst: Qwen 3.8 on Vultr Inference", detail: "cached response: a previously accepted live response for identical inputs; no new request was made." },
   human_edited: { label: "Edited by you", detail: "You changed this version." },
 };
 
@@ -410,7 +410,7 @@ export function ExperimentsHome({ overview }: { overview: Overview }) {
       <Stat label="Campaigns analysed" value={String(analysed)} />
       <Stat label="Next moves awaiting approval" value={String(awaiting)} />
       <Stat label="Ready for review" value={String(overview.tasks.filter(t => t.status === "ready_for_review").length)} />
-      <Stat label="Analyst mode" value={(PROVENANCE[overview.plans[0]?.latest_run?.interpretation_provenance || overview.generation_mode]?.label || overview.generation_mode).replace("Analyst: ", "")} />
+      <Stat label="Analyst" value={(PROVENANCE[overview.plans[0]?.latest_run?.interpretation_provenance || overview.generation_mode]?.label || overview.generation_mode).replace("Analyst: ", "")} />
     </div>
     <section className="panel saved-home">
       <div className="row-between"><h2>Campaigns</h2><a href="#/experiments/new">New analysis plan</a></div>

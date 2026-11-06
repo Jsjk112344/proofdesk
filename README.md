@@ -48,8 +48,8 @@ HTTPS and proxies to loopback. Work continues when the browser closes.
 
 **Vultr Serverless Inference** runs `qwen3.8-flash-next` with JSON-object output and
 reasoning disabled. Analysis, research and outreach have passed live end to end. Identical
-public requests prefer previously accepted responses, labelled **Analyst: Replay**;
-new requests use **Analyst: Live**. Rule-based mode is separately labelled. Failures remain
+public requests prefer previously accepted responses, labelled **Analyst: Qwen 3.8 on Vultr Inference** with **cached response**
+in the tooltip and Verification; new requests use the same primary label. Rule-based mode is separately labelled. Failures remain
 visible, with no silent provider or rule-based substitution. See [inference](docs/inference.md).
 
 The owner authorized up to $150 of hackathon credit for compute and inference. Measured
@@ -129,7 +129,7 @@ uv run python -m scripts.check_browser
   worker actually executes the demonstration in Docker. Private research supports public
   websites through the existing SSRF-protected fetcher.
 - A saved replay is an accepted live response for identical request bytes, validated again.
-  It is labelled Replay and makes no fresh model request. Browser tests use separate mocks.
+  It has a cached-response secondary label and makes no fresh model request. Browser tests use separate mocks.
 - A packet is preparation for human review. No campaign has been launched by SalesDesk and
   historical incremental spend is not SalesDesk revenue. Missing inputs remain visible.
 - No outreach is sent. No CRM, Slack, upload or mailbox integration exists.
