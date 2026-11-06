@@ -1,50 +1,23 @@
 # Agent Rush submission checklist
 
-Selected challenge: **Powering the Future of Work**, confirmed by the owner 2026-11-05.
-Rules refreshed 2026-11-05 from the [event page](https://lablab.ai/ai-hackathons/vultr-hackathon)
-(now served from lablab.build): a Vultr VM backend deployment, GitHub repository with setup
-and documentation, public demo URL, recorded demo video and a clear architecture/use-case
-explanation are required. **Vultr Serverless Inference and sandboxing are optional** for
-this challenge; SalesDesk keeps both as engineering choices. Judging: application of
-technology, presentation, business value, originality. Online build November 3–8, 2026;
-no explicit submission hour/timezone was stated on the page. Recheck the actual form.
+Challenge 2: **Powering the Future of Work**. Owner deadline: Nov 8, 2026, 18:00 ET;
+target submit 16:00 ET. The [official event](https://lablab.build/ai-hackathons/vultr-hackathon)
+requires a Vultr VM backend/web deployment, public repository, demo URL, recorded video and
+architecture/use-case explanation. Inference and sandboxing are optional for this challenge;
+SalesDesk uses both. Event and [terms](https://lablab.build/terms-of-use) refreshed this session.
 
-Sources: [event](https://lablab.ai/ai-hackathons/vultr-hackathon),
-[LabLab terms, section 16](https://lablab.ai/terms-of-use), [rule book](https://lablab.ai/hackathon-rules).
+- [x] Public MIT project and third-party provenance.
+- [x] Genuine benchmark with real Docker statistics and an editable next move.
+- [x] Live analysis, research and outreach through Vultr Serverless Inference.
+- [x] Two entry doors, shared activity trace and three plan tabs.
+- [x] Version-bound approval, scheduled worker preparation, return-to-ready download.
+- [x] Isolated seeded public examples within existing quotas.
+- [x] Public HTTPS and real signed-out browser/HTTP verification.
+- [x] README architecture, try-it and setup.
+- [x] Video script, seven-slide outline, real screenshots and form copy prepared.
+- [ ] Publish the final local commits to the public repository.
+- [ ] Record/upload video and export/upload PDF slides.
+- [ ] Paste and verify final form fields, submit and retain receipt.
 
-## Repository and rights
-
-- [x] Public repository and anonymous access verified in the initial checkpoint.
-- [x] MIT license for newly authored project work.
-- [x] Existing work and third-party provenance documented.
-- [x] README describes setup, current architecture and Vultr use.
-
-Current continuation changes are local and uncommitted; no push or publication is claimed.
-
-## Future of Work build and presentation
-
-- [x] Sales-agent journey implemented: offering + prospect → sourced brief → justified
-      demonstration decision → sandboxed demonstration → editable unsent draft → review.
-- [x] Private backend/web deployment on the owner's existing Vultr VM, updated and verified.
-- [x] Contract corrections for the two reproduced false-claim defects (grounded
-      restatements, attributed quantities) with regression tests; documentation describes
-      the checks as lexical/attributional, not as factual verification.
-- [ ] Successful live Vultr inference for the research/outreach contracts (consolidated
-      envelope proposal prepared in docs/inference.md, authorization pending). Rule-based
-      mode is the deployed default.
-- [ ] Public, reviewed web demo with HTTPS and access controls (public-demo mode, Caddy
-      and systemd templates implemented and tested offline; activation proposal in
-      docs/public-demo.md awaits the hostname and approval).
-- [ ] Recorded demo video, slides and cover.
-- [ ] Project description and technology/category tags.
-- [ ] Official LabLab submission and receipt.
-
-Phases, dependencies and required authorizations for the unchecked items are in
-[docs/plan.md](plan.md). A private loopback deployment does not satisfy the public demo requirement. No prospect
-discovery, CRM, Slack or sending exists and none is planned for this entry.
-
-## Items to confirm
-
-Exact deadline/timezone, remote prize eligibility, credit redemption and inference
-coverage. No signed-in submission form was inspected; no organizer contact, terms
-acceptance, credit redemption or submission was performed.
+No campaign launch, outreach send or new sales is claimed. See [STATUS.md](../STATUS.md)
+for observed checks and accounting and [plan.md](plan.md) for the remaining sequence.

@@ -54,3 +54,24 @@ class PublicReplayTests(unittest.TestCase):
             self.assertFalse(value["ok"])
             self.assertEqual(budget.requests, 2)
             self.assertNotEqual(first["request_sha256"], changed["request_sha256"])
+
+    def test_public_missing_plan_fails_without_rule_based_substitution(self):
+        import os
+        from unittest.mock import patch
+
+        from backend.app.experiments.reasoning import interpret, live_mode
+
+        with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {}, clear=True):
+            self.assertEqual(live_mode(True), "live_model")
+            result, generation = interpret(
+                mode=live_mode(True),
+                metrics=[],
+                manifest={},
+                spec={},
+                question="Campaign?",
+                receipt_dir=Path(directory),
+            )
+            self.assertEqual(result["status"], "failed")
+            self.assertEqual(result["failure_reason"], "live_plan_not_configured")
+            self.assertIsNone(result["reading"])
+            self.assertEqual(generation["mode"], "live_model")

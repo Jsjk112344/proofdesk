@@ -31,7 +31,15 @@ identifies the intended runner, not proof of dispatch.
 | `cleanup` | Verified absence after attempted dispatch, or `removed=true, reason=not_started` for pre-dispatch rejection |
 | `probe_check` | Optional CLI expected outcome and synthetic canary hashes, separate from task success |
 
-Scripts/inputs over 32 KiB are rejected **before saving their contents or hashing them**.
+**Analysis profile (2026-11-05).** The experiment workspace runs the fixed analysis program
+with `scenario = experiment-analysis`, `limits.wall_seconds = 30` (all other limits unchanged),
+a typed input of up to 1,048,576 bytes (`input_rejection.limit` records the cap in force; scripts
+stay capped at 32 KiB) and `validated_artifacts[0].validation = analysis_result_contract_v1`,
+meaning the artifact passed the analysis-result contract and reconciliation instead of exact
+comparison with a known answer. The container policy, image, environment allowlist and cleanup
+verification are identical; the schema allows exactly these two profiles.
+
+Scripts/inputs over the applicable cap are rejected **before saving their contents or hashing them**.
 The directory contains only `record.json`, with `task_input_limit`, no input/source/expected
 hash, `dispatched=false`, empty evidence and null exit code. The controller never reads
 runner evidence or calls its cleanup for that rejection. `not_started` is not a Docker

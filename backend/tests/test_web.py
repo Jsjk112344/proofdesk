@@ -12,6 +12,8 @@ from fastapi.testclient import TestClient
 
 from backend.app.execution.controller import atomic_json
 from backend.app.execution.runner import RunError
+from backend.app.experiments.service import Experiments
+from backend.app.experiments.store import Store
 from backend.app.main import create_app
 from backend.app.web_jobs import Jobs, extractor
 from backend.app.web_worker import work
@@ -30,7 +32,12 @@ class WebTests(unittest.TestCase):
         self.environment = patch.dict(os.environ, {"PROOFDESK_ALLOWED_HOSTS": "127.0.0.1"})
         self.environment.start()
         self.addCleanup(self.environment.stop)
-        self.client = TestClient(create_app(self.jobs), base_url="http://127.0.0.1")
+        self.experiments = Experiments(
+            Store(Path(self.temp.name) / "experiments"), launch=lambda job_id, token: None
+        )
+        self.client = TestClient(
+            create_app(self.jobs, experiments=self.experiments), base_url="http://127.0.0.1"
+        )
         self.client.__enter__()
         self.addCleanup(self.client.__exit__, None, None, None)
 
@@ -74,7 +81,9 @@ class WebTests(unittest.TestCase):
             self.start(document="reordered", request_id=key).json()["detail"],
             "idempotency_conflict",
         )
-        with TestClient(create_app(self.jobs), base_url="http://127.0.0.1") as other:
+        with TestClient(
+            create_app(self.jobs, experiments=self.experiments), base_url="http://127.0.0.1"
+        ) as other:
             other.get("/api/workspace")
             self.assertEqual(other.get("/api/runs/" + first["id"]).status_code, 404)
             self.assertEqual(other.get("/api/runs").json(), [])

@@ -228,7 +228,7 @@ function Landing({
         <p className="lede">
           Give SalesDesk your offering and a prospect website. It reads a few public pages,
           separates facts from a hypothesis, decides whether its one supported demonstration
-          is relevant, runs it in a disposable sandbox when it is, and prepares an editable
+          is relevant, prepares a worked example when it is, and creates an editable
           draft you review before anything leaves your desk.
         </p>
         {publicDemo && (
@@ -420,7 +420,7 @@ function ProspectView({
       ].map(([stage, label]): ActivityStep => {
         const event = prospect.events.find(e => e.stage === stage);
         const reached = !!event || (stage === "demonstrating" && !!prospect.demo);
-        return { label, at: event?.at, state: prospect.status === stage && active ? "running" : reached ? "done" : "pending",
+        return { label, at: event?.at, state: prospect.status === "failed" && ((stage === "researching" && !prospect.brief) || (stage === "drafting" && reached && !prospect.draft)) ? "failed" : prospect.status === stage && active ? "running" : reached ? "done" : "pending",
           evidence: stage === "researching" ? prospect.sources : stage === "demonstrating" ? prospect.demo : stage === "drafting" ? prospect.generation : undefined };
       })} />
       {prospect.status === "failed" && (
@@ -459,7 +459,7 @@ function ProspectView({
         {tab === "outreach" && (
           <OutreachTab prospect={prospect} onChange={onChange} onError={onError} />
         )}
-        {tab === "details" && <DetailsTab prospect={prospect} workspace={workspace} />}
+        {tab === "details" && <details className="verification"><summary>Verification: saved progress and receipts</summary><DetailsTab prospect={prospect} workspace={workspace} /></details>}
       </div>
     </>
   );
@@ -718,7 +718,7 @@ function DemoTab({ prospect }: { prospect: Prospect }) {
               </>
             )}
           </section>
-          <section className="panel">
+          <details className="verification"><summary>Verification</summary><section className="panel">
             <h2>What this proves</h2>
             <p>{demo.proves}</p>
             {execution && (
@@ -746,7 +746,7 @@ function DemoTab({ prospect }: { prospect: Prospect }) {
                 <pre>{execution.input}</pre>
               </details>
             )}
-          </section>
+          </section></details>
         </>
       )}
       {demo.decision !== "run" && (

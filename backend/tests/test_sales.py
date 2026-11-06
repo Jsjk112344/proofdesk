@@ -16,6 +16,8 @@ from unittest.mock import Mock, patch
 from fastapi.testclient import TestClient
 
 from backend.app.execution.runner import RunError
+from backend.app.experiments.service import Experiments
+from backend.app.experiments.store import Store
 from backend.app.generation.provider import (
     Authorization,
     Budget,
@@ -1158,7 +1160,12 @@ class ApiTests(unittest.TestCase):
         self.environment = patch.dict(os.environ, {"PROOFDESK_ALLOWED_HOSTS": "127.0.0.1"})
         self.environment.start()
         self.addCleanup(self.environment.stop)
-        self.client = TestClient(create_app(self.jobs, self.prospects), base_url="http://127.0.0.1")
+        self.experiments = Experiments(
+            Store(root / "experiments"), launch=lambda job_id, token: None
+        )
+        self.client = TestClient(
+            create_app(self.jobs, self.prospects, self.experiments), base_url="http://127.0.0.1"
+        )
         self.client.__enter__()
         self.addCleanup(self.client.__exit__, None, None, None)
 
@@ -1169,10 +1176,12 @@ class ApiTests(unittest.TestCase):
         root = Path(self.temp.name)
         public = Prospects(root / "public", live_plan="", public_demo=True)
         public.launch = lambda _: None
-        with TestClient(create_app(self.jobs, public), base_url="http://127.0.0.1") as client:
+        with TestClient(
+            create_app(self.jobs, public, self.experiments), base_url="http://127.0.0.1"
+        ) as client:
             workspace = client.get("/api/workspace").json()
             self.assertTrue(workspace["public_demo"])
-            self.assertEqual(workspace["generation_mode"], "deterministic")
+            self.assertEqual(workspace["generation_mode"], "live_model")
             self.assertEqual(workspace["limits"]["max_session_prospects"], 3)
             self.assertEqual(workspace["limits"]["max_total_prospects"], 100)
             self.assertTrue(client.get("/api/health").json()["public_demo"])
@@ -1223,12 +1232,12 @@ class ApiTests(unittest.TestCase):
             listed.start(
                 "owner-p", uuid.uuid4().hex, offering=DEFAULT_OFFERING, url="https://example.org/"
             )
-        # A private credential never turns the public app into a paid endpoint by itself.
+        # Public mode selects live without an extra opt-in; provider budgets still authorize calls.
         with patch.dict(os.environ, {"VULTR_INFERENCE_API_KEY": "synthetic-not-a-key"}):
             public_live = Prospects(
                 root / "p1", launch=lambda _: None, live_plan="x", public_demo=True
             )
-            self.assertEqual(public_live.mode(), "deterministic")
+            self.assertEqual(public_live.mode(), "live_model")
             private_live = Prospects(
                 root / "p2", launch=lambda _: None, live_plan="x", public_demo=False
             )
@@ -1249,7 +1258,7 @@ class ApiTests(unittest.TestCase):
         self.assertEqual([s["id"] for s in data["samples"]][0], "harbor-vale-freight")
         self.assertTrue(all(s["synthetic"] for s in data["samples"]))
         health = self.client.get("/api/health").json()
-        self.assertEqual(health["status"], "sales_workspace")
+        self.assertEqual(health["status"], "experiment_workspace")
         payload = {
             "offering": DEFAULT_OFFERING,
             "prospect_url": None,
@@ -1284,7 +1293,7 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(oversized.status_code, 413)
         self.assertEqual(self.client.get("/api/prospects/" + record["id"]).status_code, 200)
         with TestClient(
-            create_app(self.jobs, self.prospects), base_url="http://127.0.0.1"
+            create_app(self.jobs, self.prospects, self.experiments), base_url="http://127.0.0.1"
         ) as other:
             other.get("/api/workspace")
             self.assertEqual(other.get("/api/prospects/" + record["id"]).status_code, 404)

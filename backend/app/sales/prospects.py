@@ -78,8 +78,8 @@ class Prospects:
             live_plan if live_plan is not None else os.environ.get("PROOFDESK_SALES_LIVE_PLAN")
         )
         # Public demo mode: synthetic scenarios only (unless a host is explicitly
-        # allowlisted), smaller per-session quota, larger bounded total, no live model
-        # unless separately enabled. The mode is reported truthfully by the API.
+        # allowlisted), smaller per-session quota and larger bounded total. Live is
+        # the public default; provider authorization and budget checks still apply.
         self.public_demo = (
             public_demo
             if public_demo is not None
@@ -122,14 +122,8 @@ class Prospects:
         ]
 
     def mode(self):
-        """Live only with an operator plan and key in the API environment; never implicit.
-
-        A public deployment additionally needs PROOFDESK_PUBLIC_LIVE=1, so a credential
-        present for private use can never become a public paid endpoint by accident.
-        """
-        if self.live_plan and os.environ.get("VULTR_INFERENCE_API_KEY"):
-            if self.public_demo and os.environ.get("PROOFDESK_PUBLIC_LIVE") != "1":
-                return "deterministic"
+        """Public sessions select live; the provider still requires its plan and credential."""
+        if self.public_demo or (self.live_plan and os.environ.get("VULTR_INFERENCE_API_KEY")):
             return "live_model"
         return "deterministic"
 

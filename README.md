@@ -1,255 +1,147 @@
 # SalesDesk
 
-Demo URL (activation pending upstream firewall): https://salesdesk.149.28.51.139.sslip.io
+**Sell more: Your AI sales analyst.** SalesDesk measures what your last campaign actually
+did, proposes your next move, and prepares it for your approval, on Vultr, with every
+number verified. Start with a past campaign or research your first customers; both doors
+lead to an analyst, a next move, your approval and work prepared while you are away.
 
-Formerly ProofDesk. The app and repository are now SalesDesk. Existing Vultr resource
-names, the local checkout path, service/install paths, `PROOFDESK_*` settings, session
-cookies, request headers and execution labels retain their identifiers for compatibility.
-Historical records and authorization references remain unchanged.
+**Demo:** [Open SalesDesk](https://salesdesk.149.28.51.139.sslip.io)
 
-[![Scaffold checks](https://github.com/Jsjk112344/salesdesk/actions/workflows/ci.yml/badge.svg)](https://github.com/Jsjk112344/salesdesk/actions/workflows/ci.yml)
+**Try it in 60 seconds:**
 
-SalesDesk helps a sales team use evidence, statistics and AI reasoning to choose an
-improvement, approve the next move, run scheduled work on a Vultr VM and measure the result,
-all inside one workspace. The first complete experiment answers a sales manager's question on
-a genuine public dataset: **did these e-mails create additional purchases, and what should we
-test next?** It reproduces a historical randomized e-mail campaign, then prepares an approved
-next-move packet through a durable scheduled job.
+1. Open the demo and let the Vultr workers prepare your isolated example workspace.
+2. Choose **Analyse a campaign**. Read the benchmark result and expand Analyst activity.
+3. Open **Next move**, add a note and **Save next move**, then **Approve & schedule**.
+4. Close the tab. Return to **Ready for review** and download your Markdown packet.
+5. Try **Starting from zero** for a sourced example brief and an unsent outreach draft.
 
-**Status: See what worked implemented, verified locally with real Docker execution on the
-genuine dataset, and privately deployed on the owner's Vultr VM** (see [STATUS.md](STATUS.md)
-for the observed checkpoint). The interpretation step runs in **rule-based mode (no model)** by
-default; live model mode is implemented behind a validated analysis contract but **no successful
-live Vultr inference has been observed yet** for any contract, and the consolidated budget
-proposal in [docs/inference.md](docs/inference.md) awaits authorization. Public activation is
-prepared, not switched on. This is not yet a complete hackathon entry.
+A seeded example approval and ready packet are labelled as demo examples. Your edits need
+a fresh approval. New analysis plans and prospects remain available within session limits.
 
-## Vultr Agent Rush
+[Source repository](https://github.com/Jsjk112344/salesdesk) ·
+[Observed verification and spend](STATUS.md) · [Walkthrough](docs/demo-walkthrough.md)
 
-Selected challenge: **Powering the Future of Work**, November 3–8, 2026. The
-[official event](https://lablab.ai/ai-hackathons/vultr-hackathon) asks for a realistic enterprise
-workflow with a Vultr VM backend and web application, a public repository, demo URL and video.
-For this challenge Vultr Serverless Inference and sandboxing are **optional**; SalesDesk uses
-Vultr inference and sandboxed execution as its own engineering choices. Vultr owns the API, the
-durable workspace, scheduling, worker execution and results; the browser is a client, not the
-scheduler. Submission is through LabLab; nothing has been submitted.
+## Architecture
 
-Original project code is [MIT licensed](LICENSE). No proprietary application code or private
-customer data is included. [Provenance](docs/provenance.md) records the baseline;
-[THIRD_PARTY.md](THIRD_PARTY.md) covers dependencies, the dataset's rights boundary and references.
+```mermaid
+flowchart LR
+  Browser[Browser: two entry doors] --> Caddy[Caddy: HTTPS]
+  Caddy --> API[FastAPI on Vultr VM]
+  API --> Store[(SQLite: session-owned work)]
+  API --> Scheduler[Scheduler and leased worker]
+  Scheduler --> Sandbox[Disposable Docker sandbox]
+  Sandbox --> Metrics[Statistics and verified result]
+  Scheduler <--> Inference[Vultr Serverless Inference]
+  Inference --> Replay[Accepted exact-input replay]
+  Metrics --> Move[Next move]
+  Move --> Approval[Human approval]
+  Approval --> Scheduler
+  Scheduler --> Packet[Packet ready for review]
+  Packet --> Browser
+```
 
-## What a sales manager can do
+## How Vultr powers SalesDesk
 
-1. **Open the historical campaign dataset** and read its provenance: publisher, download and
-   checksum sources, the three original arms with customers, visits, purchases and spend, the
-   validation checks and the documented limitations. Raw rows are never shown or served.
-2. **Save an analysis plan**: a fixed comparison of two original arms (Mens E-Mail versus No
-   E-Mail by default; the third arm stays visible but excluded), fixed outcomes and intervals,
-   bootstrap seed and resamples, and pre-declared exploratory breakdowns.
-3. **Run the statistics on the server.** "Run now" queues a job that the API's scheduler claims
-   under a lease and executes in the disposable Docker sandbox with the fixed, versioned analysis
-   program. Counts and spend are reconciled against the importer's independent Decimal
-   aggregates; Wilson and Newcombe intervals are recomputed by the controller; hashes bind the
-   dataset, plan, program and artifact. Repeat runs reproduce the identical artifact.
-4. **Inspect conversion, visits, incremental historical revenue and uncertainty** with every
-   chart carrying its denominator, definition, interval method and artifact provenance, plus a
-   labelled interpretation: rule-based by default, or the Vultr model under contract when
-   authorized (numbers are rendered in code from validated metric ids; a failed live step is shown
-   as failed and never replaced).
-5. **Edit and approve the proposed next move**: hypothesis, variants, audience
-   requirements, unit of randomization, primary outcome, observation window, decision rule and
-   missing inputs, plus entered scenario assumptions (audience size, margin, cost) and sample-size
-   inputs that stay visually separate from measurements. Approval binds to the exact proposal and
-   artifact hashes; editing invalidates it.
-6. **Assign an internal task and schedule preparation**, close the browser, and come back to a
-   durable packet: the worker validates the approval, assembles the packet from the real
-   artifact and accepted reasoning (no model call), reports missing inputs rather than inventing
-   them, and leaves a downloadable Markdown packet for human review. The queue shows awaiting
-   approval, scheduled, running, ready for review, completed, cancelled and failed work, with
-   attempts and failures preserved.
+The existing **proofdesk-web** Ubuntu 24.04 VM in **EWR, New Jersey** hosts FastAPI,
+the durable store, scheduler, worker subprocesses and Docker execution. Caddy terminates
+HTTPS and proxies to loopback. Work continues when the browser closes.
 
-The Starting from zero (offering + prospect website → sourced brief → demonstration decision →
-sandboxed demonstration → unsent draft → version-bound review) remains available under
-**Prospects** as a supporting route for a future prospective experiment.
+**Vultr Serverless Inference** runs `qwen3.8-flash-next` with JSON-object output and
+reasoning disabled. Analysis, research and outreach have passed live end to end. Identical
+public requests prefer previously accepted responses, labelled **Analyst: Replay**;
+new requests use **Analyst: Live**. Rule-based mode is separately labelled. Failures remain
+visible, with no silent provider or rule-based substitution. See [inference](docs/inference.md).
 
-[docs/experiments.md](docs/experiments.md) records the dataset, importer, formulas, provenance,
-licensing boundary and limits; [docs/demo-walkthrough.md](docs/demo-walkthrough.md) is the
-walkthrough around the actual product.
+The owner authorized up to $150 of hackathon credit for compute and inference. Measured
+request accounting is in STATUS.md; token-cost estimates are distinct from account billing.
+No new VM was provisioned for this refactor.
 
-### What the controller checks, and what it does not
+## Analyst design
 
-| Mechanism | What it establishes | Limitation |
-| --- | --- | --- |
-| Pinned import: exact byte count and SHA-256, header, domains, finite non-negative currency, binary outcomes; malformed values stop the import | The analysed rows are the published file, typed, with multiplicity preserved | Random assignment is as described by the publisher and is not independently verifiable here |
-| Sandbox result contract and reconciliation: counts and cents must equal the importer's Decimal aggregates; intervals must equal the controller's implementation; hashes must bind data, plan, program and input | A number shown traces to a validated artifact produced by the versioned program on the exact input | It establishes computation integrity, not that the historical study answers a present-day question |
-| Interpretation contract: numbers only through `[metric:ID]` placeholders rendered in code; raw digits, ROI/profit wording, unknown ids and actions against the historical records are refused | A model cannot invent a figure, promise an outcome or propose contacting the anonymous records | Lexical checks; a grounded but wrong reading can still pass, which is why provenance and alternatives are shown |
-| Version-bound approval: proposal hash + artifact hash + plan hash; stale approvals are refused by the worker | Prepared packets correspond to what a person approved | It does not make the packet a launch or the review complete |
-| Durable jobs: atomic lease claims, conditional writes, unique artifacts per job, one bounded requeue | Work survives browser closure and a worker restart without duplicate results | Bounded by the quotas; a job can still end failed, which is recorded |
-| Prospect checks (quotation, grounding, quantity attribution, savings wording, demonstration validation) | Unchanged from the Starting from zero | Lexical, not semantic; see docs/architecture.md |
+**See what worked** measures a real historical e-mail campaign: a saved comparison,
+Docker statistics, uncertainty, a reading and an editable next move. **Starting from zero**
+researches a prospect, prepares a brief, decides whether the supported demonstration fits,
+and drafts an introduction. Both share measure/research → next move → approval → worker
+preparation → review.
 
-## Local setup
+The controller renders figures from validated metric references and preserves the model
+contracts, sandbox limits, source checks and version-bound approvals. Analyst activity
+shows saved worker events and receipts; details sit inside Verification disclosures.
+The plan page has three tabs: Result, Next move and Verification.
 
-Prerequisites: Python 3.12, [uv](https://docs.astral.sh/uv/), Node.js 24 and npm. Docker
-is required for the analysis and demonstration sandbox. No API key or cloud account is needed
-for the rule-based workspace.
+## Setup
+
+Prerequisites: Python 3.12, uv, Node.js 24, npm and Docker.
 
 ```bash
 git clone https://github.com/Jsjk112344/salesdesk.git
 cd salesdesk
 uv sync --locked
 npm --prefix frontend ci
-docker info
 docker pull "$(cat infra/task-image.txt)"
-```
-
-Acquire and import the dataset (bounded, checksum-verified; the raw file stays in ignored
-`.local/` and is never committed or served):
-
-```bash
-uv run python -m backend.app.experiments fetch     # or place the pinned CSV at .local/data-research/hillstrom/hillstrom.csv
+uv run python -m backend.app.experiments fetch
 uv run python -m backend.app.experiments import
-uv run python -m backend.app.experiments status
-```
-
-## Run the workspace
-
-Terminal 1, from the repository root:
-
-```bash
+npm --prefix frontend run build
 uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --workers 1
 ```
 
-Terminal 2:
+Open http://127.0.0.1:8000. Local private mode works without inference credentials using
+labelled rule-based readings. For frontend development use `npm --prefix frontend run dev`.
+Keep one API worker because it owns the scheduler thread.
 
-```bash
-npm --prefix frontend run dev
-```
+Live mode requires `VULTR_INFERENCE_API_KEY` and an operator budget plan through
+`PROOFDESK_ANALYSIS_LIVE_PLAN` and `PROOFDESK_SALES_LIVE_PLAN`. Public mode uses `PROOFDESK_PUBLIC_DEMO=1` and selects Live by default. Configure credentials outside
+the checkout/release; never put them in browser code. The example plan schema and ledger
+semantics are in [docs/inference.md](docs/inference.md).
 
-Open http://127.0.0.1:5173. Build with `npm --prefix frontend run build` to serve the
-compiled app from http://127.0.0.1:8000 instead; restart the API after building. API
-documentation is at http://127.0.0.1:8000/docs. Keep **one API worker**: it hosts the job
-scheduler thread that claims due jobs every two seconds and launches one worker subprocess at a
-time. `uv run python -m backend.app.experiments worker --once` runs due jobs from a terminal
-without the API.
+Existing `PROOFDESK_*` settings, service names and paths retain their identifiers for
+compatibility with the project's former ProofDesk name. Records stay in ignored `.local/`.
 
-Anonymous session cookies scope every plan, run, task, job and artifact; another session
-receives 404. Records live under ignored `.local/experiments/` (`PROOFDESK_EXPERIMENT_STORE`),
-sandbox executions under `.local/executions/`, and prospect records under `.local/prospects/`
-(`PROOFDESK_PROSPECT_STORE`). Private limits per session: 10 plans, 20 runs, 20 tasks, 5 queued
-jobs, due times up to 30 days ahead; public demo mode lowers them to 3 / 6 / 6 / 3 and 24 hours.
-The prospect quotas are unchanged (one job at a time, five per session, `PROOFDESK_WEB_MAX_PROSPECTS`
-total). These variables are documented here because the session's permission policy refuses
-edits to `.env.example`:
-
-| Variable | Meaning |
-| --- | --- |
-| `PROOFDESK_EXPERIMENT_STORE` | Directory for the SQLite store, dataset derivatives and artifacts (default `.local/experiments`) |
-| `PROOFDESK_ANALYSIS_LIVE_PLAN` | Owner-approved plan file enabling live interpretation (with `VULTR_INFERENCE_API_KEY`) |
-| `PROOFDESK_SALES_LIVE_PLAN` | Owner-approved plan file for the prospect contracts |
-| `PROOFDESK_PUBLIC_DEMO`, `PROOFDESK_PUBLIC_LIVE`, `PROOFDESK_PUBLIC_URL_ALLOWLIST`, `PROOFDESK_WEB_MAX_PROSPECTS` | Public demo mode, as described in docs/public-demo.md |
-
-Interpretation modes are labelled throughout the UI, records and packets:
-
-| Mode | When | What it means |
-| --- | --- | --- |
-| Analyst: Rule-based | Default | Controller text built from interval positions of validated metrics. No model request. |
-| Analyst: Live | Operator sets `PROOFDESK_ANALYSIS_LIVE_PLAN` to an owner-approved plan and provides `VULTR_INFERENCE_API_KEY` to the API | The Vultr model proposes the reading through the validated analysis contract; the controller renders every number. A failed request is shown as failed. |
-| Analyst: Replay | CLI only | A previously accepted live response replayed for identical requests. No request, no charge. |
-
-The prospect endpoints (`/api/prospects`) and the extraction run endpoints (`/api/runs`) remain
-for the supporting workflow and existing records.
-
-## Operator CLI
-
-```bash
-uv run python -m backend.app.experiments import          # verify checksum, validate rows, derive the analysis input
-uv run python -m backend.app.experiments status          # datasets, plans, jobs and tasks
-uv run python -m backend.app.experiments worker --once   # run due jobs without the API
-uv run python -m backend.app.sales run --sample harbor-vale-freight
-uv run python -m backend.app.sales cleanup
-uv run python -m backend.app.execution probe all
-uv run python -m backend.app.execution cleanup
-```
-
-Live inference uses only Vultr's fixed HTTPS chat-completions endpoint. The original
-two-request ledger is exhausted ($0.0040384 reserved under the $0.02 cap; both requests
-failed validation). The consolidated proposal for the analysis contract (and, separately
-approvable, the earlier prospect live-debug batch) is in [docs/inference.md](docs/inference.md);
-no paid request is authorized until the owner approves it. Each plan binds model, deadlines,
-token and byte bounds, request count, rates and cost cap in a durable local ledger that
-reloading cannot reset, and actual usage is logged separately from reservations.
-
-## Checks
+### Checks
 
 ```bash
 uv run ruff check backend scripts
 uv run ruff format --check backend scripts
 uv run python -m compileall -q backend
 uv run python -m unittest discover -s backend/tests -v
+PROOFDESK_DOCKER_TESTS=1 uv run python -m unittest discover -s backend/tests -v
 npm --prefix frontend run build
 python3 scripts/check_repository.py
+uv run python -m scripts.check_experiment_journey --base-url http://127.0.0.1:8000 --output .local/journey.json
 ```
 
-The offline suite covers the importer (exact counts, duplicate multiplicity, checksum, header,
-domain, non-finite, negative, precision, binary and missing-value rejections), the published
-Newcombe reference intervals and an independent Wilson root-finding check, the analysis program
-through the controller with a test-only host runner (reconciliation, reproducibility, tampered
-counts, timeouts, bad plans, oversized input), the interpretation contract (unknown metric,
-raw numbers, ROI wording, historical-contact actions, malformed JSON), the full job/task journey
-(approval binding, invalidation on edit, stale approval refused by the worker, duplicate dispatch,
-lost leases, interrupted worker requeue and restart, cancellation, quotas, public limits,
-cross-owner isolation, live failure preserving the result, budget exhaustion), the API surface,
-and the earlier prospect, SSRF, contract, execution and generation checks. Six Docker test
-methods are skipped unless enabled:
-
-```bash
-PROOFDESK_DOCKER_TESTS=1 uv run python -m unittest discover -s backend/tests -v
-```
-
-With Docker enabled, the analysis also runs in the real sandbox on the synthetic fixture and,
-when the pinned file is cached locally, on the genuine dataset, checking reproducible artifact
-hashes and verified cleanup.
-
-A real-HTTP journey check (no mocks; optional controlled API restart during the analysis job)
-records evidence under ignored `.local/`:
-
-```bash
-uv run python -m scripts.check_experiment_journey --output .local/live-preflight/journey.json \
-  --restart-command "systemctl restart proofdesk"   # or a local restart command
-```
-
-UI interaction checks run in a disposable, network-disabled browser container against a
-mocked API built from in-process journeys on the labelled synthetic fixture. They establish
-interaction behaviour only, not retrieval, execution or inference:
+Browser interactions use a disposable container and an explicitly mocked API:
 
 ```bash
 docker build -t proofdesk-ui-check - < infra/browser-test.Dockerfile
 uv run python -m scripts.check_browser
 ```
 
-Screenshots and the bounded report stay ignored under `.local/browser/`.
+[Architecture](docs/architecture.md) · [Deployment](infra/README.md) ·
+[Public demo](docs/public-demo.md) · [Dataset and methods](docs/experiments.md)
 
-## Architecture on Vultr
+## Limits and what is mocked
 
-```mermaid
-flowchart TB
-  User[Browser] --> App[React workspace and FastAPI on the Vultr VM]
-  App --> Store[SQLite experiment store: datasets, plans, runs, tasks, approvals, jobs, artifacts]
-  App --> Scheduler[Scheduler thread: lease claims every 2 s]
-  Scheduler --> Worker[Worker subprocess per job]
-  Worker --> Sandbox[Disposable Docker sandbox: fixed analysis program]
-  Sandbox --> Validation[Result contract, reconciliation and hash binding]
-  Worker <--> Inference[Vultr Serverless Inference, analysis contract, when authorized]
-  Worker --> Packet[Packet assembly from the artifact and accepted reasoning]
-  Validation --> Store
-  Packet --> Store
-  Store --> App
-```
+- The benchmark is the genuine 64,000-customer Hillstrom historical campaign. It is a
+  retrospective analysis, not a newly run campaign. Raw rows remain ignored and unserved;
+  charts show aggregates. See [THIRD_PARTY.md](THIRD_PARTY.md) for the dataset rights boundary.
+- Public prospect pages and demonstration documents are labelled synthetic examples. The
+  worker actually executes the demonstration in Docker. Private research supports public
+  websites through the existing SSRF-protected fetcher.
+- A saved replay is an accepted live response for identical request bytes, validated again.
+  It is labelled Replay and makes no fresh model request. Browser tests use separate mocks.
+- A packet is preparation for human review. No campaign has been launched by SalesDesk and
+  historical incremental spend is not SalesDesk revenue. Missing inputs remain visible.
+- No outreach is sent. No CRM, Slack, upload or mailbox integration exists.
+- Each anonymous public session has up to three plans, six runs, six tasks, three queued
+  jobs, and three prospects. Seeding uses one plan/run/task/prospect and two jobs. Due times
+  are bounded to the next day. Records are isolated by an HttpOnly session cookie.
+- Video recording, PDF slide export and the LabLab submission itself are separate from
+  these prepared assets. Nothing is submitted without a receipt.
 
-The web app, API, scheduler, workers, sandbox and store run on one Vultr Cloud Compute VM;
-Serverless Inference is the only live model adapter. Credentials stay with the controller.
-See [architecture](docs/architecture.md), [security boundaries](SECURITY.md),
-[private deployment](infra/README.md), [data and method](docs/experiments.md),
-[inference diagnostics and plan](docs/inference.md), [acceptance criteria](docs/acceptance.md),
-the [forward plan](docs/plan.md), the [demo walkthrough](docs/demo-walkthrough.md) and the
-[submission checklist](docs/hackathon.md).
+## License
+
+Original code is [MIT licensed](LICENSE). Dependencies and references are recorded in
+[THIRD_PARTY.md](THIRD_PARTY.md); [provenance](docs/provenance.md) separates the original
+baseline from hackathon additions. No private customer data or proprietary product code
+is included. Challenge: [Powering the Future of Work, Vultr Agent Rush](https://lablab.build/ai-hackathons/vultr-hackathon).

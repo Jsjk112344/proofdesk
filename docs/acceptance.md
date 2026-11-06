@@ -5,6 +5,46 @@ or Docker execution), **offline** (unit tests with injected resolvers, recording
 and fixture responses) or **mocked UI** (browser interaction against a mocked API).
 Security claims never exceed observations.
 
+## Hackathon refactor: public acceptance
+
+- **Live inference:** unchanged analysis, research and outreach contracts accepted actual
+  Vultr responses. Prompt-only rejection corrections; receipts and accounting in STATUS.md.
+- **Public HTTPS:** trusted certificate, outside-VM HTTP journey and signed-out browser
+  initialization verified at salesdesk.149.28.51.139.sslip.io.
+- **Seed/isolation:** one plan/run/task/prospect and two jobs per initial session, normal
+  quotas, idempotent initialization, no automatic approval of visitor edits, cross-session 404.
+- **Approval/walk-away:** save next move, Approve & schedule, close tab, reopen ready packet
+  and download verified against the real public backend. Replay labelled honestly.
+- **Checks:** 96 tests passed with Docker enabled; build/lint/format/compile passed; mocked
+  browser and real public browser passed; mobile no overflow. Screenshots in docs/assets.
+
+The dated sections below preserve earlier observations, including then-unfinished milestones.
+
+## Historical campaign experiment and durable jobs — observed 2026-11-05 (fourth continuation)
+
+Baseline: `ee64b08` plus this session's uncommitted work. Local host: macOS with Colima
+Docker Engine 29.5.2, Linux/arm64; VM: Ubuntu 24.04 x86-64, Docker 29.1.3. Interpretation
+mode for every real check was **rule-based (no model)**; live mode was exercised offline only.
+No paid request was made.
+
+| Criterion | Evidence | Observed result |
+| --- | --- | --- |
+| Pinned file imports with 64,000 rows and the documented arm counts; changed checksum, invalid arm, non-finite spend, non-binary outcome, missing value rejected visibly | real (local and VM import) + offline | Arms exact (Mens 21,307/3,894/267/$30,311.69; Womens 21,387/3,238/189/$23,038.11; No E-Mail 21,306/2,262/122/$13,908.33); `dataset_checksum_mismatch`, `dataset_size_mismatch`, `dataset_header_rejected`, `dataset_value_rejected` with column and observed class |
+| Equal-valued rows keep multiplicity; a fixture confirms independent calculations; empty/zero-event groups defined | offline | Synthetic fixture with a duplicated row imports 20 per arm; conversion 4/20 vs 2/20 → +10.00 pp with the Newcombe interval from the controller; `wilson_interval(0, 0)` is None, `0/10` gives 0.0 to 0.2775, relative change undefined at zero control |
+| Repeated analysis with identical input/plan/code/seed reproduces the same result; failed/timed-out sandbox leaves no result and is cleaned up | real Docker + offline | Identical artifact SHA-256 across two local runs, two VM runs and the local/VM pair (`3b3152bf…`); tampered counts → `reconciliation_mismatch_conversions` with no result; timeout → `task_deadline_exceeded`, cleanup removed |
+| Historical assignments unchanged; invented policy refused | offline + real API | `comparison.treatment = new_random_policy` → 409 `invalid_plan_comparison`; identical arms and extra keys refused; the sandbox echoes and the controller checks the plan hash |
+| Numeric AI references resolve only to metrics; unknown ids, invented ROI, unauthorized actions and malformed output rejected; valid reasoning accepted with provenance | offline | `unknown_metric_id`, `unsupported_quantity`, `invented_roi_or_outcome`, `unauthorized_action`, `keys_mismatch`, `unparseable`; a fixture live response is accepted with provenance `live_model`, usage logged separately from the reservation; the rule-based reading passes the same contract |
+| Approval binds to the exact version; editing invalidates; cross-owner, credential and unapproved dispatch refused | offline + real HTTP (local and VM) | Approval with the previous proposal hash → 409; edit after approval → task `pending_review`, scheduled job cancelled; tampered approval hash → worker `approval_stale`, task failed, no packet; other session → 404 for plan, job, artifact, packet, cancel; the model prompt contains no credential or rows |
+| A scheduled job runs after browser closure and survives a worker restart; duplicate dispatch creates no second artifact; cancellation and exhausted budgets prevent dispatch | real HTTP (local and VM) + offline | Packet job due 15–20 s later ran with the client absent; `systemctl restart proofdesk` during the analysis job → `interrupted_requeued`, attempt 2 succeeded, one artifact; a stale lease token writes nothing; cancelled task's job cancelled; `model_budget_exhausted` keeps the statistical result |
+| Packet preparation produces a real saved artifact bound to approved inputs; missing data reported; no model call; nothing marked launched or completed | real HTTP (local and VM) | Packet artifact with bindings (plan, run, artifact, proposal hashes), `model_call: false`, `planning_review` when inputs are missing, external prerequisites listed (`historical_email_text`, `consented_eligibility_list`), `not_claimed` statements; task reaches `ready_for_review`, completion needs human evidence |
+| One browser journey source → plan → analysis → result → approval → scheduled job → packet → review | mocked UI | 18 checks passed in the disposable browser container (`.local/browser/browser-check.json`) |
+| Private Vultr reproduction with a worker completing work independently of the browser; second session isolated; public limits bound queued work | real HTTP on the VM + offline | `.local/deployment/vultr-experiment-journey-2026-11-05.json`; public mode: 4th plan → `experiment_quota_reached`, 4th queued job → `experiment_queue_full`, 24-hour horizon |
+| Public HTTPS readiness tested locally; public URL claimed only after a signed-out visit | offline + mocked UI | Public-mode API and browser checks pass; **no public URL is claimed**; activation awaits the hostname and approval |
+| CONTRIBUTING checks | local | Ruff lint/format, compileall, 93 offline tests, 93 Docker-enabled tests, TypeScript/Vite build, publication/link scan (worktree) passed |
+
+Not observed: a successful live Vultr model request for any contract, a public URL, a
+recorded video or a submission. Those criteria remain **incomplete**.
+
 ## Contract corrections, envelope and public-demo preparation — observed 2026-11-05 (third continuation)
 
 Baseline: the uncommitted SalesDesk working tree on `feat/local-execution-slice` (HEAD

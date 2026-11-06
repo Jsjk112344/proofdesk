@@ -3,8 +3,13 @@
 Product name: **SalesDesk** (renamed from ProofDesk on 2026-11-05). Existing operational
 identifiers and dated historical entries retain their original names.
 
-Current checkpoint: hackathon refactor in progress. Phase 0 committed; phase 1 live
-contracts verified. Public activation and the two-door UI follow in order.
+Current checkpoint: **SalesDesk is publicly deployed on HTTPS**, with two entry doors,
+validated live Vultr inference for all three contracts, isolated seeded examples, an
+activity trace, combined approval/scheduling and ready packet downloads. All requested phases are implemented; phase commits and final verification are recorded below. Public requests for
+identical inputs use labelled accepted replay. Video recording, PDF export and official
+submission remain open; no submission receipt exists.
+
+Public URL: https://salesdesk.149.28.51.139.sslip.io
 
 ## Hackathon phase 1: 2026-11-05 ET
 
@@ -691,3 +696,50 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   `.local/live-preflight/phase6-seed-evidence.json`; one plan/run/task/prospect, two jobs,
   accepted replay for analysis and prospect, ready packet, repeat initialization unchanged,
   cross-session 404. Accepted live responses retain Replay labels in new sessions.
+
+## Hackathon phase 7 and public acceptance: 2026-11-05 ET
+
+- Caddy issued a trusted Let's Encrypt certificate after the upstream firewall was opened
+  and the issuer's retry window elapsed. External HTTPS home and health now load without
+  certificate overrides. Existing VM: EWR, two logical CPUs, about four GiB RAM observed.
+- Final deployed runtime release archive SHA-256:
+  `938b3f0b0e25d0c13c0708fca9cc9593d16dcf916c483e9845959dcfeb61f04d`.
+  Archive checksum was verified on the VM before extraction; root-owned model configuration,
+  stores, raw dataset, replay cache and all ledgers were preserved. A rollback snapshot exists.
+- Public real-HTTP journey passed: genuine Docker analysis, identical result artifacts,
+  accepted Replay interpretation, stale approval refusal, scheduled packet completion during
+  client absence, Markdown download, review completion and cross-session 404s. Evidence:
+  `.local/deployment/final-public-journey.json`.
+- Separate public seed check passed: one plan/run/task/prospect, two jobs, example packet
+  ready, prospect draft unsent, repeated initialization unchanged, cross-session 404. Both
+  analyst contracts used accepted replay. Evidence: `.local/live-preflight/final-public-seed.json`.
+- Real public browser check passed from outside the VM: fresh-session seed, charts, edit and
+  save, Approve & schedule, close tab, reopen to ready packet, authenticated Markdown download,
+  example prospect draft, mobile without horizontal overflow, no page errors. This was the
+  public backend, not a mocked API. Screenshots are in `docs/assets/`; browser evidence is
+  `.local/live-preflight/live-browser.json`.
+- Verification: all 97 backend tests passed with Docker enabled (no skips); frontend build,
+  Ruff lint/format, compileall and repository links/patterns passed. Updated disposable-browser
+  mocked-API checks also passed. Screenshots were visually inspected on desktop and mobile.
+- One verification started during service startup and received temporary HTTP 502; the
+  rerun after health was ready passed. Earlier firewall/ACME and harness failures remain
+  documented above and are not counted as successful checks.
+- Accounting: local hackathon ledger retains 13 requests / $0.0261248 worst-case reservations;
+  12 observed responses estimate $0.0039680 token cost. One uncertain reservation remains
+  fully counted. Prior exhausted ledger remains $0.0040384 reserved. VM hackathon envelope
+  has zero paid reservations: public checks used accepted replay. No new compute provisioned;
+  existing VM accrual and credit balance remain owner-managed and unverified against billing.
+  Total current + prior reservations: $0.0301632, separate from compute. Owner cap remains $150.
+- README now contains the pitch, live URL, try-it, architecture, Vultr roles, analyst design,
+  setup, limits and MIT terms. Demo script (2:45), seven-slide outline and LabLab form copy
+  are ready in docs. Five real public screenshots support the slide/cover assets.
+- Remaining submission work: record/upload video, export/upload slides PDF, paste the form
+  and submit by the owner-supplied Nov 8 deadline (target 16:00 ET; deadline 18:00 ET).
+  These files do not claim a recording, exported PDF, official submission or receipt.
+- Phase commits are local on `feat/local-execution-slice`; no GitHub push is claimed in this
+  refactor. Pre-existing session-prompt files and the root screenshot remain untouched.
+
+- Final public-mode correction: Live is now selected without the old public-live opt-in.
+  Missing plan/credential produces a visible failed step instead of a rule-based substitute.
+  A dedicated regression test confirms this; the final full Docker suite passed 97 tests.
+  Pending approval in the activity trace now respects the current next-move version.

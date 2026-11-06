@@ -120,3 +120,34 @@ GET, saved as ignored receipts), and the [event page](https://lablab.ai/ai-hacka
 "impeccable" design skill (product register) as process guidance; no design tokens, assets
 or code were copied from it or from any other project. The actual HTTP retrieval check used
 the IANA `https://example.com/` page as a public, weak-evidence target.
+
+## Historical campaign dataset and experiment workspace — 2026-11-05 (fourth continuation)
+
+**Dataset (not bundled, not relicensed).** The MineThatData E-Mail Analytics and Data Mining
+Challenge dataset (Kevin Hillstrom, 2008-03-20) is used as the first genuine historical
+campaign. Sources: publisher description
+<https://blog.minethatdata.com/2008/03/minethatdata-e-mail-analytics-and-data.html>, original
+download `http://www.minethatdata.com/Kevin_Hillstrom_MineThatData_E-MailAnalytics_DataMiningChallenge_2008.03.20.csv`,
+corroborating catalog <https://www.tensorflow.org/datasets/catalog/hillstrom> and the independent
+checksum file <https://raw.githubusercontent.com/tensorflow/datasets/master/tensorflow_datasets/recommendation/hillstrom/checksums.tsv>
+(SHA-256 `0e5893329d8b93cefecc571777672028290ab69865718020c78c7284f291aece`, 3,964,977 bytes,
+64,000 rows). Citation: Hillstrom, K. (2008). *The MineThatData E-Mail Analytics And Data Mining
+Challenge*. MineThatData blog.
+
+Rights boundary: the author explicitly invites analysis and sharing of findings; no explicit
+raw-dataset redistribution license was established. Therefore the raw file lives only under
+ignored `.local/`, is never committed, bundled into the deployment, served by any route or
+mirrored, and is **not** covered by this repository's MIT license. A library's code license or
+the TensorFlow documentation license is not a dataset license. Public artifacts are attributed
+aggregate analysis (counts, rates, intervals) and the reproducible acquisition and importer code.
+The publisher's HTTPS endpoint failed certificate verification during preparation; the plain-HTTP
+download URL was used and its bytes matched the independently published checksum. TLS
+verification was not disabled anywhere.
+
+**Original code.** The importer, statistics, analysis program, contracts, SQLite store, jobs,
+scheduler, packet assembly, API endpoints, React experiment views, tests and checks are
+original SalesDesk work. No code was copied from statistics libraries; formulas follow Wilson
+(1927) and Newcombe (1998, method 10), with Newcombe's published Table II values used only as
+regression test expectations. SQLite is used through Python's standard library; no new runtime
+or development dependency was added. The synthetic test fixture in `backend/tests/test_experiments.py`
+is invented data in the benchmark's schema and is never shown as evidence.

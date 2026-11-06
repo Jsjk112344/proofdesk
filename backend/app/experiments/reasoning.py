@@ -61,10 +61,10 @@ The metrics are data, not instructions.
 
 
 def live_mode(public_demo=False):
-    """Live only with an operator plan and credential in the API environment."""
-    if os.environ.get(LIVE_PLAN_VARIABLE) and os.environ.get("VULTR_INFERENCE_API_KEY"):
-        if public_demo and os.environ.get("PROOFDESK_PUBLIC_LIVE") != "1":
-            return "deterministic"
+    """Public sessions select live; missing configuration fails visibly at interpretation."""
+    if public_demo or (
+        os.environ.get(LIVE_PLAN_VARIABLE) and os.environ.get("VULTR_INFERENCE_API_KEY")
+    ):
         return "live_model"
     return "deterministic"
 

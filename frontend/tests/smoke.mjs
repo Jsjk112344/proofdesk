@@ -355,6 +355,7 @@ try {
   await page.getByRole("button", { name: "Research this prospect" }).click();
   await page.getByText("This prospect stopped.").waitFor();
   await page.getByRole("tab", { name: "Verification", exact: true }).click();
+  await page.getByRole("tabpanel").locator("summary").filter({ hasText: "Verification: saved progress and receipts" }).click();
   await page.getByRole("tabpanel").getByText("excerpt_not_in_source").waitFor();
   await page.screenshot({ path: "/work/failure.png", fullPage: true });
   checks.push("blocked address and rejected model research remain visible");

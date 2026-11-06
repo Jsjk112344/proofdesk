@@ -96,15 +96,15 @@ see the component descriptions in git history and [inference.md](inference.md).
   assumption. Approval binds to hashes; editing invalidates; the worker re-checks before
   assembling. Jobs survive restarts through leases, bounded requeue and unique artifacts.
 - Anonymous sessions isolate plans, runs, tasks, jobs and artifacts; public demo mode adds
-  smaller quotas and a shorter due horizon and keeps live mode off.
+  smaller quotas and a shorter due horizon and uses configured live mode with accepted exact-input replay.
 
 ## Deployment
 
-A single Ubuntu VM on Vultr runs the API with its scheduler thread, workers, the SQLite store
-and the Docker daemon under a non-root controller user, bound to loopback; access is through an
-SSH tunnel. The dataset is placed on the VM outside the bundle. No public ingress, HTTPS, domain
-or inference credential is deployed. See [infra/README.md](../infra/README.md) and
-[public-demo.md](public-demo.md).
+The existing Ubuntu Vultr VM in EWR hosts the API, scheduler, SQLite store and Docker
+workers under a non-root service user. Caddy serves public HTTPS at
+salesdesk.149.28.51.139.sslip.io and proxies to loopback. Inference credentials and bounded
+operator plans are deployed outside the release archive. Live contracts passed; identical
+public inputs replay accepted responses. See infra/README.md and STATUS.md for evidence.
 
 ## Out of scope
 

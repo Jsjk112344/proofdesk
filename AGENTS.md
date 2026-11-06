@@ -22,8 +22,8 @@ public MIT project for Vultr Agent Rush, targeting Powering the Future of Work.
   leases, analysis program in the Docker sandbox, validated metrics, rule-based or
   contract-validated model interpretation, tasks/approvals/packets), prospect workspace,
   SSRF-protected retrieval, validated model contracts, the bounded Docker sandbox, and a
-  private Vultr deployment. No successful live Vultr inference has been observed for any
-  contract; live mode is offline-tested only. Do not describe planned or offline-tested
+  private Vultr deployment. Live Vultr analysis, research and outreach contracts have passed; public sessions
+  prefer revalidated exact-input replay with explicit provenance labels. Do not describe planned or offline-tested
   behaviour as verified live.
 - The historical benchmark is analysed as recorded: never reassign customers, attach
   outcomes to invented treatments, deduplicate equal-valued rows, invent e-mail text or

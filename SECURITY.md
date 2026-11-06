@@ -2,16 +2,37 @@
 
 ## Current status
 
-The HTTP application is a prospect workspace: it fetches a bounded set of public pages for
-a user-supplied website (or reads labelled synthetic sample pages), builds an evidence
-brief, decides whether the one supported demonstration applies, runs that demonstration
-in the existing disposable Docker sandbox, and prepares an unsent draft for review. It is
-privately installed on the owner's Vultr VM, listening on loopback. Live model mode exists
-behind validated contracts but no successful live inference has been observed; the web
-deployment runs in rule-based mode with no credential. There are no uploads, arbitrary
-code, sends, CRM or mailbox integrations. Anonymous session capabilities scope records;
+The HTTP application is an experiment workspace plus a supporting prospect workspace. The
+experiment workspace serves aggregates of a pinned public dataset (never raw rows), saves
+analysis plans, runs a fixed analysis program in the disposable Docker sandbox through
+lease-based jobs claimed by the API process's scheduler, validates and reconciles the result,
+and lets a person edit, approve and schedule a next-experiment packet. The prospect workspace
+fetches a bounded set of public pages, builds an evidence brief, optionally runs the one
+supported demonstration in the same sandbox and prepares an unsent draft. Both are publicly available through Caddy HTTPS on the owner's Vultr VM; the API listens
+on loopback. Live analysis, research and outreach have passed their contracts. Public sessions
+prefer validated exact-input replay; credentials remain controller-only. There are no uploads, arbitrary code, sends, raw-dataset
+routes, CRM or mailbox integrations. Anonymous session capabilities scope records;
 user-account authentication is not implemented. Observed checks are in [STATUS.md](STATUS.md).
 This is not a production deployment or proof against every container escape.
+
+## Experiment boundary
+
+- The raw dataset lives only in ignored local storage (mode 0600 on the VM) and is read by
+  the importer alone; the sandbox receives a typed derivative, the API serves aggregates.
+- Every plan names original arms only; every result is accepted only through the analysis
+  contract and reconciliation (counts and cents against the importer's Decimal aggregates,
+  intervals against the controller's implementation, hashes binding data, plan, program and
+  input); every displayed number derives from a validated artifact or a labelled assumption.
+- A model receives validated metrics and limitations, never rows, credentials or contacts,
+  and may cite numbers only through metric placeholders rendered in code; raw numbers, ROI
+  wording, unknown ids and actions against the historical records are refused. The model
+  cannot change rows, methods, confidence levels, allocation, approvals or job destinations.
+- Jobs are claimed atomically under a lease; every worker write is conditional on that lease;
+  artifacts are unique per job; a lost or terminated worker is requeued once or failed; a
+  restarted API runs the existing sandbox recovery before dispatching again. Approval binds
+  to the proposal, artifact and plan hashes and is re-checked by the worker.
+- Quotas bound plans, runs, tasks and queued jobs per session and in total; public demo mode
+  lowers them and shortens the due horizon. Cross-session reads answer 404.
 
 ## Retrieval boundary (SSRF)
 
@@ -46,13 +67,14 @@ This is not a production deployment or proof against every container escape.
   task environment never receives it (`env -i` allowlist, unchanged).
 - Only the fixture extractor and labelled synthetic documents enter the sandbox. Prospect
   pages never do. Results are shown only when the saved artifact hash matches.
-- Worker loss is terminal; restart marks abandoned prospects failed without rerunning.
-  CSP forbids inline scripts and foreign resources; task text is escaped by React.
+- Prospect worker loss is terminal; restart marks abandoned prospects failed without
+  rerunning. Experiment jobs are requeued once by lease recovery. CSP forbids inline scripts
+  and foreign resources; task text is escaped by React.
 
 ## Model boundary
 
-- Three separate contracts validate model content: executable source, research JSON and
-  outreach JSON. Research citations must name fetched sources and quote verbatim text; a
+- Four separate contracts validate model content: executable source, research JSON,
+  outreach JSON and the analysis reading JSON (metric placeholders only; see above). Research citations must name fetched sources and quote verbatim text; a
   claim's restatement may use only words and numbers from its own quotation, so an
   unrelated assertion cannot be accepted because its quotation exists; summaries and the
   hypothesis are kept as labelled interpretations and may not introduce quantities absent
@@ -79,10 +101,12 @@ Fresh named container per task on a digest-pinned image; UID 65532, all capabili
 dropped, `no-new-privileges`, default seccomp, private PID/IPC/cgroup namespaces,
 read-only root, `--network=none`, no mounts, devices, Docker socket or credentials;
 0.5 CPU, 128 MiB RAM without swap, 32 processes, bounded tmpfs, 16 KiB logs, 64 KiB
-archive, five-second deadline with forced removal; kernel limits read back before task
-code; only `out/result.json` ≤ 16 KiB accepted, parsed as strict JSON and compared with the
-expected answer as canonical JSON values (not original bytes); verified container absence
-required for success; explicit crash recovery.
+archive, five-second deadline with forced removal (thirty seconds and a 1 MiB typed input for
+the analysis profile; scripts always ≤ 32 KiB); kernel limits read back before task code; only
+`out/result.json` ≤ 16 KiB accepted, parsed as strict JSON and compared with the expected
+answer as canonical JSON values (not original bytes) or, for the analysis profile, checked by
+the result contract; verified container absence required for success, with bounded repeated
+removal when a killed client's `create` lands late; explicit crash recovery at CLI and API start.
 See [docs/execution-record.md](docs/execution-record.md).
 
 ## Local limitations

@@ -19,6 +19,9 @@ class DemoSeedTests(unittest.TestCase):
             root = Path(temp)
             store, service = workspace(root, public_demo=True)
             prospects = Prospects(root / "prospects", launch=lambda _: None, public_demo=True)
+            # This seed state-machine test uses explicitly injected offline readings.
+            service.mode = lambda: "deterministic"
+            prospects.mode = lambda: "deterministic"
             initial = seed_demo(service, prospects, "visitor-a")
             self.assertFalse(initial["ready"])
             run_prospect(

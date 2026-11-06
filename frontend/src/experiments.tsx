@@ -365,7 +365,8 @@ export function ExperimentsHome({ overview }: { overview: Overview }) {
   const [opening, setOpening] = useState(false);
   const [error, setError] = useState("");
   async function openCampaign() {
-    if (overview.plans[0]) return go(`/experiments/${overview.plans[0].id}`);
+    const benchmark = [...overview.plans].reverse().find(p => p.dataset_id === "hillstrom-2008" && p.title === "Mens e-mail versus no e-mail") || overview.plans[0];
+    if (benchmark) return go(`/experiments/${benchmark.id}`);
     setOpening(true);
     try {
       const plan = await post<Plan>("/api/experiments/plans", {
@@ -381,7 +382,7 @@ export function ExperimentsHome({ overview }: { overview: Overview }) {
   }
   const analysed = overview.plans.filter(p => p.latest_run?.status === "succeeded").length;
   const awaiting = overview.plans.filter(p => p.proposal_version > 0 &&
-    !p.tasks.some(t => ["approved", "scheduled", "running", "ready_for_review", "completed"].includes(t))).length;
+    !overview.tasks.some(t => t.plan_id === p.id && t.proposal_version === p.proposal_version && ["approved", "scheduled", "running", "ready_for_review", "completed"].includes(t.status))).length;
   return <>
     <div className="heading home-hero">
       <h1>Sell more: Your AI sales analyst</h1>
@@ -409,7 +410,7 @@ export function ExperimentsHome({ overview }: { overview: Overview }) {
       <Stat label="Campaigns analysed" value={String(analysed)} />
       <Stat label="Next moves awaiting approval" value={String(awaiting)} />
       <Stat label="Ready for review" value={String(overview.tasks.filter(t => t.status === "ready_for_review").length)} />
-      <Stat label="Analyst mode" value={(PROVENANCE[overview.generation_mode]?.label || overview.generation_mode).replace("Analyst: ", "")} />
+      <Stat label="Analyst mode" value={(PROVENANCE[overview.plans[0]?.latest_run?.interpretation_provenance || overview.generation_mode]?.label || overview.generation_mode).replace("Analyst: ", "")} />
     </div>
     <section className="panel saved-home">
       <div className="row-between"><h2>Campaigns</h2><a href="#/experiments/new">New analysis plan</a></div>
@@ -685,15 +686,17 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
   const proposal = detail.proposals[0] || null;
   const analysisJob = detail.jobs.find(j => j.kind === "analyze_plan");
   const preparation = detail.jobs.find(j => j.kind === "prepare_packet");
+  const activityRun = detail.runs.find(r => r.job_id === analysisJob?.id);
   const task = detail.tasks[0];
+  const approvedCurrent = task?.approval && task.proposal_sha256 === proposal?.sha256;
   const event = (stage: string) => analysisJob?.events.find(e => e.stage === stage)?.at;
   const steps: ActivityStep[] = [
     { label: "Picked up by SalesDesk worker on Vultr", at: event("claimed"), state: event("claimed") ? "done" : "pending" },
-    { label: "Running the numbers", at: event("executing"), state: run?.reconciliation ? "done" : event("executing") ? (analysisJob?.status === "failed" ? "failed" : "running") : "pending", evidence: run?.execution },
-    { label: "Results verified", at: event("interpreting"), state: run?.reconciliation ? "done" : "pending", evidence: run?.reconciliation },
-    { label: `Reading the result (Vultr Inference · ${run?.generation?.model || "waiting for model"})`, at: run?.interpretation?.created_at || event("interpreting"), state: run?.interpretation?.status === "succeeded" ? "done" : run?.interpretation?.status === "failed" ? "failed" : event("interpreting") ? "running" : "pending", evidence: run?.generation },
+    { label: "Running the numbers", at: event("executing"), state: activityRun?.reconciliation ? "done" : event("executing") ? (analysisJob?.status === "failed" ? "failed" : "running") : "pending", evidence: activityRun?.execution },
+    { label: "Results verified", at: event("interpreting"), state: activityRun?.reconciliation ? "done" : "pending", evidence: activityRun?.reconciliation },
+    { label: `Reading the result (Vultr Inference · ${activityRun?.generation?.model || "waiting for model"})`, at: activityRun?.interpretation?.created_at || event("interpreting"), state: activityRun?.interpretation?.status === "succeeded" ? "done" : activityRun?.interpretation?.status === "failed" ? "failed" : event("interpreting") ? "running" : "pending", evidence: activityRun?.generation },
     { label: "Next move drafted", at: proposal?.created_at, state: proposal ? "done" : "pending", evidence: proposal ? { sha256: proposal.sha256, version: proposal.version } : undefined },
-    { label: "Awaiting your approval", at: task?.approval ? String(task.approval.approved_at) : proposal?.created_at, state: task?.approval ? "done" : proposal ? "running" : "pending", evidence: task?.approval },
+    { label: "Awaiting your approval", at: approvedCurrent ? String(task!.approval!.approved_at) : proposal?.created_at, state: approvedCurrent ? "done" : proposal ? "running" : "pending", evidence: task?.approval },
     { label: "Preparing your packet", at: preparation?.started_at || preparation?.due_at, state: task?.packet_artifact_id ? "done" : preparation?.status === "failed" ? "failed" : preparation ? "running" : "pending" },
     { label: "Ready for review", at: preparation?.finished_at, state: task?.packet_artifact_id ? "done" : "pending", evidence: task?.packet_artifact_id },
   ];
@@ -899,7 +902,7 @@ function ResultsTab({ detail, run, working }: { detail: PlanDetail; run: Run | n
         title={working ? "The analysis is running on the server." : detail.runs.length ? "No successful result yet." : "Nothing has run yet."}
         text={
           working
-            ? "A worker claimed the job and is executing the fixed analysis program in the sandbox. This page refreshes itself."
+            ? "Your Vultr worker is analysing the campaign. This page refreshes itself."
             : "Use \"Run analysis now\". The job is durable: it runs even if you close this tab."
         }
       />
@@ -1012,7 +1015,7 @@ function ResultsTab({ detail, run, working }: { detail: PlanDetail; run: Run | n
 function InterpretationTab({ run, working }: { run: Run | null; working: boolean }) {
   const interpretation = run?.interpretation;
   if (!run || run.status !== "succeeded")
-    return <Empty title={working ? "Waiting for the analysis." : "No result to interpret yet."} text="The interpretation follows a successful sandbox run." />;
+    return <Empty title={working ? "Waiting for the analysis." : "No result to interpret yet."} text="Your analyst reads the campaign result here." />;
   if (!interpretation || interpretation.status !== "succeeded" || !interpretation.rendered)
     return (
       <div className="stack">
@@ -1355,7 +1358,7 @@ function PacketSummary({ artifactId }: { artifactId: string }) {
           </li>
         ))}
       </ul>
-      <p className="muted">Not claimed: {p.not_claimed.join(" ")}</p>
+      <details className="verification"><summary>Verification</summary><p className="muted">Not claimed: {p.not_claimed.join(" ")}</p></details>
     </div>
   );
 }

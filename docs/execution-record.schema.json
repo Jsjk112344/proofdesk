@@ -139,7 +139,10 @@
       ],
       "properties": {
         "wall_seconds": {
-          "const": 5
+          "enum": [
+            5,
+            30
+          ]
         },
         "memory_bytes": {
           "const": 134217728
@@ -220,7 +223,10 @@
             "$ref": "#/$defs/hash"
           },
           "validation": {
-            "const": "exact_controller_schema_and_content"
+            "enum": [
+              "exact_controller_schema_and_content",
+              "analysis_result_contract_v1"
+            ]
           }
         }
       }
@@ -297,7 +303,10 @@
               "minimum": 0
             },
             "limit": {
-              "const": 32768
+              "enum": [
+                32768,
+                1048576
+              ]
             }
           }
         }

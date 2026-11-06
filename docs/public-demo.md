@@ -1,91 +1,46 @@
-# Public demo: prepared configuration and activation proposal
+# Public SalesDesk demo
 
-Status: **implemented and tested offline; not activated.** Public activation needs the
-owner's explicit approval of the hostname, HTTPS configuration, access policy and the
-reviewed public content below. Nothing in this document authorizes ingress, DNS changes,
-package installation on the VM or public inference spending.
+URL: https://salesdesk.149.28.51.139.sslip.io
 
-## What a signed-out visitor would get
+The owner authorized public activation and up to $150 of hackathon credit in AGENTS.md.
+The existing Vultr VM hosts Caddy HTTPS, FastAPI, SQLite, the scheduler and Docker workers.
+The domain uses sslip.io DNS pointing to the VM. Ports 80 and 443 must be allowed in both
+Vultr's attached firewall and the host firewall; the API stays on loopback.
 
-The same prospect workspace as the private deployment, in **public demo mode**:
+A fresh browser session calls same-origin POST `/api/demo/seed` until its normal workers
+have prepared the benchmark packet and unsent prospect draft. The benchmark analysis uses
+the genuine dataset. Prospect pages and demonstration inputs are labelled synthetic.
+The ready packet's initial approval is explicitly a seeded demo example. Later visitor
+changes require their own approval; reload never approves them automatically.
 
-- Only the three labelled synthetic scenarios can be researched. The real-website field is
-  disabled in the UI and the API refuses real URLs with `public_demo_samples_only` unless a
-  host is named in `PROOFDESK_PUBLIC_URL_ALLOWLIST` (empty by default). The SSRF policy is
-  unchanged for any allowlisted host.
-- Generation mode is **rule-based (no model)** and is labelled as such on every brief and
-  draft. A credential present on the VM cannot turn the public app into a paid endpoint:
-  live mode additionally requires `PROOFDESK_PUBLIC_LIVE=1`, an approved plan and its
-  envelope. No public live inference is proposed here.
-- The demonstration runs in the same disposable Docker sandbox on labelled synthetic
-  documents; execution evidence, extractor source and cleanup verification are shown.
-- Anonymous session cookies scope records: three prospects per session, 100 in total by
-  default (`PROOFDESK_WEB_MAX_PROSPECTS`, hard cap 200), one job at a time. Another
-  session receives 404 for someone else's prospect. Nothing is sent anywhere.
-- The header reads "Public demo · synthetic scenarios · nothing is sent"; the landing page
-  carries a labelled note; `/api/health` and `/api/workspace` report `public_demo: true`.
+Public limits: three plans, six runs, six tasks, three queued jobs, twelve total jobs per
+session, two hundred jobs globally, due times up to one day ahead, three prospects per
+session and one hundred prospects globally. Initialization counts against those quotas:
+one plan, one run, one task, two jobs and one prospect. No quota is reset on reload.
 
-## Proposed URL and ingress
+`PROOFDESK_PUBLIC_DEMO=1` activates these limits and the example initialization.
+Public sessions select Live by default. `PROOFDESK_ANALYSIS_LIVE_PLAN`,
+`PROOFDESK_SALES_LIVE_PLAN` and `VULTR_INFERENCE_API_KEY` enable the live analyst.
+Configuration is outside the release archive in a root-only systemd drop-in. The worker
+receives controller credentials; disposable execution sandboxes never receive them.
 
-Two options for the hostname; both work with the prepared files unchanged apart from
-substituting the name:
+Identical requests prefer accepted saved responses, revalidate them and show Analyst:
+Replay. New inputs use Vultr under durable batch/envelope limits and show Analyst: Live.
+A genuine failure is visible. No failed step is silently replaced by rule-based text.
+Private mode can use explicitly labelled rule-based analysis without a credential.
 
-1. **Owner-supplied subdomain** (preferred if a domain exists), for example
-   `salesdesk.<owner-domain>` with an A record to `149.28.51.139`.
-2. **No-DNS fallback**: a wildcard-DNS name such as `149-28-51-139.sslip.io`, which resolves
-   to the VM without any DNS setup. It exposes the already-public VM address in the name
-   and depends on a third-party resolver; use it only for the judging window.
+No outreach sends, uploads, arbitrary code, CRM, Slack or mailbox integration is exposed.
+Anonymous HttpOnly sessions scope all plans, jobs, artifacts, packets and prospects.
+Source rows, secrets, approval files and ledgers are never served by static routes.
 
-TLS termination: Caddy from the Ubuntu 24.04 repositories on the existing VM, using
-[infra/Caddyfile.public](../infra/Caddyfile.public) (automatic Let's Encrypt certificate,
-HTTP→HTTPS redirect, HSTS, 64 KB request bodies, reverse proxy to `127.0.0.1:8000`). The
-API keeps binding to loopback. The systemd drop-in
-[infra/proofdesk-public.conf](../infra/proofdesk-public.conf) sets public mode, the
-allowed host header, the total quota and uvicorn's proxy-header handling so the session
-cookie is marked `Secure` behind TLS. Ports 80 and 443 must be opened in the VM firewall
-or Vultr firewall group; no other ports change.
+## Verification and recovery
 
-## Costs, resources and cleanup
+Read STATUS.md for observed external HTTPS, seed, journey and browser checks. The first
+ACME attempts failed while upstream ports were closed; after the owner opened the Vultr
+firewall and the retry window elapsed, a trusted certificate was issued successfully.
 
-- No new VM, managed service, GPU, database or inference resource. Caddy is a distribution
-  package on the existing VM; Let's Encrypt certificates are free.
-- Vultr compute billing for the existing VM is unchanged and remains owner-managed. Public
-  demo traffic adds Docker demonstration runs bounded by the quotas above.
-- Cleanup owner: the executor removes the drop-in and Caddy configuration and closes the
-  ports on request; the owner controls DNS and VM teardown. Prospect records created by
-  visitors live under `/opt/proofdesk/.local/prospects/` and are demonstration data.
-
-## Checks before activation (done offline) and after (to observe)
-
-Done offline, this checkpoint: API tests for public mode (real URL refused, allowlist honoured,
-session quota of three, totals, `public_demo` flags, live mode refused without the public
-flag) and the disposable browser check of the public-mode landing page, disabled website
-field and sample journey.
-
-To observe after authorized activation, recorded in STATUS.md with the URL:
-
-1. `curl -I https://<host>/` returns 200 with the CSP and HSTS headers; `http://` redirects.
-2. A signed-out browser completes the sample journey over HTTPS: brief, demonstration
-   decision and verified result, editable draft, review binding, reload.
-3. A second browser profile cannot read the first profile's prospect (404) and the
-   session quota stops the fourth prospect with a readable message.
-4. `/api/health` reports `public_demo: true` and `generation_mode: deterministic`.
-5. The private SSH-tunnel path still works; existing records are intact.
-
-## Rollback
-
-```bash
-systemctl stop caddy && systemctl disable caddy
-rm -f /etc/systemd/system/proofdesk.service.d/public.conf
-systemctl daemon-reload && systemctl restart proofdesk
-```
-
-Records are untouched by rollback; the service returns to private loopback mode. Closing
-ports 80/443 again is part of the same step.
-
-## Authorization requested (not granted by this document)
-
-- The hostname to use (option 1 or 2) and permission to install Caddy and open 80/443.
-- Approval of the public content: the current README, fixtures and UI copy as reviewed.
-- Confirmation that public live inference is **not** enabled (default) or, separately, an
-  approved public plan and envelope if it ever is.
+For updates, follow [infra/README.md](../infra/README.md). Keep `.local/`, budget ledgers
+and credentials across deployments. Never reset an exhausted ledger to resume calls.
+Stop public execution with `systemctl stop proofdesk`; Caddy can remain up for a service
+unavailable response. Stop Caddy separately to remove public ingress. The owner manages
+VM billing and teardown; stopping the app does not stop VM charges.

@@ -66,7 +66,7 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.key]);
 
-  const experimentsMode = workspace?.experiments?.generation_mode || overview?.generation_mode || "deterministic";
+  const experimentsMode = overview?.plans.find(p => route.name === "experiment" ? p.id === route.id : true)?.latest_run?.interpretation_provenance || workspace?.experiments?.generation_mode || overview?.generation_mode || "deterministic";
   const publicDemo = !!(workspace?.public_demo || overview?.public_demo);
   const title =
     route.name === "prospects"
