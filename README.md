@@ -170,3 +170,5 @@ Original code is [MIT licensed](LICENSE). Dependencies and references are record
 [THIRD_PARTY.md](THIRD_PARTY.md); [provenance](docs/provenance.md) separates the original
 baseline from hackathon additions. No private customer data or proprietary product code
 is included. Challenge: [Powering the Future of Work, Vultr Agent Rush](https://lablab.build/ai-hackathons/vultr-hackathon).
+
+Dealer sample floorplan assumption: **$8 per unit per day**, configurable, shown as an entered assumption in Verification. See [Sample dealer group](fixtures/dealer-group/README.md).

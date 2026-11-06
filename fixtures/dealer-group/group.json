@@ -1,0 +1,16 @@
+{
+  "group": "Summit Auto Group",
+  "data_label": "Sample dealer group",
+  "synthetic": true,
+  "seed": 20261106,
+  "reference_time": "2026-11-06T08:00:00-07:00",
+  "floorplan_daily_rate": 8.0,
+  "match_distance_miles": 250,
+  "counts": {
+    "rooftops": 24,
+    "inventory": 3000,
+    "open_leads": 9000,
+    "historical_leads": 2400
+  },
+  "assumption": "Entered assumption: $8 per inventory unit per day, not a measured lending charge."
+}
