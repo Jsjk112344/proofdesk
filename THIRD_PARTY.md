@@ -151,3 +151,12 @@ original SalesDesk work. No code was copied from statistics libraries; formulas 
 regression test expectations. SQLite is used through Python's standard library; no new runtime
 or development dependency was added. The synthetic test fixture in `backend/tests/test_experiments.py`
 is invented data in the benchmark's schema and is never shown as evidence.
+
+## Sales workload evidence for submission slides (checked 2026-11-06 UTC)
+
+- [Salesforce State of Sales, seventh edition](https://www.salesforce.com/en-us/wp-content/uploads/sites/4/documents/reports/sales/salesforce-state-of-sales-report-2026.pdf),
+  pp. 8 and 21: reported non-selling share and preparation/planning share.
+- [Salesforce 2026 report announcement](https://www.salesforce.com/news/stories/state-of-sales-report-announcement-2026/):
+  reported outreach capacity constraint and survey methodology (4,050 professionals,
+  22 countries, August–September 2025). Used as linked factual references; no report
+  graphics copied. Illustrative team-hour arithmetic is explicitly labelled in the slides.

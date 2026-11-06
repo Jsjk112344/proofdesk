@@ -3,7 +3,7 @@
 Prepared copy for Challenge 2, Powering the Future of Work. This is not a submission receipt.
 Verify the final logged-in form's field names and limits before pasting.
 
-**Title:** SalesDesk: Your AI sales analyst
+**Title:** SalesDesk — Sell more: Your AI sales analyst
 
 **Short description:** SalesDesk measures campaign results, proposes your next move and prepares an approved packet while you are away. Two entry doors, one analyst loop, powered by Vultr compute and Serverless Inference.
 
@@ -28,11 +28,7 @@ explicitly synthetic; the demonstration really executes in Docker. No outreach i
 Vultr hosts FastAPI, SQLite, the scheduler, workers and Docker execution in EWR, New Jersey.
 Caddy handles HTTPS. Qwen 3.8 Flash Next runs through Vultr Serverless Inference; analysis,
 research and outreach contracts have passed live. Identical requests can use accepted,
-revalidated responses labelled Replay. Human approvals remain version-bound.
-
-SalesDesk is an original MIT-licensed project. It demonstrates a complete preparation
-workflow, not a newly launched campaign or a claim of new sales. Next, we plan to support
-bringing campaign data into the same measured workflow.
+revalidated cached responses, with that provenance in Verification. Human approvals remain version-bound.
 
 **Challenge/category:** Powering the Future of Work / Sales Operations
 

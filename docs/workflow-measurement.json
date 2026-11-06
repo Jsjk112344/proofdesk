@@ -1,0 +1,18 @@
+{
+  "kind": "SalesDesk own recorded public VM run",
+  "retrieved_at": "2026-11-06",
+  "source": "Saved jobs and task events, read-only from the Vultr runtime store",
+  "analysis_job_id": "c5be10076f724c169829fba0f1497aec",
+  "packet_job_id": "0e351dd8ec584197b022c27e4ca22cc6",
+  "task_id": "813557f21cfe496e931a38ece5a13103",
+  "worker_pickup_event": "claimed",
+  "worker_pickup_at": "2026-11-06T02:12:28.391082+00:00",
+  "packet_ready_event": "ready_for_review",
+  "packet_ready_at": "2026-11-06T02:12:46.768096+00:00",
+  "elapsed_seconds": 18.377014,
+  "analysis_seconds_until_job_succeeded": 5.186575,
+  "interpretation_provenance": "saved_replay",
+  "includes": ["Docker statistics", "accepted cached interpretation", "reproducibility rerun", "scripted edit and approval", "scheduled wait", "packet preparation"],
+  "excludes": ["fresh inference latency", "human deliberation time", "campaign launch", "sales outcomes"],
+  "scope": "One observed workflow, not a latency benchmark or a measured customer time saving."
+}
