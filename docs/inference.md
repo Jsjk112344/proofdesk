@@ -1,9 +1,26 @@
+# Current live verification: hackathon phase 1
+
+Authenticated GET `/v1/models` on 2026-11-05 ET selected **qwen3.8-flash-next**.
+It supports JSON-object output and optional reasoning; live calls with
+`reasoning: {"enabled": false}` and `response_format: {"type": "json_object"}`
+passed the unchanged analysis, research and outreach contracts. Rates remain $0.10/$0.20
+per million input/output tokens. The benchmark ran through the real Docker worker;
+the prospect example uses labelled synthetic pages and a real Docker demonstration.
+
+Thirteen reservations total $0.0261248; twelve observed responses imply $0.0039680 token
+cost. One interrupted harness reservation has no observed usage and is retained in full.
+See STATUS.md for aggregate accounting and the $150 owner cap. Fresh batch plans share a
+$0.15 inference sub-envelope; historical exhausted ledgers are never reset.
+
+Public sessions use live mode with exact-input accepted replay preferred. Replays pass
+validation again, carry `saved_replay` provenance, and reserve no paid capacity. Different
+inputs call Vultr. Provider/contract failures remain visible; no silent fallback occurs.
+
 # Inference: contracts, diagnostics, observed outcomes and the next plan
 
 Vultr Serverless Inference is SalesDesk's chosen live model adapter. It is an
 implementation choice; Powering the Future of Work does not require inference. No other
-provider is implemented and there is no fallback. Nothing in this document authorizes a
-paid request.
+provider is implemented and there is no fallback. The owner authorized hackathon spend in AGENTS.md; the dated proposals below remain historical.
 
 ## Separate validated contracts
 
@@ -15,10 +32,16 @@ request names its contract in the receipt and only that validator sees the conte
 | `python_source` | CLI code-generation workflow | optional `reasoning` controls | Non-empty source without NUL bytes or a leading Markdown fence, ≤ 32 KiB; still runs only in the sandbox |
 | `research` | Prospect research step | `reasoning: {"enabled": false}`, `response_format: {"type": "json_object"}` | Brief JSON whose source ids are fetched sources and whose excerpts are verbatim page text; each claim's text must be a restatement built only from its own quotation's words and numbers (`interpretation_not_grounded` otherwise); summary, hypothesis, unknowns and relevance reason may not contain quantities absent from the quotations (`unsupported_quantity`) |
 | `outreach` | Prospect drafting step | same | Body paragraphs citing only known claim ids; a quantity (numeral, written number, quantifier, percentage, amount) must appear counting the same thing in an excerpt the paragraph cites, the offering or a verified demonstration (`unsupported_quantity` with `quantity_kind` and `attribution`); no savings language, named greetings or demo mentions without a verified demonstration |
+| `analysis` | Experiment interpretation step (`backend/app/experiments/reasoning.py`) | `reasoning: {"enabled": false}`, `response_format: {"type": "json_object"}` | Reading JSON (question answered, interpretation, alternative explanations, unknowns, proposed next experiment with hypothesis, variants, audience requirements, unit, outcome, window, decision rule, missing inputs). Numbers may appear only as `[metric:ID]` placeholders resolving to validated metrics (`unknown_metric_id`); any digit, percent or currency symbol in prose (`unsupported_quantity`), ROI/profit/guarantee/realized wording (`invented_roi_or_outcome`) or an action that contacts the historical records (`unauthorized_action`) is refused. The controller renders values, denominators and intervals in code |
 
 Sales prose never passes through the source validator and source never parses as sales
 JSON. In live mode the controller re-derives claim strength from the validated excerpts and
-applies its own demonstration rule; the model's `demo_relevance` is recorded, not obeyed.
+applies its own demonstration rule; the model's `demo_relevance` is recorded, not obeyed. The
+analysis contract receives validated aggregate metrics and documented limitations only (never
+raw rows, credentials or contacts); a model cannot change source rows, methods, confidence
+levels, allocation, task approval or job destinations, and a failed live step leaves the
+statistical result intact with the sanitized diagnostic (no rule-based substitution). These are
+lexical checks; they do not establish that an interpretation is right.
 
 ## Sanitized diagnostics
 
@@ -73,9 +96,41 @@ requests, 32,192 reserved tokens and **$0.0040384** reserved under the $0.02 cap
 usage-priced estimate is $0.0011082. It is exhausted, was not reset, deleted or reused,
 and is not a billing receipt.
 
-## Consolidated live-debug and evaluation proposal (awaiting authorization)
+## Consolidated proposal for the analysis contract and the prospect live-debug batch (awaiting authorization)
 
-This single proposal supersedes the four-request and sixteen-request files of 2026-11-05,
+Prepared in the fourth continuation of 2026-11-05 as the single current proposal. Rates were
+re-read from the public catalog on 2026-11-05 (receipt
+`.local/live-preflight/catalog-receipt-2026-11-05-session4.json`, byte-identical to the
+session-3 receipt): `qwen3.8-flash-next`, $0.10 / $0.20 per million input/output tokens.
+
+| Setting | Proposed value |
+| --- | --- |
+| Model | `qwen3.8-flash-next` (no fallback, no other model) |
+| Analysis request | 60 s deadline, 16,000 input / 1,536 completion tokens (byte-based admission; the measured prompt is about 13 KiB), 65,536-byte response, reasoning disabled, JSON-object output, temperature 0 |
+| Analysis worst case per request | 17,536 tokens, **$0.0019072** |
+| Batch A: analysis live validation | `proposed-batch-A-analysis-2026-11-05.json`: ≤ 6 requests, ceiling $0.012 (worst case $0.0114432): one local run and one run on the private Vultr deployment of the Mens-vs-No-E-Mail plan, with up to four further attempts after diagnosed rejections (prompt/option adjustment only) |
+| Batch B: prospect live debugging (optional, separately approvable) | `proposed-batch-B-sales-debug-2026-11-05.json`: ≤ 6 requests, ceiling $0.015 (worst case $0.0120576), the earlier research + outreach debug of the sample scenario; not required for the experiment milestone |
+| Envelope (aggregate) | **12 requests, 213,504 tokens, worst case $0.0235008, requested ceiling $0.03**, enforced across both batches by the envelope ledger |
+| Retries | None at transport or HTTP level; every attempt is one counted request; a rejected analysis response keeps the statistical result and records the diagnostic |
+| Permitted adjustments without new authorization | Prompt wording in `reasoning.py`; `reasoning` disabled or low/minimal with ≤ 1,024 tokens; analysis completion cap 1,024–2,048 and input allowance ≤ 16,000 within the same envelope |
+| Not permitted | Other models, non-zero temperature, provider fallback, resetting or deleting any ledger, plans that do not name the envelope, public live mode |
+
+Files (ignored, unapproved, `approval_reference` empty): `.local/live-preflight/proposed-analysis-envelope-2026-11-05.json`
+with the two batch plan files. The controller refuses them while unapproved (`invalid_envelope`).
+The owner approves by writing the same reference into the envelope block and into each batch
+file that is approved; batch B may stay empty. The approved batch A file is then named by
+`PROOFDESK_ANALYSIS_LIVE_PLAN` (locally via `.env`; on the VM via a root-only systemd drop-in
+together with the credential). Actual usage is logged per receipt separately from the
+reservation. Successful live interpretation is an explicit AI milestone; test fixtures and the
+rule-based reading do not demonstrate it. **Not approved; no live request has been sent under
+these files.**
+
+The earlier 22-request / $0.05 proposal below covered the prospect contracts only and remains a
+historical, unapproved proposal.
+
+## Earlier consolidated live-debug and evaluation proposal (historical, unapproved)
+
+This single proposal superseded the four-request and sixteen-request files of 2026-11-05,
 which remain historical, unapproved proposals. Rates were re-read from the public catalog
 on 2026-11-05 (receipt `.local/live-preflight/catalog-receipt-2026-11-05-session3.json`,
 byte-identical to the earlier receipt): `qwen3.8-flash-next`, $0.10 / $0.20 per million

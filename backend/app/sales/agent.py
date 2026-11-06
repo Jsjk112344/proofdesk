@@ -157,6 +157,7 @@ def run_prospect(
                 reasoning=REASONING_OFF,
                 response_format=JSON_FORMAT,
                 replay_store=REPLAYS,
+                prefer_replay=os.environ.get("PROOFDESK_PUBLIC_DEMO") == "1",
             )
         except RunError:
             receipt = json.loads(receipt_path.read_text())
@@ -180,6 +181,9 @@ def run_prospect(
             **record["generation"].get("usage", {}),
             contract_name: receipt["usage"],
         }
+        value["provenance"] = (
+            "saved_replay" if receipt["provider"] == "saved_replay" else "live_model"
+        )
         return value
 
     try:
@@ -248,7 +252,7 @@ def run_prospect(
                     ),
                 )
                 draft = model_draft(validated, brief, record["demo"], sources)
-                if mode == "saved_replay":
+                if mode == "saved_replay" or validated.get("provenance") == "saved_replay":
                     draft["provenance"] = "saved_replay"
                     brief["provenance"] = "saved_replay"
             else:

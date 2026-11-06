@@ -151,6 +151,8 @@ class Prospects:
             "PATH",
             "HOME",
             "LANG",
+            "PROOFDESK_PUBLIC_DEMO",
+            "PROOFDESK_PUBLIC_LIVE",
             "DOCKER_HOST",
             "DOCKER_CONTEXT",
             "DOCKER_CONFIG",

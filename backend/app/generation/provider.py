@@ -787,6 +787,7 @@ def complete(
     reasoning=None,
     response_format=None,
     replay_store=None,
+    prefer_replay=False,
 ):
     """One bounded request through one contract. Reservation persists before dispatch."""
     started = time.monotonic()
@@ -827,7 +828,6 @@ def complete(
     }
     atomic_json(path, receipt)
     try:
-        provider.ready(config, budget)
         validate_request_controls(request_controls, provider, config)
         reasoning_option = request_controls["reasoning"] if request_controls else reasoning
         validate_reasoning(reasoning_option, config)
@@ -851,7 +851,18 @@ def complete(
         if len(payload) + 256 > config.max_input_tokens:
             raise RunError("model_input_token_limit")
         receipt["request_sha256"] = sha256(payload)
-        receipt["reservation"] = budget.reserve(config)
+        cached = (
+            prefer_replay
+            and replay_store is not None
+            and (Path(replay_store) / (receipt["request_sha256"] + ".json")).is_file()
+        )
+        if cached:
+            provider = ReplayProvider(replay_store)
+            receipt["provider"] = provider.kind
+            receipt["endpoint"] = None
+            receipt["usage_kind"] = USAGE_KINDS[provider.kind]
+        provider.ready(config, budget)
+        receipt["reservation"] = None if cached else budget.reserve(config)
         receipt["budget"] = budget.record()
         receipt["envelope"] = budget.envelope.record() if budget.envelope else None
         (path.parent / "request.json").write_bytes(payload)

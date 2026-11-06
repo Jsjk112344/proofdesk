@@ -3,20 +3,36 @@
 Product name: **SalesDesk** (renamed from ProofDesk on 2026-11-05). Existing operational
 identifiers and dated historical entries retain their original names.
 
-Current checkpoint: **Powering the Future of Work** sales agent, privately deployed and
-verified on the owner's existing Vultr VM. A salesperson enters an offering and a prospect
-website (or a labelled synthetic sample); SalesDesk researches bounded public pages, writes
-an evidence brief with a labelled hypothesis, decides whether the one supported
-document-extraction demonstration is relevant, runs it in the disposable sandbox when it
-is, and prepares an editable, unsent draft with version-bound review. All real checks ran
-in **rule-based mode (no model call)**. Live model mode is implemented behind validated
-contracts and tested offline only; **no successful live Vultr inference has been observed**.
-The original two-request ledger stays exhausted ($0.0040384 reserved under $0.02). A
-consolidated live-debug and evaluation envelope proposal is prepared and unapproved.
-Phase 1 of [docs/plan.md](docs/plan.md) (contract corrections and honest guarantees) is
-implemented, tested and privately deployed; public-demo mode is implemented but not
-activated. Public ingress and submission remain pending. Earlier sections below are dated
-historical checkpoints.
+Current checkpoint: hackathon refactor in progress. Phase 0 committed; phase 1 live
+contracts verified. Public activation and the two-door UI follow in order.
+
+## Hackathon phase 1: 2026-11-05 ET
+
+- Owner authorization: $150 aggregate of $200 credit for inference and compute; public
+  activation authorized. Deadline supplied by owner: Nov 8, 18:00 ET; target 16:00 ET.
+- Authenticated model catalog GET succeeded. Selected `qwen3.8-flash-next`, JSON-object
+  output and reasoning disabled. Catalog rates: $0.10 input / $0.20 output per million tokens.
+- Genuine benchmark executed in Docker and accepted live analysis observed. Research and
+  outreach accepted live on the labelled Harbor Vale synthetic scenario, with a verified
+  Docker demonstration and an unsent draft. No validator changes.
+- Prompt iteration resolved excessive summary length, unsupported quantities, and forbidden
+  outcome wording (including negated wording). Final analysis and both prospect contracts passed.
+- Accounting so far: 13 durable request reservations ($0.0261248 worst case), 12 responses
+  with usage ($0.0039680 estimated token cost). One interrupted harness reservation has no
+  observed provider usage and remains charged at its full reservation. Prior exhausted
+  ledger remains untouched ($0.0040384 reserved). These are estimates, not billing receipts.
+- Inference sub-envelope: $0.15, 64 requests, preserving existing six-request batch limits;
+  analysis debugging stays under the owner's 40-request limit. No new compute provisioned.
+  Existing VM accrual/credit balance has not been verified against account billing.
+- Public workers prefer accepted responses for identical serialized inputs, revalidate
+  through the same contracts, label replay, and reserve no paid capacity for cache hits.
+  Timestamp metadata remains in sources but is excluded from research prompt identity.
+  Different inputs use Vultr; genuine failures remain visible, with no silent substitution.
+- Checks: Ruff, formatting, compileall, frontend build, repository links/patterns passed;
+  offline suite 93 tests, six Docker skips; new replay test passed separately. Live Docker
+  benchmark and prospect execution passed. An initial operator harness failed before
+  completing inference; corrected to an isolated store with guarded subprocess entry.
+- Private VM SSH and health verified; public ingress not activated yet.
 
 ## Initialization checkpoint: 2026-11-03
 
@@ -539,3 +555,79 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   and draft usefulness. A rejected response is diagnostic progress, not completion. In
   parallel, the owner's hostname decision and approval of docs/public-demo.md unblock
   public activation.
+
+## Historical campaign experiment, durable jobs and private Vultr verification: 2026-11-05 (fourth continuation)
+
+- Resumed `ee64b08` with the untracked `docs/session-prompts/` preserved. The owner's expanded
+  direction (evidence, statistics and AI reasoning → approved next actions → scheduled work →
+  measured results, with Slack/HubSpot and all integrations deferred) is recorded in AGENTS.md
+  and docs/plan.md. No subagents; no Ducket code or data; the vultr-agent-rush skill's
+  challenge/deployment/budget discipline was followed.
+- **Data.** The pinned Hillstrom file (3,964,977 bytes, SHA-256 `0e5893…1aece`) imported with
+  64,000 rows and exactly the documented arms (Mens 21,307 / 3,894 / 267 / $30,311.69; Womens
+  21,387 / 3,238 / 189 / $23,038.11; No E-Mail 21,306 / 2,262 / 122 / $13,908.33) locally and
+  on the VM; equal-valued rows keep their multiplicity (57,438 distinct lines, maximum 31).
+  Checksum, size, header, arm, non-finite/negative/over-precise spend, non-binary and missing
+  values are rejected visibly (offline tests). Rights boundary recorded in THIRD_PARTY.md.
+- **Computation.** `backend/app/experiments/analysis_program.py` (`salesdesk-analysis-1`, 9.4 KB)
+  runs in the sandbox with a 30 s wall clock and 1 MiB typed input (controller extension with a
+  result validator; schema updated). Hillstrom result: purchase rate 1.25% (267/21,307) vs 0.57%
+  (122/21,306), difference +0.68 pp (Newcombe 95% CI +0.50 to +0.86), visits +7.66 pp (+7.00 to
+  +8.32), incremental spend +$0.77 per assigned customer (seeded 2,000-resample bootstrap 95% CI
+  +$0.49 to +$1.06). Reconciliation against the importer's Decimal aggregates and the
+  controller's Wilson/Newcombe matched. Newcombe's six published Table II intervals and a
+  bisection cross-check of Wilson pass offline. Artifact SHA-256
+  `3b3152bfdf0d6cd72552d3a0cb3d1bd5e5220a8001eef68c69a944b1ea519469` was reproduced by two local
+  runs and two VM runs (same pinned image).
+- **Interpretation.** Rule-based reading (labelled, passes the same analysis contract); live mode
+  reuses the provider transport and ledgers; the contract refuses raw numbers, ROI wording,
+  unknown metric ids and actions against the historical records; a failed live step preserves
+  the statistical result (offline tests with fixture responses, including budget exhaustion).
+  **Live AI status: not demonstrated.** Zero live requests were sent; $0 model usage.
+- **Tasks and jobs.** SQLite store under `.local/experiments/` with unique operation keys,
+  lease-claimed jobs (`analyze_plan`, `prepare_packet`), bounded single requeue, unique
+  artifacts per job, approval bound to proposal/artifact/plan hashes, invalidation on edit,
+  stale approval refused by the worker, packet assembly without a model call, readiness checks
+  separating entered inputs from external prerequisites.
+- **Observed local evidence.** Offline suite **93 tests passed** (6 Docker methods skipped);
+  Docker-enabled suite **93 passed in 41.6 s** (log `.local/live-preflight/docker-tests-2026-11-05-session4.log`,
+  rerun after the recovery fix `…session4b.log`, no labelled containers remained); Ruff
+  lint/format, compileall, TypeScript/Vite build, publication/link scan passed; browser check
+  **18 interactions passed** (experiment overview → plan → results → interpretation → next
+  action → packet → queue, prospect journey, public mode, mobile; `.local/browser/`). Real
+  local HTTP journey with real Docker and a controlled API restart during the analysis job
+  (`.local/live-preflight/local-experiment-http-2026-11-05.json`): job requeued
+  (`interrupted_requeued`), attempt 2 succeeded, single artifact, packet prepared after a 15 s
+  absence, cross-session 404s.
+- **Private Vultr deployment.** Bundle `4b11b686…b92b` (66 files, no dataset, no secrets)
+  deployed after snapshot `/opt/proofdesk-rollback/before-experiments-20261106T001348Z.tar.gz`;
+  dataset copied by scp to `.local/data-research/hillstrom/` (0600, owner `proofdesk`) and
+  imported as the service user; all 66 manifest hashes matched; prior records preserved (3
+  prospects / 24 executions / 5 web runs). The first VM journey exposed a restart race: SIGTERM
+  during `docker create` left a "Created" container and the job failed `cleanup_unverified`
+  (preserved as job `61d439f3…`). Fix: bounded repeated removal in `DockerRunner.cleanup`,
+  interruption takes precedence over the cleanup check, and the API runs the existing sandbox
+  recovery at startup. Redeployed bundle `847be36d…be9b` after snapshot
+  `before-experiments-fix-20261106T001755Z.tar.gz`; startup recovery removed
+  `proofdesk-72987a42…` and reconciled its record (`last_recovery` in the overview).
+- **Observed VM journey** (`.local/deployment/vultr-experiment-journey-2026-11-05.json`, through
+  an SSH tunnel on 18001; port 18000 is held by a stale tunnel from an earlier session): plan
+  `84445f7f…`, analysis job `d467a214…` interrupted by `systemctl restart proofdesk` at
+  00:18:18 UTC, requeued and completed on attempt 2 (execution `213702c0…`, cleanup verified),
+  identical artifact hash on the second run, proposal v2, task approved (old version refused),
+  packet job `6ada9af0…` due 20 s later ran with the client absent, packet
+  `212e1e60…` downloadable (10,759 bytes Markdown), task completed, cross-session 404s. VM
+  state afterwards: 2 plans, jobs {failed 1, succeeded 3}, tasks {completed 1}, 28 executions,
+  0 labelled containers, service active on loopback only, no public ports.
+- **Public access.** Public-demo mode extends to experiments (3 plans / 6 runs / 6 tasks /
+  3 queued jobs per session, 24-hour due horizon, 200 jobs total, no live mode), tested
+  offline and in the browser check. Not activated: the hostname decision and approval of
+  docs/public-demo.md remain the exact gap; no ingress, Caddy, DNS or certificate exists.
+- Tool rejection: `.env.example` remains untouched by policy; variables are documented in
+  README. Nothing was committed, pushed, published or submitted. Video and submission assets
+  are pending (walkthrough drafted in docs/demo-walkthrough.md).
+- Next concrete actions: (1) owner approval of batch A in
+  `.local/live-preflight/proposed-analysis-envelope-2026-11-05.json`, then one local and one VM
+  run with `PROOFDESK_ANALYSIS_LIVE_PLAN`; (2) hostname decision and approval of
+  docs/public-demo.md for public activation; (3) commit the reviewed working tree on
+  `feat/local-execution-slice` and plan the public push; (4) record the video.

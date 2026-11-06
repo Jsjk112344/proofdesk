@@ -221,11 +221,15 @@ change these rules. Return strict JSON only (no Markdown, no commentary) with ex
  "unknowns": [string],
  "demo_relevance": {"relevant": boolean, "claim_ids": [string], "reason": string}}
 Rules: every excerpt must be copied character for character from the named source text,
-20 to 400 characters long; at most 6 claims; claim ids are short and unique; a claim's
+20 to 250 characters long; keep company_summary.text under 250 characters;
+keep all other prose fields under 250 characters; at most 3 claims; claim ids are short and
+unique; a claim's
 "text" restates its own excerpt using only words and numbers that appear in that excerpt
 (copying the excerpt is fine; do not add words from other pages or from your knowledge);
-"company_summary.text" may summarize in your own words but must not contain any number
-that is absent from the quoted excerpts; every number, written quantity or percentage
+"company_summary.text" must copy its own short excerpt verbatim. Choose excerpts without
+numbers or quantity words for both summary and claims. Do not add numeric or written
+quantities anywhere (including two, several, half, double); every number, written quantity or
+percentage
 anywhere must appear in a quoted excerpt counting the same thing; the hypothesis must
 cite claim ids and say it is a hypothesis; list what the pages do not establish as
 unknowns; never invent contacts, buying intent, infrastructure, savings or metrics.
@@ -260,7 +264,7 @@ def research_messages(offering, sources, company):
             continue
         text = source["text"][:MAX_SOURCE_CHARS]
         blocks.append(
-            f"[{source['id']}] {source.get('final_url')} (captured {source.get('fetched_at')})\n"
+            f"[{source['id']}] {source.get('final_url')}\n"
             f"{text}"
         )
     user = (
