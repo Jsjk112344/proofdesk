@@ -18,6 +18,8 @@ from backend.app.sales.agent import run_prospect
 from backend.app.sales.evidence import SUPPORTED_CAPABILITY
 from backend.app.sales.prospects import DEFAULT_OFFERING, MAX_OFFERING, Prospects, samples
 from backend.app.web_jobs import checkpoint, documents, extractor
+from backend.tests.test_experiments import PLAN
+from backend.tests.test_experiments import workspace as experiment_workspace
 from backend.tests.test_generation import RecordingRunner
 
 
@@ -87,11 +89,61 @@ def mock_records():
         return views
 
 
+def mock_experiments():
+    """Synthetic experiment journey on the labelled fixture dataset, run in-process with the
+    test-only host runner; labelled UI-MOCK. Not benchmark evidence."""
+    with TemporaryDirectory() as temp:
+        root = Path(temp)
+        _, service = experiment_workspace(root)
+        owner = "ui-mock"
+        plan = service.create_plan(owner, uuid.uuid4().hex, PLAN)
+        job = service.run_now(plan["id"], owner, uuid.uuid4().hex)
+        service.scheduler.tick()
+        detail = service.plan_detail(plan["id"], owner)
+        proposal = detail["proposals"][0]
+        content = dict(proposal["content"])
+        content["notes"] = "UI-MOCK edit"
+        edited = service.save_proposal(
+            plan["id"], owner, uuid.uuid4().hex, content, base_version=proposal["version"]
+        )
+        task = service.create_task(
+            plan["id"],
+            owner,
+            uuid.uuid4().hex,
+            {
+                "title": "Review the repeat-experiment packet",
+                "assignee_label": "Sales manager",
+                "proposed_action": "Review and decide",
+                "due_date": "2026-11-12",
+            },
+        )
+        service.approve_task(task["id"], owner, uuid.uuid4().hex, proposal_sha256=edited["sha256"])
+        scheduled = service.schedule_task(task["id"], owner, uuid.uuid4().hex, due_at="now")
+        service.scheduler.tick()
+        final = service.plan_detail(plan["id"], owner)
+        packet = service.artifact_view(final["tasks"][0]["packet_artifact_id"], owner)
+        service.stop()
+        return {
+            "kind": "UI-MOCK synthetic fixture journey; not benchmark evidence",
+            "overview": service.overview(owner),
+            "detail": final,
+            "analysis_job": service.job_detail(job["id"], owner),
+            "packet_job": service.job_detail(scheduled["job_id"], owner),
+            "packet": packet,
+        }
+
+
 def main():
     output = ROOT / ".local/browser"
     output.mkdir(parents=True, exist_ok=True)
     script, source = extractor()
+    experiments = mock_experiments()
     workspace = {
+        "experiments": {
+            "generation_mode": "deterministic",
+            "limits": experiments["overview"]["limits"],
+            "datasets": [d["id"] for d in experiments["overview"]["datasets"]],
+        },
         "capability": SUPPORTED_CAPABILITY,
         "default_offering": DEFAULT_OFFERING,
         "max_offering_chars": MAX_OFFERING,
@@ -117,6 +169,7 @@ def main():
         "workspace.json": json.dumps(workspace).encode(),
         "workspace-public.json": json.dumps(public).encode(),
         "records.json": json.dumps(mock_records()).encode(),
+        "experiments.json": json.dumps(experiments).encode(),
         "smoke.mjs": (ROOT / "frontend/tests/smoke.mjs").read_bytes(),
     }
     data.update(
@@ -172,6 +225,11 @@ def main():
         (output / "browser.log").write_bytes(out + err)
         assert code == 0, "browser checks failed; inspect ignored browser.log"
         names = {
+            "home.png",
+            "plan.png",
+            "results.png",
+            "next-action.png",
+            "queue.png",
             "landing.png",
             "research.png",
             "demonstration.png",

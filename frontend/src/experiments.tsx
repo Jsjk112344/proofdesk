@@ -1,3 +1,4 @@
+import { AnalystActivity, type ActivityStep } from "./activity";
 import { useEffect, useRef, useState } from "react";
 import { api, Badge, Empty, newId, post, stamp, time } from "./shared";
 
@@ -640,19 +641,9 @@ export function NewPlanForm({ overview, onCreated, onError }: { overview: Overvi
 }
 
 // ---------------------------------------------------------------- Experiment detail
-const STEPS: [string, string][] = [
-  ["source", "Historical data"],
-  ["plan", "Saved plan"],
-  ["execution", "Sandboxed statistics"],
-  ["results", "Result and uncertainty"],
-  ["interpretation", "Interpretation"],
-  ["approval", "Approved next move"],
-  ["packet", "Scheduled packet"],
-];
-
 export function ExperimentView({ planId, onChanged, onError }: { planId: string; onChanged: () => Promise<void>; onError: (m: string) => void }) {
   const [detail, setDetail] = useState<PlanDetail | null>(null);
-  const [tab, setTab] = useState<"results" | "interpretation" | "action" | "work" | "source" | "technical">("results");
+  const [tab, setTab] = useState<"results" | "action" | "technical">("results");
   const [running, setRunning] = useState(false);
   const [missing, setMissing] = useState(false);
   const requestId = useRef<string | null>(null);
@@ -692,15 +683,20 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
   const run = detail.runs.find((r) => r.status === "succeeded") || detail.runs[0] || null;
   const latest = detail.runs[0] || null;
   const proposal = detail.proposals[0] || null;
-  const reached = {
-    source: true,
-    plan: true,
-    execution: detail.runs.length > 0,
-    results: !!run && run.status === "succeeded",
-    interpretation: !!run?.interpretation && run.interpretation.status === "succeeded",
-    approval: detail.tasks.some((t) => ["approved", "scheduled", "running", "ready_for_review", "completed"].includes(t.status)),
-    packet: detail.tasks.some((t) => ["ready_for_review", "completed"].includes(t.status)),
-  } as Record<string, boolean>;
+  const analysisJob = detail.jobs.find(j => j.kind === "analyze_plan");
+  const preparation = detail.jobs.find(j => j.kind === "prepare_packet");
+  const task = detail.tasks[0];
+  const event = (stage: string) => analysisJob?.events.find(e => e.stage === stage)?.at;
+  const steps: ActivityStep[] = [
+    { label: "Picked up by SalesDesk worker on Vultr", at: event("claimed"), state: event("claimed") ? "done" : "pending" },
+    { label: "Running the numbers", at: event("executing"), state: run?.reconciliation ? "done" : event("executing") ? (analysisJob?.status === "failed" ? "failed" : "running") : "pending", evidence: run?.execution },
+    { label: "Results verified", at: event("interpreting"), state: run?.reconciliation ? "done" : "pending", evidence: run?.reconciliation },
+    { label: `Reading the result (Vultr Inference · ${run?.generation?.model || "waiting for model"})`, at: run?.interpretation?.created_at || event("interpreting"), state: run?.interpretation?.status === "succeeded" ? "done" : run?.interpretation?.status === "failed" ? "failed" : event("interpreting") ? "running" : "pending", evidence: run?.generation },
+    { label: "Next move drafted", at: proposal?.created_at, state: proposal ? "done" : "pending", evidence: proposal ? { sha256: proposal.sha256, version: proposal.version } : undefined },
+    { label: "Awaiting your approval", at: task?.approval ? String(task.approval.approved_at) : proposal?.created_at, state: task?.approval ? "done" : proposal ? "running" : "pending", evidence: task?.approval },
+    { label: "Preparing your packet", at: preparation?.started_at || preparation?.due_at, state: task?.packet_artifact_id ? "done" : preparation?.status === "failed" ? "failed" : preparation ? "running" : "pending" },
+    { label: "Ready for review", at: preparation?.finished_at, state: task?.packet_artifact_id ? "done" : "pending", evidence: task?.packet_artifact_id },
+  ];
   async function runNow() {
     onError("");
     setRunning(true);
@@ -735,14 +731,13 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
           </button>
         </div>
       </div>
-      <ol className="stepper seven" aria-label="Journey">
-        {STEPS.map(([id, label]) => (
-          <li key={id} className={reached[id] ? "reached" : ""}>
-            <span className="step-dot" aria-hidden="true" />
-            <span className="step-label">{label}</span>
-          </li>
-        ))}
-      </ol>
+      <AnalystActivity steps={steps} />
+      {task && ["scheduled", "running", "ready_for_review", "completed"].includes(task.status) && <section className="panel walk-away" role="status">
+        <h2>{task.packet_artifact_id ? "Ready for review" : "Preparing your packet on Vultr, you can close this tab"}</h2>
+        <p className="muted">{stamp(task.updated_at)}</p>
+        {task.packet_artifact_id && <><PacketSummary artifactId={task.packet_artifact_id} />
+          <a className="primary button-link" href={`/api/experiments/artifacts/${task.packet_artifact_id}/packet.md`}>Download packet (.md)</a></>}
+      </section>}
       {latest && latest.status === "failed" && (
         <div className="alert" role="alert">
           <strong>The latest run failed.</strong> Reason <span className="code">{latest.failure_reason}</span>. Earlier
@@ -758,11 +753,8 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
       <div className="tabs" role="tablist" aria-label="Experiment views">
         {(
           [
-            ["results", "Results"],
-            ["interpretation", "Interpretation"],
+            ["results", "Result"],
             ["action", "Next move"],
-            ["work", "Scheduled work"],
-            ["source", "Plan and source"],
             ["technical", "Verification"],
           ] as const
         ).map(([id, label]) => (
@@ -772,20 +764,18 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
         ))}
       </div>
       <div id="tabpanel" role="tabpanel" aria-labelledby={`tab-${tab}`}>
-        {tab === "results" && <ResultsTab detail={detail} run={run} working={working} />}
-        {tab === "interpretation" && <InterpretationTab run={run} working={working} />}
+        {tab === "results" && <><InterpretationTab run={run} working={working} /><ResultsTab detail={detail} run={run} working={working} /></>}
         {tab === "action" && (
           <NextActionTab detail={detail} run={run} proposal={proposal} onChange={async () => {
             await load();
             await onChanged();
           }} onError={onError} />
         )}
-        {tab === "work" && <WorkTab detail={detail} onChange={async () => {
-          await load();
-          await onChanged();
-        }} onError={onError} />}
-        {tab === "source" && <SourceTab detail={detail} />}
-        {tab === "technical" && <TechnicalTab detail={detail} run={run} />}
+        {tab === "technical" && <details className="verification"><summary>Verification: source, execution and model receipts</summary>
+          <SourceTab detail={detail} /><TechnicalTab detail={detail} run={run} />
+          <WorkTab detail={detail} onChange={async () => { await load(); await onChanged(); }} onError={onError} />
+        </details>}
+
       </div>
     </>
   );
@@ -1282,125 +1272,58 @@ function NextActionTab({ detail, run, proposal, onChange, onError }: { detail: P
           </button>
         </div>
       </section>
-      <TaskPanel detail={detail} proposal={proposal} onChange={onChange} onError={onError} />
+      <TaskPanel detail={detail} proposal={proposal} dirty={dirty} onChange={onChange} onError={onError} />
     </div>
   );
 }
 
-function TaskPanel({ detail, proposal, onChange, onError }: { detail: PlanDetail; proposal: Proposal | null; onChange: () => Promise<void>; onError: (m: string) => void }) {
-  const [title, setTitle] = useState("Review the repeat-experiment packet");
-  const [assignee, setAssignee] = useState("Sales manager");
-  const [action, setAction] = useState("Review the prepared packet and decide whether to run the repeat experiment with a current audience.");
-  const [due, setDue] = useState("");
+function TaskPanel({ detail, proposal, dirty, onChange, onError }: { detail: PlanDetail; proposal: Proposal | null; dirty: boolean; onChange: () => Promise<void>; onError: (m: string) => void }) {
   const [busy, setBusy] = useState(false);
-  const [dueAt, setDueAt] = useState<Record<string, string>>({});
-  const [evidence, setEvidence] = useState<Record<string, string>>({});
-  async function act(fn: () => Promise<unknown>) {
-    onError("");
-    setBusy(true);
+  const [due, setDue] = useState("");
+  const operation = useRef({ create: newId(), approve: newId(), schedule: newId() });
+  const pendingTask = useRef<Task | null>(null);
+  useEffect(() => {
+    pendingTask.current = null;
+    operation.current = { create: newId(), approve: newId(), schedule: newId() };
+  }, [proposal?.sha256]);
+  const current = detail.tasks.find(t => t.proposal_sha256 === proposal?.sha256 && t.status !== "cancelled");
+  async function approve() {
+    if (!proposal || dirty) return;
+    setBusy(true); onError("");
     try {
-      await fn();
+      let task = current || pendingTask.current;
+      if (!task) {
+        task = await post<Task>(`/api/experiments/plans/${detail.plan.id}/tasks`, {
+          title: "Review the next-move packet", assignee_label: "Sales manager",
+          proposed_action: "Review the prepared packet and decide whether to proceed with a current consenting audience.",
+          due_date: null, request_id: operation.current.create,
+        });
+        pendingTask.current = task;
+      }
+      if (task.status === "pending_review") task = await post<Task>(`/api/experiments/tasks/${task.id}/approve`, {
+        proposal_sha256: proposal.sha256, request_id: operation.current.approve,
+      });
+      pendingTask.current = task;
+      if (["approved", "failed"].includes(task.status)) await post(`/api/experiments/tasks/${task.id}/schedule`, {
+        due_at: due ? new Date(due).toISOString() : "now", request_id: operation.current.schedule,
+      });
       await onChange();
-    } catch (e) {
-      onError((e as Error).message);
-    } finally {
-      setBusy(false);
-    }
+    } catch (e) { onError((e as Error).message); }
+    finally { setBusy(false); }
   }
-  const tasks = detail.tasks;
-  return (
-    <section className="panel">
-      <h2>Internal tasks</h2>
-      <p className="muted">
-        Assign a person, approve the exact next-move version, then schedule preparation. The approval binds to the
-        proposal hash and the analysis artifact hash; a later edit clears it.
-      </p>
-      {tasks.map((t) => {
-        const job = detail.jobs.find((j) => j.id === t.job_id);
-        return (
-          <div className="task" key={t.id}>
-            <div className="row-between">
-              <strong>{t.title}</strong>
-              <Badge tone={TONES[t.status] || "warn"}>{taskLabel(t.status)}</Badge>
-            </div>
-            <p className="muted">
-              {t.assignee_label} · due {t.due_date || "unset"} · proposal v{t.proposal_version} · {t.proposed_action}
-            </p>
-            {t.approval && (
-              <p className="muted">
-                Approved {stamp(String(t.approval.approved_at))} for proposal v{String(t.approval.proposal_version)} and artifact{" "}
-                <span className="hash">{String(t.approval.artifact_sha256).slice(0, 12)}</span>
-              </p>
-            )}
-            {job && (
-              <p className="muted">
-                Preparation job <span className="hash">{job.id.slice(0, 8)}</span> · {job.status} · due {stamp(job.due_at)} · attempt {job.attempts} of {job.max_attempts}
-                {job.failure_reason ? ` · ${job.failure_reason}` : ""}
-              </p>
-            )}
-            {t.completion && (
-              <p className="muted">
-                Completed {stamp(t.completion.completed_at)}: {t.completion.evidence_note}
-              </p>
-            )}
-            <div className="draft-actions">
-              {t.status === "pending_review" && proposal && (
-                <button className="primary" disabled={busy || proposal.version !== detail.proposals[0]?.version} onClick={() => void act(() => post(`/api/experiments/tasks/${t.id}/approve`, { proposal_sha256: proposal.sha256, request_id: newId() }))}>
-                  Approve next move v{proposal.version}
-                </button>
-              )}
-              {(t.status === "approved" || t.status === "failed") && (
-                <>
-                  <button className="primary" disabled={busy} onClick={() => void act(() => post(`/api/experiments/tasks/${t.id}/schedule`, { due_at: dueAt[t.id] || "now", request_id: newId() }))}>
-                    {dueAt[t.id] ? "Schedule preparation" : "Prepare packet now"}
-                  </button>
-                  <input type="text" aria-label="Due time (ISO-8601 UTC, optional)" placeholder="2026-11-06T09:00:00+00:00 (optional)" value={dueAt[t.id] || ""} onChange={(e) => setDueAt((d) => ({ ...d, [t.id]: e.target.value }))} />
-                </>
-              )}
-              {t.status === "ready_for_review" && t.packet_artifact_id && (
-                <>
-                  <a className="secondary button-link" href={`/api/experiments/artifacts/${t.packet_artifact_id}/packet.md`}>
-                    Download packet (.md)
-                  </a>
-                  <input type="text" aria-label="Completion evidence" placeholder="What did you review or decide?" value={evidence[t.id] || ""} onChange={(e) => setEvidence((d) => ({ ...d, [t.id]: e.target.value }))} />
-                  <button className="primary" disabled={busy || !(evidence[t.id] || "").trim()} onClick={() => void act(() => post(`/api/experiments/tasks/${t.id}/complete`, { evidence_note: evidence[t.id], request_id: newId() }))}>
-                    Mark review complete
-                  </button>
-                </>
-              )}
-              {!["completed", "cancelled"].includes(t.status) && (
-                <button className="secondary" disabled={busy} onClick={() => void act(() => post(`/api/experiments/tasks/${t.id}/cancel`, {}))}>
-                  Cancel
-                </button>
-              )}
-            </div>
-            {t.status === "ready_for_review" && t.packet_artifact_id && <PacketSummary artifactId={t.packet_artifact_id} />}
-          </div>
-        );
-      })}
-      <h3>New task</h3>
-      <div className="two">
-        <div>
-          <label htmlFor="t-title">Title</label>
-          <input id="t-title" type="text" value={title} maxLength={160} onChange={(e) => setTitle(e.target.value)} />
-        </div>
-        <div>
-          <label htmlFor="t-assignee">Assignee label</label>
-          <input id="t-assignee" type="text" value={assignee} maxLength={80} onChange={(e) => setAssignee(e.target.value)} />
-        </div>
-      </div>
-      <label htmlFor="t-action">Proposed action</label>
-      <input id="t-action" type="text" value={action} maxLength={600} onChange={(e) => setAction(e.target.value)} />
-      <label htmlFor="t-due">Due date (operational, optional)</label>
-      <input id="t-due" type="text" placeholder="YYYY-MM-DD" value={due} onChange={(e) => setDue(e.target.value)} />
-      <div className="draft-actions">
-        <button className="primary" disabled={busy || !proposal || !title.trim() || !assignee.trim() || !action.trim()} onClick={() => void act(() => post(`/api/experiments/plans/${detail.plan.id}/tasks`, { title, assignee_label: assignee, proposed_action: action, due_date: due.trim() || null, request_id: newId() }))}>
-          Create task
-        </button>
-        {!proposal && <span className="hint">Save a proposal first.</span>}
-      </div>
-    </section>
-  );
+  const scheduled = current && ["scheduled", "running", "ready_for_review", "completed"].includes(current.status);
+  return <section className="panel approval-card">
+    <h2>{scheduled ? "Next move approved" : "Approve your next move"}</h2>
+    <p>{proposal?.content.hypothesis || "Save your next move first."}</p>
+    {!scheduled && <>
+      <label htmlFor="prepare-at">Prepare packet (leave empty to start now)</label>
+      <input id="prepare-at" type="datetime-local" value={due} onChange={e => setDue(e.target.value)} disabled={busy} />
+      <button className="primary" disabled={busy || dirty || !proposal} onClick={() => void approve()}>{busy ? "Scheduling…" : "Approve & schedule"}</button>
+      {dirty && <p className="hint">Save your edits before approving.</p>}
+    </>}
+    {current?.status === "failed" && <p role="alert">Preparation stopped. Review Verification before retrying.</p>}
+    {proposal && <p className="hint hash">Bound to next move {proposal.sha256.slice(0, 12)} · plan {detail.plan.sha256.slice(0, 12)}{current?.approval ? ` · artifact ${String(current.approval.artifact_sha256).slice(0, 12)}` : " · analysis artifact bound on approval"}</p>}
+  </section>;
 }
 
 function PacketSummary({ artifactId }: { artifactId: string }) {

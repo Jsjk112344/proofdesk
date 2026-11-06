@@ -661,3 +661,19 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   numbers, saved campaigns and a working new-plan link. Dataset moved below the fold.
 - Production build, backend suite (94, six Docker skips), and real VM HTTP journey passed.
   The journey used public-mode limits and accepted replay with real Docker execution.
+
+## Hackathon phase 5
+
+- Plan tabs reduced to Result, Next move, Verification. Shared Analyst activity derives
+  progress from saved job/prospect events, execution records and generation receipts;
+  per-step evidence is collapsed. Motion respects reduced-motion preference.
+- One approval action creates/reuses a task, binds its version and schedules preparation
+  through the existing endpoints. Unsaved edits disable approval. Packet status, timestamp,
+  summary and download persist across tabs and reloads.
+- Build and 94 backend tests passed (six Docker skips). Real VM HTTP journey passed.
+  Disposable browser checks passed: combined approval, dirty edits, reload, three tabs,
+  verification, prospect review invalidation, rejected research, mobile overflow, no page
+  errors. Updated stale screenshot expectations after first collection failure; corrected
+  a test selector that matched both disclosed and collapsed diagnostics.
+- Owner reports upstream firewall updated. Public HTTP now responds; certificate retry is
+  deferred until the ACME retry window after earlier connection failures. HTTPS pending.

@@ -1,3 +1,4 @@
+import { AnalystActivity, type ActivityStep } from "./activity";
 import { useEffect, useRef, useState } from "react";
 import { api, Badge, day, Empty, ERRORS, MODES, money, newId, post, time } from "./shared";
 
@@ -158,14 +159,6 @@ type Prospect = {
 };
 
 const ACTIVE = ["queued", "researching", "deciding", "demonstrating", "drafting"];
-const STAGES: [string, string][] = [
-  ["queued", "Queued"],
-  ["researching", "Researching public pages"],
-  ["deciding", "Deciding on a demonstration"],
-  ["demonstrating", "Running the demonstration"],
-  ["drafting", "Drafting outreach"],
-  ["ready", "Ready for review"],
-];
 const SOURCE_FAILURES: Record<string, string> = {
   address_blocked: "Blocked: the host resolved to a private or reserved address.",
   ip_literal_rejected: "Blocked: redirect to an IP address.",
@@ -423,26 +416,16 @@ function ProspectView({
           {statusLabel(prospect)}
         </Badge>
       </div>
-      <ol className="stepper" aria-label="Progress">
-        {STAGES.map(([stage, label]) => {
-          const event = prospect.events.find((e) => e.stage === stage);
-          const skipped =
-            stage === "demonstrating" && prospect.demo && prospect.demo.decision !== "run";
-          const currentStage = prospect.status === stage;
-          return (
-            <li
-              key={stage}
-              className={`${event ? "reached" : ""} ${currentStage && active ? "current" : ""} ${skipped ? "skipped" : ""}`}
-            >
-              <span className="step-dot" aria-hidden="true" />
-              <span className="step-label">
-                {skipped ? "Demonstration skipped" : label}
-              </span>
-              {event && <time dateTime={event.at}>{time(event.at)}</time>}
-            </li>
-          );
-        })}
-      </ol>
+      <AnalystActivity steps={[
+        ["researching", "Researching the prospect"], ["deciding", "Brief prepared"],
+        ["demonstrating", "Demonstration decision"], ["drafting", "Drafting your next move"],
+        ["ready", "Awaiting your approval"],
+      ].map(([stage, label]): ActivityStep => {
+        const event = prospect.events.find(e => e.stage === stage);
+        const reached = !!event || (stage === "demonstrating" && !!prospect.demo);
+        return { label, at: event?.at, state: prospect.status === stage && active ? "running" : reached ? "done" : "pending",
+          evidence: stage === "researching" ? prospect.sources : stage === "demonstrating" ? prospect.demo : stage === "drafting" ? prospect.generation : undefined };
+      })} />
       {prospect.status === "failed" && (
         <div className="alert" role="alert">
           <strong>This prospect stopped.</strong>{" "}

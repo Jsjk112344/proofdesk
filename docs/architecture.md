@@ -1,18 +1,30 @@
-# Architecture: the experiment journey and the supporting prospect journey
+# SalesDesk: two doors, one analyst loop
 
-SalesDesk's entry screen is the See what worked. The implemented journey is:
-pinned historical campaign dataset → saved analysis plan → durable job claimed by the
-server's scheduler → fixed analysis program in the disposable Docker sandbox → validated,
-reconciled metrics → labelled interpretation (rule-based, or the Vultr model under contract) →
-human-edited and approved next-move proposal → internal task → scheduled packet
-preparation that survives browser closure and worker restart → downloadable packet for human
-review. The prospect journey (offering + website → research → demonstration decision → unsent
-draft → version-bound review) is a supporting route. Both are privately deployed on the owner's
-Vultr VM.
+SalesDesk has two entry doors: **See what worked** for campaign analysis and
+**Starting from zero** for prospect research. Both lead to an evidenced next move,
+human approval and work prepared by Vultr workers while the user is away.
 
-No successful live Vultr inference has been observed for any contract. Interpretation runs in
-**rule-based mode** by default and is labelled everywhere; live mode is implemented behind the
-analysis contract and awaits an authorized run.
+The campaign page has three tabs: Result (interpretation and charts), Next move
+(editable content, schedule and one approval card), Verification (source, saved plan,
+execution, reconciliation, model receipts and job history). Analyst activity is derived
+from persisted job events, execution records and generation receipts. Pending work is
+never marked complete before evidence exists. Per-step evidence is disclosed on demand.
+The same timeline component shows prospect research, brief, demonstration decision,
+draft and approval readiness.
+
+Approve & schedule invokes the existing idempotent create-task, exact-version approval
+and schedule endpoints in order. Request ids persist through a retried click; editing
+resets them. Each server operation retains its ownership, quota and version checks;
+a partial network failure keeps the saved task for recovery. Packet status and Markdown
+download remain visible across tabs and reloads. The browser polls active jobs; the
+server scheduler owns execution.
+
+Live Vultr analysis, research and outreach have passed their unchanged validators.
+Public workers prefer exact-input accepted replay, revalidate it and label provenance.
+No model/provider fallback is silently substituted. Caddy public ingress is configured;
+external HTTPS acceptance is tracked separately in STATUS.md.
+
+The sections below record the underlying components and retained contracts.
 
 ## Components
 
