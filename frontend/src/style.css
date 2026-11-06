@@ -1219,8 +1219,9 @@ table.list td {
 .verification > summary { cursor: pointer; color: var(--ink-2); padding: .8rem 0; }
 @media (max-width: 700px) { .home-hero h1 { font-size: 1.9rem; } .entry-door { padding: 1.2rem; } }
 .analyst-activity { margin: 1rem 0; }
-.analyst-activity ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); list-style: none; padding: 0; gap: .8rem 1.5rem; }
-.analyst-activity li { display: flex; gap: .7rem; font-size: .85rem; }
+.analyst-activity ol { display: flex; flex-direction: column; list-style: none; padding: 0; gap: .8rem; }
+.analyst-activity li { display: flex; min-width: 0; gap: .7rem; font-size: .85rem; }
+.analyst-activity li > div { min-width: 0; }
 .analyst-activity time { display: block; color: var(--muted); font-size: .8rem; }
 .activity-marker { flex: 0 0 1.6rem; height: 1.6rem; border: 1px solid var(--line-strong); border-radius: 50%; display: grid; place-items: center; }
 .activity-done .activity-marker { background: var(--accent); color: white; animation: step-complete 200ms ease-out; }
@@ -1231,4 +1232,3 @@ table.list td {
 .approval-card .primary { margin-top: 1rem; }
 @keyframes step-complete { from { transform: scale(.85); } to { transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .activity-done .activity-marker { animation: none; } }
-@media (max-width: 700px) { .analyst-activity ol { grid-template-columns: 1fr; } }
