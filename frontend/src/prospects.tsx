@@ -1,6 +1,6 @@
 import { AnalystActivity, type ActivityStep } from "./activity";
 import { useEffect, useRef, useState } from "react";
-import { api, Badge, day, Empty, ERRORS, MODES, money, newId, post, time } from "./shared";
+import { displayCurrency, api, Badge, day, Empty, ERRORS, MODES, money, newId, post, time } from "./shared";
 
 type Sample = { id: string; title: string; note: string; synthetic: boolean };
 type Capability = { id: string; label: string; summary: string };
@@ -500,7 +500,7 @@ function ResearchTab({ prospect }: { prospect: Prospect }) {
             </blockquote>
             {brief.company_summary.text_kind === "model_summary" && (
               <p className="muted restatement">
-                <Badge tone="hypothesis">Model summary</Badge> {brief.company_summary.text}{" "}
+                <Badge tone="hypothesis">Model summary</Badge> {displayCurrency(brief.company_summary.text)}{" "}
                 <span>(not a verified fact; the quotation above is the evidence)</span>
               </p>
             )}
@@ -532,7 +532,7 @@ function ResearchTab({ prospect }: { prospect: Prospect }) {
                     <span className="claim-id">{c.id}</span> “{c.excerpt}”
                     {c.text_kind === "grounded_restatement" && c.text !== c.excerpt && (
                       <div className="muted restatement">
-                        <Badge tone="hypothesis">Model restatement</Badge> {c.text}{" "}
+                        <Badge tone="hypothesis">Model restatement</Badge> {displayCurrency(c.text)}{" "}
                         <span>(built only from the quotation's words; not a separately verified fact)</span>
                       </div>
                     )}
@@ -565,7 +565,7 @@ function ResearchTab({ prospect }: { prospect: Prospect }) {
           <h2>
             Proposed opportunity <Badge tone="hypothesis">Hypothesis</Badge>
           </h2>
-          <p>{brief.opportunity_hypothesis.text}</p>
+          <p>{displayCurrency(brief.opportunity_hypothesis.text)}</p>
           {brief.opportunity_hypothesis.claim_ids.length > 0 && (
             <p className="muted">Based on {brief.opportunity_hypothesis.claim_ids.join(", ")}.</p>
           )}
@@ -666,7 +666,7 @@ function DemoTab({ prospect }: { prospect: Prospect }) {
             <p className="input-label">
               <Badge tone="synthetic">Synthetic input</Badge> {demo.input_label}
             </p>
-            {demo.status === "verified" && demo.result_text && <p>{demo.result_text}</p>}
+            {demo.status === "verified" && demo.result_text && <p>{displayCurrency(demo.result_text)}</p>}
             {demo.status === "failed" && (
               <p>
                 The run did not pass verification ({demo.failure_reason}). The draft does not
@@ -829,7 +829,7 @@ function OutreachTab({
   }
   async function copy() {
     try {
-      await navigator.clipboard.writeText(`Subject: ${subject}\n\n${body}`);
+      await navigator.clipboard.writeText(`Subject: ${subject}\n\n${displayCurrency(body)}`);
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1800);
     } catch {
@@ -837,7 +837,7 @@ function OutreachTab({
     }
   }
   function download() {
-    const blob = new Blob([`Subject: ${subject}\n\n${body}`], { type: "text/plain" });
+    const blob = new Blob([`Subject: ${subject}\n\n${displayCurrency(body)}`], { type: "text/plain" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `salesdesk-draft-${prospect.prospect.display_name.replace(/[^a-z0-9]+/gi, "-").toLowerCase()}-v${draft!.version}.txt`;
@@ -862,7 +862,7 @@ function OutreachTab({
         <label htmlFor="subject">Subject</label>
         <input id="subject" value={subject} maxLength={160} onChange={(e) => setSubject(e.target.value)} />
         <label htmlFor="body">Body</label>
-        <textarea id="body" value={body} rows={18} maxLength={6000} onChange={(e) => setBody(e.target.value)} />
+        <textarea id="body" value={displayCurrency(body)} rows={18} maxLength={6000} onChange={(e) => setBody(e.target.value)} />
         <div className="draft-actions">
           <button className="primary" onClick={() => void save()} disabled={!dirty || saving}>
             {saving ? "Saving…" : "Save edits as new version"}

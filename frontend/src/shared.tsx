@@ -24,6 +24,14 @@ export const day = (value: string | null | undefined) => (value ? value.slice(0,
 export const stamp = (value: string | null | undefined) => (value ? `${day(value)} ${time(value)}` : "");
 export const money = (cents: number, currency: string) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency }).format(cents / 100);
+// Display only: keep stored evidence and version-bound draft bytes intact.
+export const displayCurrency = (text: string) => text.replace(
+  /\b(\d+) cents \(([A-Z]{3}) (\d+\.\d{2})\)/g,
+  (original, cents: string, currency: string, amount: string) => {
+    if (!Number.isSafeInteger(Number(cents)) || Number(cents) !== Math.round(Number(amount) * 100)) return original;
+    try { return money(Number(cents), currency); } catch { return original; }
+  },
+);
 export const newId = () => crypto.randomUUID().replaceAll("-", "");
 
 export function Badge({ tone, children }: { tone: string; children: ReactNode }) {
