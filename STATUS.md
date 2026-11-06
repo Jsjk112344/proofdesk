@@ -933,3 +933,33 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   used normal fresh demo sessions and accepted caches; no new paid requests were needed.
   The deployment blocker is resolved. Untracked session prompts and root screenshot remain
   untouched. Narrated recording, slide PDF and official submission remain outstanding.
+
+## Dealer-group rebuild: steps 0–3, 2026-11-06
+
+- Working repository located at `/Users/justin/Desktop/Projects/proofdesk` (SalesDesk
+  remote); the session initially opened the unrelated SoloForge workspace. No SoloForge
+  files changed. Existing untracked owner prompts and screenshot preserved.
+- Direction and data boundaries committed; synthetic generator produces 24 rooftops,
+  3,000 units, 9,000 open leads, 2,400 historical leads and exactly 600 cold leads.
+- CSV ingestion: UTF-8 CSVs, 10 MiB/file, 50,000 rows, header synonyms, bounded errors,
+  typed validation, cross-file rooftop references and session-scoped staging. Raw exports
+  never enter model requests; templates are downloadable.
+- Parallel jobs reuse the existing SQLite lease operations and scheduler. Configured
+  concurrency defaults to six. Parent roll-up waits for terminal children. Per-job Docker
+  namespaces preserve abandoned-container refusal without serializing sibling jobs.
+  Limits remain unchanged: 128 MiB/container, half CPU, no network/host mounts/credentials,
+  30 s analysis deadline, 1 MiB typed input, 16 KiB result artifact.
+- Observed local full review: **16.223 s**, peak **6 concurrent children**, all 24
+  succeeded; current and prior-night snapshots used 48 cleaned disposable sandboxes.
+  Evidence: ignored `.local/dealer-acceptance/acceptance.json` and execution records.
+  This run used labelled deterministic interpretation; no inference requests.
+- Sandy Docker acceptance confirms Maria G. ranks first and S00138 (silver RAV4 Hybrid
+  XLE, 74 days) is the best match. Tampered KPI output is refused by reconciliation.
+- Backend suite, frontend build and existing disposable browser checks passed after
+  steps 0, 1, 2 and 3. Step 3 adds opt-in real Docker tests (passed). New dealer browser
+  screens, live contracts and deployment acceptance are still pending at this checkpoint.
+- Step 4 resource plan within the existing $150 authorization: reuse the running VM;
+  add a bounded dealer inference envelope of $0.15, 64 requests and 1,048,576 reserved
+  tokens, with separate six-request plans per rooftop/group. Existing ledgers stay intact.
+  Authenticated model catalog checked 2026-11-06: qwen3.8-flash-next, $0.10 input and
+  $0.20 output per million tokens; JSON output, reasoning disabled. No new VM/paid service.

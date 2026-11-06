@@ -350,10 +350,10 @@ class Store:
         job.update(fields)
         self.append_job_event(conn, job, status)
 
-    def claim_due(self, conn, moment, lease_token, lease_seconds):
+    def claim_due(self, conn, moment, lease_token, lease_seconds, *, max_running=1):
         """Claim at most one due job atomically; returns the claimed job or None."""
         running = conn.execute("SELECT COUNT(*) FROM jobs WHERE status = 'running'").fetchone()[0]
-        if running:
+        if running >= max_running:
             return None
         row = conn.execute(
             "SELECT * FROM jobs WHERE status = 'scheduled' AND due_at <= ?"

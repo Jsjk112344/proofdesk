@@ -70,7 +70,8 @@ def program_sha256():
 class Scheduler:
     """Claims due jobs and launches one worker subprocess per claim."""
 
-    def __init__(self, store, *, launch=None, interval=2.0, recover=None):
+    def __init__(self, store, *, launch=None, interval=2.0, recover=None, concurrency=1):
+        self.concurrency = max(1, min(12, int(concurrency)))
         self.store = store
         self.launch = launch or self._launch
         self.interval = interval
@@ -115,7 +116,9 @@ class Scheduler:
         self.reconcile()
         token = uuid.uuid4().hex
         with self.store.transaction() as conn:
-            job = self.store.claim_due(conn, now(), token, LEASE_SECONDS)
+            job = self.store.claim_due(
+                conn, now(), token, LEASE_SECONDS, max_running=self.concurrency
+            )
         if job is None:
             return None
         try:
@@ -167,7 +170,9 @@ class Scheduler:
     def _loop(self):
         while not self._stop.is_set():
             try:
-                self.tick()
+                for _ in range(self.concurrency):
+                    if self.tick() is None:
+                        break
                 self.last_error = None
             except Exception as exc:  # The scheduler must outlive one bad tick.
                 self.last_error = type(exc).__name__

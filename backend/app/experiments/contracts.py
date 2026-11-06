@@ -77,7 +77,9 @@ JOB_TRANSITIONS = {
     "failed": set(),
     "cancelled": set(),
 }
-JOB_KINDS = frozenset({"analyze_plan", "prepare_packet"})
+JOB_KINDS = frozenset(
+    {"analyze_plan", "prepare_packet", "dealer_rooftop", "dealer_rollup", "dealer_handoff"}
+)
 
 
 def transition(kind, current, target):

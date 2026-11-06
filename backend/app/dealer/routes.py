@@ -1,5 +1,7 @@
 """Dealer endpoints retain session capabilities and same-origin write protection."""
 
+import os
+
 from fastapi import HTTPException, Request
 from fastapi.responses import PlainTextResponse
 
@@ -61,4 +63,90 @@ def register(app, owner, body):
             counts={key: len(content[key]) for key in ("rooftops", "inventory", "leads")},
             floorplan_daily_rate=content["floorplan_daily_rate"],
             match_distance_miles=content["match_distance_miles"],
+        )
+
+    @app.post("/api/dealer/sample")
+    async def load_sample(request: Request):
+        await body(request, ())
+        request.app.state.dealer_store.seed(owner(request))
+        return {"loaded": True}
+
+    @app.post("/api/dealer/reviews", status_code=202)
+    async def review(request: Request):
+        data = await body(request, ("request_id",))
+        mode = (
+            "live_model"
+            if (
+                request.app.state.prospects.public_demo
+                or os.environ.get("SALESDESK_DEALER_LIVE_PLANS")
+            )
+            else "deterministic"
+        )
+        job = request.app.state.dealer_store.start_review(
+            owner(request), data["request_id"], mode=mode
+        )
+        return {"id": job["id"], "status": job["status"]}
+
+    @app.get("/api/dealer")
+    def overview(request: Request):
+        identity = owner(request)
+        store = request.app.state.dealer_store
+        store.seed(identity)
+        with store.reading() as conn:
+            group = store.group(conn, identity)
+            parent = store.latest_review(conn, identity)
+            jobs = store.jobs(conn, identity)
+        children = [j for j in jobs if parent and j["payload"].get("parent_id") == parent["id"]]
+        content = group["content"]
+        results = {
+            j["payload"]["rooftop_id"]: store.result(j)
+            for j in children
+            if j["status"] == "succeeded"
+        }
+        childmap = {j["payload"]["rooftop_id"]: j for j in children}
+        rooftops = []
+        for roof in content["rooftops"]:
+            job = childmap.get(roof["id"])
+            result = results.get(roof["id"])
+            rooftops.append(
+                dict(
+                    **roof,
+                    result=result,
+                    job={k: job[k] for k in ("id", "status", "events", "failure_reason")}
+                    if job
+                    else None,
+                )
+            )
+        from .jobs import aggregate
+
+        rollup = (
+            store.result(parent)
+            if parent and parent["status"] == "succeeded"
+            else aggregate(list(results.values()), [])
+        )
+        return dict(
+            group=content["group"],
+            data_label=content["data_label"],
+            rooftops=rooftops,
+            review={
+                k: parent[k]
+                for k in (
+                    "id",
+                    "status",
+                    "events",
+                    "created_at",
+                    "started_at",
+                    "finished_at",
+                    "failure_reason",
+                )
+            }
+            if parent
+            else None,
+            rollup=rollup,
+            validation=content["validation"],
+            assumptions=dict(
+                floorplan_daily_rate=content["floorplan_daily_rate"],
+                match_distance_miles=content["match_distance_miles"],
+            ),
+            concurrency=request.app.state.dealer_scheduler.concurrency,
         )

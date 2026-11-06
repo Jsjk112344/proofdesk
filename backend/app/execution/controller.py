@@ -26,6 +26,7 @@ ANALYSIS_LIMITS = Limits(wall_seconds=30)
 VALIDATIONS = {
     None: "exact_controller_schema_and_content",
     "analysis_result_contract_v1": "analysis_result_contract_v1",
+    "dealer_result_contract_v1": "dealer_result_contract_v1",
 }
 
 

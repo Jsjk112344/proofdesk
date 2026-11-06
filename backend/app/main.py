@@ -18,6 +18,7 @@ from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from starlette.staticfiles import StaticFiles
 
+from .dealer.jobs import DealerScheduler
 from .dealer.routes import register as register_dealer
 from .dealer.store import DealerStore
 from .demo import seed_demo
@@ -82,6 +83,9 @@ def create_app(jobs=None, prospects=None, experiments=None, dealer_store=None):
     @asynccontextmanager
     async def lifespan(app):
         app.state.dealer_store = dealer_store or DealerStore()
+        app.state.dealer_scheduler = DealerScheduler(app.state.dealer_store)
+        app.state.dealer_scheduler.reconcile(startup=True)
+        app.state.dealer_scheduler.start()
         app.state.jobs = jobs or Jobs()
         app.state.prospects = prospects or Prospects()
         app.state.experiments = experiments or Experiments()
@@ -91,6 +95,7 @@ def create_app(jobs=None, prospects=None, experiments=None, dealer_store=None):
         # The API process owns scheduling; the browser only reads and approves.
         app.state.experiments.start()
         yield
+        app.state.dealer_scheduler.stop()
         app.state.experiments.stop()
         app.state.jobs.stop()
         app.state.prospects.stop()

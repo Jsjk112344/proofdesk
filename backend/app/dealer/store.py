@@ -101,3 +101,100 @@ class DealerStore(Store):
         with self.transaction() as conn:
             conn.execute("DELETE FROM dealer_imports WHERE owner=?", (owner,))
         return {"imported": True, "validation": reports, "data_label": "CSV import"}
+
+    def claim_due(self, conn, moment, lease_token, lease_seconds, *, max_running=1):
+        # Roll-up waits durably without consuming a worker or a lease. A restart
+        # cannot finish the parent before all children reach a terminal state.
+        parents = conn.execute(
+            "SELECT * FROM jobs WHERE kind='dealer_rollup' AND status='scheduled'"
+        ).fetchall()
+        waiting = []
+        for row in parents:
+            pending = conn.execute(
+                "SELECT 1 FROM jobs WHERE json_extract(payload,'$.parent_id')=? "
+                "AND status IN ('scheduled','running') LIMIT 1",
+                (row["id"],),
+            ).fetchone()
+            if pending:
+                waiting.append((row["id"], row["due_at"]))
+                conn.execute("UPDATE jobs SET due_at=? WHERE id=?", ("9999-01-01", row["id"]))
+        job = super().claim_due(conn, moment, lease_token, lease_seconds, max_running=max_running)
+        for jid, due in waiting:
+            conn.execute("UPDATE jobs SET due_at=? WHERE id=?", (due, jid))
+        return job
+
+    def ensure_plan(self, conn, group):
+        if group["plan_id"]:
+            return self.plan(conn, group["plan_id"], group["owner"])
+        spec = dict(dataset_id="dealer-group", group_sha256=group["sha256"])
+        conn.execute(
+            "INSERT OR IGNORE INTO datasets VALUES(?,?,?,?)",
+            ("dealer-group", group["sha256"], dump({"id": "dealer-group"}), now()),
+        )
+        pid = self.insert_plan(conn, group["owner"], spec, sha256(dump(spec).encode()))
+        conn.execute("UPDATE dealer_groups SET plan_id=? WHERE id=?", (pid, group["id"]))
+        return self.plan(conn, pid, group["owner"])
+
+    def start_review(self, owner, request_id, *, mode="deterministic"):
+        with self.transaction() as conn:
+            key, prior = self.operation(conn, owner, "dealer_review", request_id)
+            if prior:
+                return self.job(conn, prior, owner)
+            group = self.group(conn, owner)
+            existing = conn.execute(
+                "SELECT id FROM jobs WHERE owner=? AND kind='dealer_rollup' "
+                "AND status IN ('scheduled','running')",
+                (owner,),
+            ).fetchone()
+            if existing:
+                return self.job(conn, existing["id"], owner)
+            if self.count(conn, "jobs", owner, kind="dealer_rollup") >= 6:
+                raise RunError("dealer_quota_reached")
+            if (
+                conn.execute("SELECT COUNT(*) FROM jobs").fetchone()[0]
+                + len(group["content"]["rooftops"])
+                + 1
+                > 5000
+            ):
+                raise RunError("dealer_quota_reached")
+            plan = self.ensure_plan(conn, group)
+            stamp = now()
+            payload = dict(group_sha256=group["sha256"], mode=mode)
+            parent = self.insert_job(
+                conn,
+                owner=owner,
+                kind="dealer_rollup",
+                plan=plan,
+                payload=payload,
+                due_at=stamp,
+                operation_key=key,
+            )
+            for roof in group["content"]["rooftops"]:
+                self.insert_job(
+                    conn,
+                    owner=owner,
+                    kind="dealer_rooftop",
+                    plan=plan,
+                    payload=dict(**payload, rooftop_id=roof["id"], parent_id=parent),
+                    due_at=stamp,
+                    operation_key=key + ":" + roof["id"],
+                )
+            self.record_operation(conn, key, owner, "dealer_review", parent)
+            return self.job(conn, parent, owner)
+
+    def result(self, job):
+        if not job.get("outcome") or not job["outcome"].get("result_path"):
+            return None
+        path = self.root / job["outcome"]["result_path"]
+        raw = path.read_bytes()
+        if sha256(raw) != job["outcome"]["result_sha256"]:
+            raise RunError("saved_artifact_hash_mismatch")
+        return json.loads(raw)
+
+    def latest_review(self, conn, owner):
+        row = conn.execute(
+            "SELECT id FROM jobs WHERE owner=? AND kind='dealer_rollup' "
+            "ORDER BY created_at DESC LIMIT 1",
+            (owner,),
+        ).fetchone()
+        return self.job(conn, row["id"], owner) if row else None
