@@ -4,9 +4,10 @@ SalesDesk has two entry doors: **See what worked** for campaign analysis and
 **Starting from zero** for prospect research. Both lead to an evidenced next move,
 human approval and work prepared by Vultr workers while the user is away.
 
-The campaign page has three tabs: Result (interpretation and charts), Next move
-(editable content, schedule and one approval card), Verification (source, saved plan,
-execution, reconciliation, model receipts and job history). Analyst activity is derived
+The campaign page follows Analyst activity, Result (interpretation and charts), Next move
+(editable content, schedule and one approval card), then the packet card. Missing launch
+inputs and Verification (source, saved plan, execution, reconciliation, model receipts and
+job history) are collapsed by default. Analyst activity is derived
 from persisted job events, execution records and generation receipts. Pending work is
 never marked complete before evidence exists. Per-step evidence is disclosed on demand.
 The same timeline component shows prospect research, brief, demonstration decision,

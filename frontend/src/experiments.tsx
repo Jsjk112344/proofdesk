@@ -644,7 +644,6 @@ export function NewPlanForm({ overview, onCreated, onError }: { overview: Overvi
 // ---------------------------------------------------------------- Experiment detail
 export function ExperimentView({ planId, onChanged, onError }: { planId: string; onChanged: () => Promise<void>; onError: (m: string) => void }) {
   const [detail, setDetail] = useState<PlanDetail | null>(null);
-  const [tab, setTab] = useState<"results" | "action" | "technical">("results");
   const [running, setRunning] = useState(false);
   const [missing, setMissing] = useState(false);
   const requestId = useRef<string | null>(null);
@@ -735,12 +734,6 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
         </div>
       </div>
       <AnalystActivity steps={steps} />
-      {task && ["scheduled", "running", "ready_for_review", "completed"].includes(task.status) && <section className="panel walk-away" role="status">
-        <h2>{task.packet_artifact_id ? "Ready for review" : "Preparing your packet on Vultr, you can close this tab"}</h2>
-        <p className="muted">{stamp(task.updated_at)}{task.title.startsWith("Demo example:") ? " · Seeded demo example with an example approval" : ""}</p>
-        {task.packet_artifact_id && <><PacketSummary artifactId={task.packet_artifact_id} />
-          <a className="primary button-link" href={`/api/experiments/artifacts/${task.packet_artifact_id}/packet.md`}>Download packet (.md)</a></>}
-      </section>}
       {latest && latest.status === "failed" && (
         <div className="alert" role="alert">
           <strong>The latest run failed.</strong> Reason <span className="code">{latest.failure_reason}</span>. Earlier
@@ -753,33 +746,28 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
           ). The statistical result below is unchanged; Details are under Verification.
         </div>
       )}
-      <div className="tabs" role="tablist" aria-label="Experiment views">
-        {(
-          [
-            ["results", "Result"],
-            ["action", "Next move"],
-            ["technical", "Verification"],
-          ] as const
-        ).map(([id, label]) => (
-          <button key={id} id={`tab-${id}`} role="tab" aria-selected={tab === id} aria-controls="tabpanel" className={id === "technical" ? "tab-secondary" : ""} onClick={() => setTab(id)}>
-            {label}
-          </button>
-        ))}
-      </div>
-      <div id="tabpanel" role="tabpanel" aria-labelledby={`tab-${tab}`}>
-        {tab === "results" && <><InterpretationTab run={run} working={working} /><ResultsTab detail={detail} run={run} working={working} /></>}
-        {tab === "action" && (
-          <NextActionTab detail={detail} run={run} proposal={proposal} onChange={async () => {
-            await load();
-            await onChanged();
-          }} onError={onError} />
-        )}
-        {tab === "technical" && <details className="verification"><summary>Verification: source, execution and model receipts</summary>
-          <SourceTab detail={detail} /><TechnicalTab detail={detail} run={run} />
-          <WorkTab detail={detail} onChange={async () => { await load(); await onChanged(); }} onError={onError} />
-        </details>}
+      <section aria-label="Result" className="stack">
+        <h2>Result</h2>
+        <InterpretationTab run={run} working={working} />
+        <ResultsTab detail={detail} run={run} working={working} />
+      </section>
+      <section aria-label="Next move">
+        <NextActionTab detail={detail} run={run} proposal={proposal} onChange={async () => {
+          await load(); await onChanged();
+        }} onError={onError} />
+      </section>
+      {task && ["scheduled", "running", "ready_for_review", "completed"].includes(task.status) && <section className="panel walk-away" role="status">
+        <p className="lede small">{detail.proposals.find(p => p.id === task.proposal_id)?.content.hypothesis || task.proposed_action}</p>
+        {task.packet_artifact_id && <a className="primary button-link" href={`/api/experiments/artifacts/${task.packet_artifact_id}/packet.md`}>Download packet (.md)</a>}
+        <h2>{task.packet_artifact_id ? "Ready for review" : "Preparing your packet on Vultr, you can close this tab"}</h2>
+        <p className="muted">{stamp(task.updated_at)}{task.title.startsWith("Demo example:") ? " · Seeded demo example with an example approval" : ""}</p>
+        {task.packet_artifact_id && <PacketSummary artifactId={task.packet_artifact_id} />}
+      </section>}
+      <details className="verification"><summary>Verification: source, execution and model receipts</summary>
+        <SourceTab detail={detail} /><TechnicalTab detail={detail} run={run} />
+        <WorkTab detail={detail} onChange={async () => { await load(); await onChanged(); }} onError={onError} />
+      </details>
 
-      </div>
     </>
   );
 }
@@ -1349,6 +1337,18 @@ function PacketSummary({ artifactId }: { artifactId: string }) {
       <p>
         <Badge tone={p.status === "planning_review" ? "warn" : "ok"}>{p.status.replaceAll("_", " ")}</Badge> {p.what_this_is}
       </p>
+      <details><summary>Inputs to add before launch ({p.readiness_checks.filter(c => c.status === "missing").length})</summary>
+      <ul className="plain">
+        {p.readiness_checks.filter(c => c.status === "missing").map((c) => (
+          <li key={c.input}>
+            {c.label}: <strong>{c.status}</strong>
+            {c.value !== null && c.value !== undefined ? ` = ${String(c.value)}` : ""}
+            {c.note ? ` · ${c.note}` : ""}
+          </li>
+        ))}
+      </ul>
+      </details>
+      <details className="verification"><summary>Verification: all readiness checks</summary>
       <ul className="plain">
         {p.readiness_checks.map((c) => (
           <li key={c.input}>
@@ -1358,6 +1358,7 @@ function PacketSummary({ artifactId }: { artifactId: string }) {
           </li>
         ))}
       </ul>
+      </details>
       <details className="verification"><summary>Verification</summary><p className="muted">Not claimed: {p.not_claimed.join(" ")}</p></details>
     </div>
   );

@@ -67,7 +67,7 @@ preparation → review.
 The controller renders figures from validated metric references and preserves the model
 contracts, sandbox limits, source checks and version-bound approvals. Analyst activity
 shows saved worker events and receipts; details sit inside Verification disclosures.
-The plan page has three tabs: Result, Next move and Verification.
+The plan page follows Analyst activity, Result, Next move and the packet card, with Verification collapsed below.
 
 ## Setup
 
