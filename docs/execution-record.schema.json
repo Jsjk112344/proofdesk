@@ -1,0 +1,526 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SalesDesk local execution record v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "container_name",
+    "started_at",
+    "finished_at",
+    "scenario",
+    "source_kind",
+    "execution_kind",
+    "revision",
+    "input_sha256",
+    "script_sha256",
+    "expected_sha256",
+    "image",
+    "limits",
+    "status",
+    "failure_reason",
+    "exit_code",
+    "evidence",
+    "validated_artifacts",
+    "cleanup",
+    "dispatched",
+    "input_rejection",
+    "generation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$"
+    },
+    "container_name": {
+      "type": "string",
+      "pattern": "^proofdesk-[0-9a-f]{32}$"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "finished_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "scenario": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_kind": {
+      "enum": [
+        "deterministic_synthetic_fixture",
+        "offline_provider_fixture",
+        "vultr_model_generated"
+      ]
+    },
+    "execution_kind": {
+      "const": "local_docker"
+    },
+    "revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "commit",
+        "dirty"
+      ],
+      "properties": {
+        "commit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "dirty": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "input_sha256": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/hash"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "script_sha256": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/hash"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "expected_sha256": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/hash"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "image": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wall_seconds",
+        "memory_bytes",
+        "nano_cpus",
+        "pids",
+        "work_bytes",
+        "tmp_bytes",
+        "shm_bytes",
+        "log_bytes",
+        "archive_bytes"
+      ],
+      "properties": {
+        "wall_seconds": {
+          "enum": [
+            5,
+            30
+          ]
+        },
+        "memory_bytes": {
+          "const": 134217728
+        },
+        "nano_cpus": {
+          "const": 500000000
+        },
+        "pids": {
+          "const": 32
+        },
+        "work_bytes": {
+          "const": 8388608
+        },
+        "tmp_bytes": {
+          "const": 1048576
+        },
+        "shm_bytes": {
+          "const": 1048576
+        },
+        "log_bytes": {
+          "const": 16384
+        },
+        "archive_bytes": {
+          "const": 65536
+        }
+      }
+    },
+    "status": {
+      "enum": [
+        "running",
+        "succeeded",
+        "failed",
+        "interrupted"
+      ]
+    },
+    "failure_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "exit_code": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "description": "Controller-observed runtime/image/policy and pre-task kernel/environment measurements; may be incomplete on failure. Task output is not policy evidence."
+    },
+    "validated_artifacts": {
+      "type": "array",
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "media_type",
+          "size_bytes",
+          "sha256",
+          "validation"
+        ],
+        "properties": {
+          "path": {
+            "const": "result.json"
+          },
+          "media_type": {
+            "const": "application/json"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 16384
+          },
+          "sha256": {
+            "$ref": "#/$defs/hash"
+          },
+          "validation": {
+            "enum": [
+              "exact_controller_schema_and_content",
+              "analysis_result_contract_v1"
+            ]
+          }
+        }
+      }
+    },
+    "cleanup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "removed",
+        "reason"
+      ],
+      "properties": {
+        "removed": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "probe_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expected_failure",
+        "passed",
+        "host_canary_before_sha256",
+        "host_canary_after_sha256"
+      ],
+      "properties": {
+        "expected_failure": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "host_canary_before_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "host_canary_after_sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "dispatched": {
+      "type": "boolean"
+    },
+    "input_rejection": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "input_bytes",
+            "script_bytes",
+            "limit"
+          ],
+          "properties": {
+            "input_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "script_bytes": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "limit": {
+              "enum": [
+                32768,
+                1048576
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "generation": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "workflow_id",
+            "attempt",
+            "provider",
+            "model",
+            "request_sha256",
+            "response_sha256",
+            "generation_record"
+          ],
+          "properties": {
+            "workflow_id": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            "attempt": {
+              "enum": [
+                1,
+                2
+              ]
+            },
+            "provider": {
+              "enum": [
+                "offline_fake_provider",
+                "vultr_serverless_inference"
+              ]
+            },
+            "model": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "request_sha256": {
+              "$ref": "#/$defs/hash"
+            },
+            "response_sha256": {
+              "$ref": "#/$defs/hash"
+            },
+            "generation_record": {
+              "type": "string",
+              "pattern": "^attempt-[12]/generation\\.json$"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "succeeded"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "exit_code": {
+            "const": 0
+          },
+          "failure_reason": {
+            "const": null
+          },
+          "finished_at": {
+            "type": "string"
+          },
+          "validated_artifacts": {
+            "minItems": 1
+          },
+          "cleanup": {
+            "properties": {
+              "removed": {
+                "const": true
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "failed",
+              "interrupted"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "failure_reason": {
+            "type": "string"
+          },
+          "finished_at": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "input_rejection": {
+            "type": "object"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "dispatched": {
+            "const": false
+          },
+          "evidence": {
+            "maxProperties": 0
+          },
+          "exit_code": {
+            "const": null
+          },
+          "status": {
+            "const": "failed"
+          },
+          "failure_reason": {
+            "const": "task_input_limit"
+          },
+          "input_sha256": {
+            "const": null
+          },
+          "script_sha256": {
+            "const": null
+          },
+          "expected_sha256": {
+            "const": null
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source_kind": {
+            "const": "offline_provider_fixture"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "generation": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "const": "offline_fake_provider"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source_kind": {
+            "const": "vultr_model_generated"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "generation": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "const": "vultr_serverless_inference"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "source_kind": {
+            "const": "deterministic_synthetic_fixture"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "generation": {
+            "const": null
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,38 +1,23 @@
 # Agent Rush submission checklist
 
-Rules snapshot checked 2026-11-03. Recheck the actual submission form before submitting.
+Challenge 2: **Powering the Future of Work**. Owner deadline: Nov 8, 2026, 18:00 ET;
+target submit 16:00 ET. The [official event](https://lablab.build/ai-hackathons/vultr-hackathon)
+requires a Vultr VM backend/web deployment, public repository, demo URL, recorded video and
+architecture/use-case explanation. Inference and sandboxing are optional for this challenge;
+SalesDesk uses both. Event and [terms](https://lablab.build/terms-of-use) refreshed this session.
 
-Sources:
-- [Event and challenge](https://lablab.ai/ai-hackathons/vultr-hackathon)
-- [LabLab terms, section 16](https://lablab.ai/terms-of-use)
-- [Submission rule book](https://lablab.ai/hackathon-rules)
+- [x] Public MIT project and third-party provenance.
+- [x] Genuine benchmark with real Docker statistics and an editable next move.
+- [x] Live analysis, research and outreach through Vultr Serverless Inference.
+- [x] Two entry doors, shared activity trace and three plan tabs.
+- [x] Version-bound approval, scheduled worker preparation, return-to-ready download.
+- [x] Isolated seeded public examples within existing quotas.
+- [x] Public HTTPS and real signed-out browser/HTTP verification.
+- [x] README architecture, try-it and setup.
+- [x] Video script, seven-slide outline, real screenshots and form copy prepared.
+- [ ] Publish the final local commits to the public repository.
+- [ ] Record/upload video and export/upload PDF slides.
+- [ ] Paste and verify final form fields, submit and retain receipt.
 
-## Repository and rights
-
-- [x] Public repository and anonymous access verified.
-- [x] MIT license for newly authored project work.
-- [x] Existing work and third-party provenance documented.
-- [x] README includes setup, proposed architecture and Vultr use.
-
-LabLab's general terms require original, open-source, MIT-compliant submissions unless
-otherwise specified. This repository's license does not grant rights to unrelated work.
-
-## Build and presentation
-
-- [ ] Web application and backend live on Vultr.
-- [ ] All agent model calls use Vultr Serverless Inference.
-- [ ] Real multi-step sandbox execution and verifiable outputs.
-- [ ] Resource bounds, credential separation and cleanup demonstrated.
-- [ ] Containment moment recorded in the video.
-- [ ] Public demo URL, video, slides and cover prepared.
-- [ ] Project descriptions and technology/category tags completed.
-- [ ] Official LabLab submission completed and receipt saved.
-
-Vultr GPUs are unavailable for this event. Vultr Community sharing is optional and does
-not replace LabLab submission. These are requirements/checkpoints, not claims of completion.
-
-## Items to confirm
-
-Exact deadline/timezone, remote prize eligibility, credit redemption and inference
-coverage. No signed-in submission form has been inspected. No organizer contact or
-submission has been performed by this setup.
+No campaign launch, outreach send or new sales is claimed. See [STATUS.md](../STATUS.md)
+for observed checks and accounting and [plan.md](plan.md) for the remaining sequence.

@@ -9,4 +9,8 @@ licenses in [THIRD_PARTY.md](THIRD_PARTY.md). Keep real research outputs and sec
 Run the checks in [README.md](README.md) before opening a pull request. Add meaningful
 behavior tests as functionality is implemented; fixtures must not make paid calls.
 Update implementation status and distinguish observed evidence from planned acceptance.
-The current GitHub CI covers scaffold quality only.
+GitHub CI covers scaffold quality, offline artifact validation, the sales journey with
+injected retrieval and fixture responses, and missing-Docker behavior. Run the opt-in
+Docker checks in README.md when changing execution or demonstration code, and the
+disposable browser check when changing the workspace UI. Those checks use only local
+synthetic tasks, never inference, real prospects or paid services.

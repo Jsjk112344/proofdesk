@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "document_id": "DEMO-0042",
+  "supplier": "Example Paper Laboratory",
+  "date": "2026-11-03",
+  "currency": "USD",
+  "items": [
+    {"description": "Test notebooks", "quantity": 3, "unit_cents": 450},
+    {"description": "Sample folders", "quantity": 2, "unit_cents": 125}
+  ],
+  "total_cents": 1600
+}

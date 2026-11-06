@@ -1,0 +1,8 @@
+SYNTHETIC EXAMPLE — no real company, customer, or transaction
+Currency: EUR
+Date: 2026-10-31
+Supplier: Synthetic Stationery Studio
+Document: CASE-17
+
+Item: Demo labels | Unit cents: 99 | Quantity: 4
+Item: Test sleeve | Quantity: 1 | Unit cents: 12

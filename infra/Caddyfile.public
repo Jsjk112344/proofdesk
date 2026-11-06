@@ -1,0 +1,17 @@
+# SalesDesk public-demo ingress for the existing Vultr VM. NOT installed by default.
+# Activation needs the owner's explicit approval of docs/public-demo.md: a hostname whose
+# DNS A record points at the VM, ports 80/443 opened, `apt install caddy`, this file at
+# /etc/caddy/Caddyfile with the hostname substituted, and the systemd drop-in
+# infra/proofdesk-public.conf applied to the proofdesk service. Caddy obtains and renews
+# the TLS certificate itself; HTTP is redirected to HTTPS automatically.
+demo.example.invalid {
+	encode zstd gzip
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+	request_body {
+		max_size 64KB
+	}
+	reverse_proxy 127.0.0.1:8000
+}
