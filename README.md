@@ -11,7 +11,7 @@ lead to an analyst, a next move, your approval and work prepared while you are a
 
 1. Open the demo and let the Vultr workers prepare your isolated example workspace.
 2. Choose **Analyse a campaign**. Read the benchmark result and expand Analyst activity.
-3. Open **Next move**, add a note and **Save next move**, then **Approve & schedule**.
+3. Scroll to **Next move**, add a note and **Save next move**, then **Approve & schedule**.
 4. Close the tab. Return to **Ready for review** and download your Markdown packet.
 5. Try **Starting from zero** for a sourced example brief and an unsent outreach draft.
 

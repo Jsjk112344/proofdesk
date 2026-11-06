@@ -3,10 +3,11 @@
 Product name: **SalesDesk** (renamed from ProofDesk on 2026-11-05). Existing operational
 identifiers and dated historical entries retain their original names.
 
-Current checkpoint: **SalesDesk is publicly deployed on HTTPS**, with two entry doors,
-validated live Vultr inference for all three contracts, isolated seeded examples, an
-activity trace, combined approval/scheduling and ready packet downloads. All requested phases are implemented; phase commits and final verification are recorded below. Public requests for
-identical inputs use labelled accepted replay. Video recording, PDF export and official
+Current checkpoint: **SalesDesk is publicly deployed on HTTPS** with the presentation
+refresh described below: Qwen analyst labels, takeaway-first readings, a vertical activity
+trace, result → next move → packet order, compact launch inputs and technical details under
+Verification. Seeded sessions use the refreshed accepted reading; a new Womens E-Mail
+comparison has passed with fresh Vultr inference. Video recording, PDF export and official
 submission remain open; no submission receipt exists.
 
 Public URL: https://salesdesk.149.28.51.139.sslip.io
@@ -784,3 +785,61 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   reservation still counted in full. This is token accounting, not account billing.
 - Frontend builds after steps 2–3 and replay regression checks passed. Validator, replay
   dispatch mechanism, sandbox policy, source rules and approval bindings are unchanged.
+
+
+## Presentation refresh, steps 5–9 and public acceptance: 2026-11-05 ET
+
+- Step 5 (`8d0bbcc`): metric references, exploratory breakdowns and the retrospective
+  badge moved into Verification. The home disclaimer sentence remains in README only.
+- Step 6 (`21cda1c`): activity is a single vertical column, preserving steps and disclosures.
+- Step 7 (`85ef769`): outreach/brief currency displays as $16.00. Stored evidence and
+  draft bytes/hashes are preserved; formatting alone does not create an unsaved edit.
+- Step 8 (`2457e61`): slides cite Salesforce's seventh State of Sales and its 2026 report
+  announcement for sales workload/capacity evidence. Cost slide uses explicitly assumed
+  team-hours; inference cost moved to architecture; Hillstrom result moved to the demo.
+  Slide 6 reports 18.38 seconds measured in SalesDesk's own recorded workflow, with exact
+  timestamps and scope in docs/workflow-measurement.json. Submission title and script
+  match owner copy; the script uses a fresh Womens comparison and a longer close/reopen beat.
+- Step 9: redeployed the allowlisted release on the existing Vultr VM, retaining all
+  .local records, accepted caches, budget ledgers and root-owned service configuration.
+  Final archive SHA-256: `436fb9ac0b6baf4f556591e746c3564a6405768e38d43ce448475c667bb01789`.
+  Verified archive checksum and every installed manifest file hash (67 files). A rollback
+  snapshot exists. The final visual fix keeps the longer Qwen badge inside the sidebar.
+- Final public HTTP journey passed on this release: genuine Docker statistics,
+  reproducible artifact bytes, stale-version approval refusal, packet preparation while
+  absent, Markdown download, review completion and cross-session 404s. Evidence:
+  .local/deployment/presentation-final-public-journey.json.
+- Fresh external Chromium session passed without TLS exceptions: refreshed seed cache
+  identity, Qwen/cached tooltip, requested content order, hidden technical details,
+  closed launch-input disclosure, vertical activity, new Womens E-Mail vs No E-Mail live
+  inference, dirty-edit refusal, exact-version approval, packet completion while closed,
+  reopen/download, $16.00 outreach, and desktop/mobile without overflow or page errors.
+  Final live plan: `452be24f88c34fadac0978f8289f8ba9`. It passed on its first run.
+  Tab closed at 2026-11-06T03:34:56.742Z, packet ready at 2026-11-06T03:36:01.402263+00:00,
+  reopened at 2026-11-06T03:36:06.851Z. Evidence: .local/live-preflight/live-browser.json
+  and .local/deployment/presentation-public-acceptance.json. All five docs/assets images
+  were retaken from this release; desktop/mobile and result/outreach layouts inspected.
+- Full suite passed before release and after the initial public screenshots: 97 backend
+  tests with Docker enabled, no skips; frontend build, locked sync, Ruff lint/format,
+  compileall, publication/local-link checks and disposable mocked-browser checks passed.
+  Final post-screenshot suite also passed all 97 tests with Docker enabled, no skips
+  (.local/step9-final-full-suite.log); final build, lint, format, compile, locked sync
+  and repository checks passed. Latest mocked-browser evidence is
+  .local/step9-final-mocked-browser.log.
+- Corrected verification harness issues: an initial health assertion expected "ok" while
+  the existing health contract returns "experiment_workspace" (HTTP 200); a browser
+  timestamp with seconds was refused by Playwright's datetime-local fill. The corrected
+  minute-precision scheduling input passed. These failures are not counted as passes.
+- Three fresh VM Womens responses passed the unchanged contract, including the final
+  screenshot run. VM reservations: 3 / $0.0060288; estimated token usage $0.0015611.
+  This presentation task added 13 paid requests across local/VM: $0.0261248 reserved,
+  $0.0066944 estimated usage. Total current+prior reservations across local/VM now
+  $0.0562880; hackathon observed usage estimate $0.0106624. Prior uncertain reservation
+  remains fully counted. No new compute, budget-limit expansion or ledger reset; these
+  are token estimates, separate from account/compute billing and the owner's $150 cap.
+- Source comparison against the step-1 merge confirms every execution/sandbox file,
+  validator, provider/replay mechanism, service/store/job state rule and approval binding
+  is unchanged. Backend changes are confined to the analysis SYSTEM prompt.
+- Untracked docs/session-prompts/ and screenshot-2026-11-05.png remain untouched. The
+  video script is prepared and its live journey rehearsed; no narrated recording, PDF
+  export or official hackathon submission/receipt is claimed.

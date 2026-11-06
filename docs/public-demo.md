@@ -24,8 +24,10 @@ Public sessions select Live by default. `PROOFDESK_ANALYSIS_LIVE_PLAN`,
 Configuration is outside the release archive in a root-only systemd drop-in. The worker
 receives controller credentials; disposable execution sandboxes never receive them.
 
-Identical requests prefer accepted saved responses, revalidate them and show Analyst:
-Replay. New inputs use Vultr under durable batch/envelope limits and show Analyst: Live.
+Identical requests prefer accepted saved responses and revalidate them. Both cached and
+new responses show Analyst: Qwen 3.8 on Vultr Inference; cached responses have a cached
+response tooltip and retain saved_replay provenance in Verification. New inputs use Vultr
+under the existing durable batch/envelope limits.
 A genuine failure is visible. No failed step is silently replaced by rule-based text.
 Private mode can use explicitly labelled rule-based analysis without a credential.
 

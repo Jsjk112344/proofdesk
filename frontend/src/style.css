@@ -211,9 +211,13 @@ h3 {
 }
 .side-mode {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 0.5rem;
+}
+.side-mode .badge {
+  max-width: 100%;
+  white-space: normal;
 }
 .side-mode-label {
   font-size: 0.72rem;
