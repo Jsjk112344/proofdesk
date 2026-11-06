@@ -702,7 +702,7 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
 - Caddy issued a trusted Let's Encrypt certificate after the upstream firewall was opened
   and the issuer's retry window elapsed. External HTTPS home and health now load without
   certificate overrides. Existing VM: EWR, two logical CPUs, about four GiB RAM observed.
-- Final deployed runtime release archive SHA-256:
+- Earlier public verification release archive SHA-256:
   `938b3f0b0e25d0c13c0708fca9cc9593d16dcf916c483e9845959dcfeb61f04d`.
   Archive checksum was verified on the VM before extraction; root-owned model configuration,
   stores, raw dataset, replay cache and all ledgers were preserved. A rollback snapshot exists.
@@ -743,3 +743,19 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   Missing plan/credential produces a visible failed step instead of a rule-based substitute.
   A dedicated regression test confirms this; the final full Docker suite passed 97 tests.
   Pending approval in the activity trace now respects the current next-move version.
+
+## Final deployment receipt
+
+- Runtime commit: `38e687e`; release archive SHA-256
+  `b93be2f59fcd40a5488c48439a1da650efc12de3f35ccc186dcd70134b2efad9`.
+  VM checksum verified before extraction. The obsolete public-live opt-in was removed
+  from service configuration; health still reports public demo and Live mode.
+- The complete public HTTP journey, idempotent seed/isolation check and real public
+  browser close/reopen/download check passed again on this final runtime. Evidence:
+  `.local/deployment/final-default-live-public-journey.json`,
+  `.local/live-preflight/final-public-seed.json`, and
+  `.local/live-preflight/live-browser.json`. Refreshed real screenshots are in docs/assets.
+- Final backend suite: 97 tests passed with Docker enabled. Frontend build, mocked browser,
+  lint, format, compile and repository content/link checks passed. No safety validator,
+  sandbox limit, SSRF check, quota or approval binding was relaxed.
+- No final GitHub push, video recording, PDF export or official submission is claimed.
