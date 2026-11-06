@@ -759,3 +759,28 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   lint, format, compile and repository content/link checks passed. No safety validator,
   sandbox limit, SSRF check, quota or approval binding was relaxed.
 - No final GitHub push, video recording, PDF export or official submission is claimed.
+
+## Presentation refresh, steps 1–4: 2026-11-05 ET
+
+- Merged the local execution branch into main and pushed with owner authorization.
+  GitHub main's README was fetched unauthenticated and verified to show SalesDesk and
+  https://salesdesk.149.28.51.139.sslip.io. Merge: `bafd7cc`.
+- Analyst badges and the home tile now name Qwen 3.8 on Vultr Inference; cached responses
+  disclose that provenance in tooltips and Verification. Rule-based and failed states
+  remain separate. Plan content follows activity, result, next move, then packet; the
+  packet leads with its approved summary/download and collapses missing launch inputs.
+- Analysis prompt only: opening takeaway, recommended next move, detailed reading; caveats
+  in Unknowns / Alternative explanations. Final accepted live response and replay passed
+  the unchanged contract. Request SHA-256:
+  `01e4acb4098e62f02f18790f3f6acb012a884ab271b23866da516a90456fa980`.
+  Accepted cache installed on the VM for the new prompt; runtime deployment follows step 9.
+- This step used 10 paid requests ($0.020096 worst-case reservations; $0.0051333 estimated
+  usage). Intermediate failures: unsupported quantities and forbidden outcome wording;
+  four later pre-dispatch input-size refusals made no paid reservation. Prompt shortened
+  within the existing input cap. Failed reservations retained; no ledger reset.
+- Local aggregate envelope now 23 requests / $0.0462208 reservations. Prior exhausted
+  approval remains $0.0040384. Combined reserved $0.0502592, separate from VM compute.
+  Observed usage total including prior checkpoint: $0.0091013, with the old uncertain
+  reservation still counted in full. This is token accounting, not account billing.
+- Frontend builds after steps 2–3 and replay regression checks passed. Validator, replay
+  dispatch mechanism, sandbox policy, source rules and approval bindings are unchanged.
