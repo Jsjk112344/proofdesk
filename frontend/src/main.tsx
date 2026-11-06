@@ -1,7 +1,7 @@
 import { StrictMode, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./style.css";
-import { api, Badge, newId, post } from "./shared";
+import { api, newId, post } from "./shared";
 import { ProspectsWorkspace, type Workspace } from "./prospects";
 import {
   ExperimentsHome,
@@ -12,12 +12,6 @@ import {
   useRoute,
   type Overview,
 } from "./experiments";
-
-const MODE_LABEL: Record<string, string> = {
-  deterministic: "Analyst: Rule-based",
-  live_model: "Analyst: Qwen 3.8 on Vultr Inference",
-  saved_replay: "Analyst: Qwen 3.8 on Vultr Inference",
-};
 
 function App() {
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
@@ -66,7 +60,6 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.key]);
 
-  const experimentsMode = overview?.plans.find(p => route.name === "experiment" ? p.id === route.id : true)?.latest_run?.interpretation_provenance || workspace?.experiments?.generation_mode || overview?.generation_mode || "deterministic";
   const publicDemo = !!(workspace?.public_demo || overview?.public_demo);
   const title =
     route.name === "prospects"
@@ -101,7 +94,7 @@ function App() {
             Starting from zero
           </a>
         </nav>
-        <div className="side-label">Saved analyses</div>
+        <div className="side-label row-between">Saved analyses <a className="side-add" href="#/experiments/new" aria-label="New analysis plan">+</a></div>
         <nav className="side-list" aria-label="Saved analyses">
           {(!overview || overview.plans.length === 0) && <p className="side-empty">No analysis plan yet in this session.</p>}
           {overview?.plans.map((p) => (
@@ -112,14 +105,6 @@ function App() {
             </a>
           ))}
         </nav>
-        <div className="side-foot">
-          <div className="side-mode">
-            <span className="side-mode-label">Interpretation</span>
-            <Badge tone={experimentsMode}>{MODE_LABEL[experimentsMode] || experimentsMode}</Badge>
-          </div>
-          <p>Campaign evaluation and next-move planning on a Vultr VM.</p>
-          <p className="side-fine">Powering the Future of Work · Vultr Agent Rush</p>
-        </div>
       </aside>
       <div className="main">
         <header className="top">
@@ -157,9 +142,6 @@ function App() {
           ) : (
             <ExperimentsHome overview={overview} />
           )}
-          <footer>
-            SalesDesk evaluates historical campaign data, prepares experiment packets and drafts for a person to review.
-          </footer>
         </main>
       </div>
     </div>

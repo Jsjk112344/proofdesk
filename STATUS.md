@@ -3,12 +3,12 @@
 Product name: **SalesDesk** (renamed from ProofDesk on 2026-11-05). Existing operational
 identifiers and dated historical entries retain their original names.
 
-Current checkpoint: **SalesDesk is publicly deployed on HTTPS** with the presentation
-refresh described below: Qwen analyst labels, takeaway-first readings, a vertical activity
-trace, result → next move → packet order, compact launch inputs and technical details under
-Verification. Seeded sessions use the refreshed accepted reading; a new Womens E-Mail
-comparison has passed with fresh Vultr inference. Video recording, PDF export and official
-submission remain open; no submission receipt exists.
+Current checkpoint: **The compact demo frontend is implemented and verified against the
+real public backend, but its deployment is blocked by SSH access.** The public URL still
+serves the prior presentation release. SSH to 149.28.51.139:22 repeatedly times out;
+HTTPS remains healthy. The new answer/draft hero layouts, collapsed supporting detail,
+primary actions and screenshots are ready; see docs/demo-readability.md. Video recording,
+PDF export and official submission remain open; no submission receipt exists.
 
 Public URL: https://salesdesk.149.28.51.139.sslip.io
 
@@ -843,3 +843,54 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
 - Untracked docs/session-prompts/ and screenshot-2026-11-05.png remain untouched. The
   video script is prepared and its live journey rehearsed; no narrated recording, PDF
   export or official hackathon submission/receipt is claimed.
+
+
+## Compact demo presentation: 2026-11-06
+
+- Frontend only: campaign answer hero with two large purchase rates, a single existing
+  approval/download slot, purchase bar chart, collapsed full analysis, a five-line Next
+  move summary with Edit/Advanced, and a compact activity stepper. Active jobs expand
+  activity and completion collapses it. Raw evidence/ids/hashes live in Verification.
+- Prospect defaults to the draft, with Approve draft (same exact-version review), an
+  excerpt, collapsed full editable draft and source list. Save appears only for edits;
+  Copy/Download are ghost actions. Research and Demonstration retain their full content
+  on demand; examples have one small Example badge.
+- Home retains hero, two door cards and stats, with one filled action. Campaign list and
+  footers/sidebar Interpretation removed. The one Verification link opens source context
+  in a dialog, rather than a home-page disclosure. The sidebar retains saved analyses and
+  a New analysis plan link. Full wording is retained in README and Verification.
+- Build and updated disposable-browser checks passed at 1440×900, including one primary
+  action above fold, dirty-edit refusal, saved approval/download across reloads, exact-version
+  draft review/invalidation, Advanced, full analysis, receipt access and mobile overflow.
+- Backend diff is empty. No validators/contracts, sandbox rules, jobs, replay, schema,
+  approval bindings or stored-data semantics changed. The existing campaign approval and
+  draft-review request handlers were compared with the starting commit byte for byte.
+  Only normal operations in fresh isolated verification sessions created demo records.
+- Public before heights: home 900 px; campaign before approval 4,048 px; after approval
+  4,366 px; prospect 1,452 px. New frontend preview heights: 900 / 1,037 / 1,078 / 900 px.
+  All four primary actions are visible in the first 900 px. Exact bounds and screenshot
+  hashes are in docs/assets/readability-measurements.json; new images use readability-*.png.
+- Deployment blocker: SCP/SSH to the documented VM timed out on port 22. Repeated bounded
+  SSH checks also timed out. No installation or restart is claimed. Owner asked for the
+  current SSH endpoint or restored SSH access; authorization to deploy/push already exists.
+- Prepared release archive SHA-256:
+  `cc3bbbe06cace1365ee9076187f1c640cf331e17eb0dd4f9dd8c0d82755ad997` (67 files).
+  Existing deployed salesdesk-*.png screenshots are preserved. The new screenshots are
+  explicitly labelled as real-backend integration previews with local frontend overrides,
+  not as an observed deployment. No API responses, origin headers or cookies were mocked
+  in this preview; baseline and new measurements used the same normal benchmark comparison.
+- Existing public HTTP journey passed, with real Docker analysis, identical artifacts,
+  stale approval refusal, scheduled packet completion, downloads and cross-session 404s:
+  .local/demo-readability/public-journey.json. A direct new-UI browser check against the
+  still-old deployed assets failed its expected single-primary assertion; it is not counted
+  as acceptance. Real-backend preview passed in .local/demo-readability/preview/measurements.json.
+- Early local browser failures corrected before final checks: lifted dirty-edit state
+  needed synchronous notification to disable approval immediately, and the mock task fixture
+  copied an old proposal hash instead of matching the existing API's current proposal hash.
+  These corrections did not change backend authorization or approval rules.
+- Analysis/prospect checks used accepted caches; no new paid calls or budget changes were
+  required. Last recorded reservations remain $0.0562880 across current/prior local/VM
+  approvals, separate from compute billing. No provisioning or ledger reset.
+- Remaining: restore SSH, install/checksum/verify the release, take direct deployed browser
+  screenshots and rerun the journey on that release. Untracked session prompts and the root
+  screenshot remain untouched. Do not describe the new UI as live until verified.

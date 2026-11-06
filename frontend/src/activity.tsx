@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { stamp } from "./shared";
 
 export type ActivityStep = {
@@ -7,15 +8,23 @@ export type ActivityStep = {
   evidence?: unknown;
 };
 
-export function AnalystActivity({ steps }: { steps: ActivityStep[] }) {
-  return <section className="panel analyst-activity" aria-label="Analyst activity">
-    <h2>Analyst activity</h2>
-    <ol aria-live="polite">{steps.map((step, index) => <li key={index} className={`activity-${step.state}`}>
+export function AnalystActivity({ steps, active = false, shortLabels }: { steps: ActivityStep[]; active?: boolean; shortLabels?: string[] }) {
+  const [expanded, setExpanded] = useState(active);
+  useEffect(() => { setExpanded(active); }, [active]);
+  return <section className={`analyst-activity ${expanded ? "expanded" : "compact"}`} aria-label="Analyst activity">
+    <button className="activity-toggle" aria-expanded={expanded} onClick={() => setExpanded(v => !v)}>
+      <span className="activity-title">Analyst activity</span>
+      <span className="activity-dots">{steps.map((step, index) => <span key={index} className={`activity-${step.state}`} title={`${step.label}: ${step.state}${step.at ? ` · ${stamp(step.at)}` : ""}`}>
+        <span className="activity-marker" aria-hidden="true">{step.state === "done" ? "✓" : step.state === "failed" ? "!" : index + 1}</span>
+        <span>{shortLabels?.[index] || step.label}</span>
+      </span>)}</span>
+      <span className="activity-chevron" aria-hidden="true">{expanded ? "−" : "+"}</span>
+    </button>
+    {expanded && <ol aria-live="polite">{steps.map((step, index) => <li key={index} className={`activity-${step.state}`}>
       <span className="activity-marker" aria-hidden="true">{step.state === "done" ? "✓" : step.state === "failed" ? "!" : index + 1}</span>
-      <div><strong>{step.label}</strong> <span className="muted">{step.state === "pending" ? "Waiting" : step.state === "running" ? "In progress" : step.state === "failed" ? "Stopped" : "Complete"}</span>
+      <div><strong>{step.label}</strong>
         {step.at && <time dateTime={step.at}>{stamp(step.at)}</time>}
-        {step.evidence != null && <details><summary>Verification</summary><pre>{JSON.stringify(step.evidence, null, 2)}</pre></details>}
       </div>
-    </li>)}</ol>
+    </li>)}</ol>}
   </section>;
 }

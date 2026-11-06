@@ -10,10 +10,10 @@ lead to an analyst, a next move, your approval and work prepared while you are a
 **Try it in 60 seconds:**
 
 1. Open the demo and let the Vultr workers prepare your isolated example workspace.
-2. Choose **Analyse a campaign**. Read the benchmark result and expand Analyst activity.
-3. Scroll to **Next move**, add a note and **Save next move**, then **Approve & schedule**.
-4. Close the tab. Return to **Ready for review** and download your Markdown packet.
-5. Try **Starting from zero** for a sourced example brief and an unsent outreach draft.
+2. Choose **Analyse a campaign**. Read the answer and the two purchase rates.
+3. Use **Edit** under Next move if needed, save, then **Approve & schedule** in the answer card.
+4. Close the tab. Return to **Ready for review** and **Download packet** from the answer card.
+5. Try **Starting from zero**. Open the draft, read/edit it, and **Approve draft** for review.
 
 A seeded example approval and ready packet are labelled as demo examples. Your edits need
 a fresh approval. New analysis plans and prospects remain available within session limits.
@@ -66,8 +66,14 @@ preparation → review.
 
 The controller renders figures from validated metric references and preserves the model
 contracts, sandbox limits, source checks and version-bound approvals. Analyst activity
-shows saved worker events and receipts; details sit inside Verification disclosures.
-The plan page follows Analyst activity, Result, Next move and the packet card, with Verification collapsed below.
+shows saved worker events as a compact stepper that expands while a job is running or on
+request. The campaign opens with an answer, purchase rates and one approval/download action.
+The purchase chart stays visible; **See full analysis** holds the detailed reading, uncertainty,
+metrics and spend. Next move is read-only until **Edit**; scenario and sample-size fields live
+under **Advanced**. One **Verification** entry retains source, hashes, versions and receipts.
+Prospects open on the draft with **Approve draft**, the existing exact-version review action.
+The full editable draft and its sources are collapsed until requested. Neither approval
+launches a campaign nor sends an e-mail.
 
 ## Setup
 
@@ -139,6 +145,24 @@ uv run python -m scripts.check_browser
   are bounded to the next day. Records are isolated by an HttpOnly session cookie.
 - Video recording, PDF slide export and the LabLab submission itself are separate from
   these prepared assets. Nothing is submitted without a receipt.
+
+## Wording kept in Verification
+
+The compact interface keeps these qualifications available in Verification and the full
+reading, without changing records or validation:
+
+- SalesDesk evaluates historical campaign data, prepares experiment packets and drafts for
+  a person to review. Campaign evaluation and next-move planning run on a Vultr VM.
+- A prepared packet is a planning review, not a launched campaign, new responses or sales,
+  or a completed review. An example approval is a seeded demo approval.
+- Synthetic prospect pages are invented and read from disk. They are examples, not live
+  customer research. The public interface marks the example with an **Example** badge.
+- Edit freely; saving creates a new version and clears any approval bound to an older
+  version. Historical records are never a contact list. Draft review binds to the exact
+  saved version; editing invalidates that review. Nothing is sent by SalesDesk.
+- Per-step dates, completion states, source and artifact identifiers, metric references,
+  version hashes and interpretation provenance remain available in Verification or the
+  expanded activity. Cached responses make no fresh inference request.
 
 ## License
 

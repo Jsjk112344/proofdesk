@@ -1,6 +1,6 @@
 import { AnalystActivity, type ActivityStep } from "./activity";
 import { useEffect, useRef, useState } from "react";
-import { api, Badge, Empty, newId, post, stamp, time } from "./shared";
+import { api, Badge, Empty, newId, post, shortCopy, stamp, time } from "./shared";
 
 export type Arm = {
   id: string;
@@ -303,6 +303,7 @@ const PROVENANCE: Record<string, { label: string; detail: string }> = {
   },
   saved_replay: { label: "Analyst: Qwen 3.8 on Vultr Inference", detail: "cached response: a previously accepted live response for identical inputs; no new request was made." },
   human_edited: { label: "Edited by you", detail: "You changed this version." },
+  failed: { label: "Analyst unavailable", detail: "The AI reading failed; validated statistics are preserved." },
 };
 
 export const pct = (value: number | null | undefined, digits = 2) =>
@@ -363,6 +364,7 @@ function ProvenanceBadge({ provenance }: { provenance: string }) {
 // ---------------------------------------------------------------- Home / overview
 export function ExperimentsHome({ overview }: { overview: Overview }) {
   const [opening, setOpening] = useState(false);
+  const verificationDialog = useRef<HTMLDialogElement>(null);
   const [error, setError] = useState("");
   async function openCampaign() {
     const benchmark = [...overview.plans].reverse().find(p => p.dataset_id === "hillstrom-2008" && p.title === "Mens e-mail versus no e-mail") || overview.plans[0];
@@ -386,8 +388,7 @@ export function ExperimentsHome({ overview }: { overview: Overview }) {
   return <>
     <div className="heading home-hero">
       <h1>Sell more: Your AI sales analyst</h1>
-      <p className="lede">SalesDesk measures what your last campaign actually did, proposes your next move,
-        and prepares it for your approval, on Vultr, with every number verified.</p>
+      <p className="lede">Understand your last campaign, choose the next move, and return to work prepared on Vultr.</p>
     </div>
     {error && <p className="alert" role="alert">{error}</p>}
     <div className="two entry-doors">
@@ -397,13 +398,13 @@ export function ExperimentsHome({ overview }: { overview: Overview }) {
         <button className="primary" disabled={opening || !overview.datasets.length} onClick={() => void openCampaign()}>
           {opening ? "Opening…" : "Analyse a campaign"}
         </button>
-        <p className="hint">Demo uses a real 64,000-customer e-mail campaign. Bring your own data: coming next.</p>
+        <p className="hint">Explore a real campaign.</p>
       </section>
       <section className="panel entry-door">
         <h2>Starting from zero? Let's find your first customers.</h2>
         <p>Research a prospect and return to an evidence-backed brief and a draft ready for your approval.</p>
-        <a className="primary button-link" href="#/prospects">Research a prospect</a>
-        <p className="hint">Start with the pre-filled document-workflow offering and Harbor Vale example.</p>
+        <a className="secondary button-link" href="#/prospects">Research a prospect</a>
+        <p className="hint">Start with an example prospect.</p>
       </section>
     </div>
     <div className="metric-grid dashboard-stats">
@@ -412,16 +413,11 @@ export function ExperimentsHome({ overview }: { overview: Overview }) {
       <Stat label="Ready for review" value={String(overview.tasks.filter(t => t.status === "ready_for_review").length)} />
       <Stat label="Analyst" value={(PROVENANCE[overview.plans[0]?.latest_run?.interpretation_provenance || overview.generation_mode]?.label || overview.generation_mode).replace("Analyst: ", "")} />
     </div>
-    <section className="panel saved-home">
-      <div className="row-between"><h2>Campaigns</h2><a href="#/experiments/new">New analysis plan</a></div>
-      {overview.plans.length ? <ul className="plain">{overview.plans.map(p => <li key={p.id}>
-        <a href={`#/experiments/${p.id}`}>{p.title}</a> · {p.latest_run ? p.latest_run.status : "Saved plan"}
-      </li>)}</ul> : <p>Your first campaign analysis will appear here.</p>}
-      <a href="#/queue">Open action queue</a>
-    </section>
-    <div className="below-fold">{overview.datasets[0] && <details className="verification"><summary>Verification: benchmark dataset</summary>
-      <DatasetCard dataset={overview.datasets[0]} />
-    </details>}</div>
+    <button className="link-button page-verification-link" onClick={() => verificationDialog.current?.showModal()}>Verification</button>
+    <dialog ref={verificationDialog} aria-label="Verification" className="verification-dialog">
+      <button className="secondary dialog-close" onClick={() => verificationDialog.current?.close()}>Close</button>
+      {overview.datasets[0] && <DatasetCard dataset={overview.datasets[0]} />}
+    </dialog>
   </>;
 }
 
@@ -487,7 +483,7 @@ export function DatasetCard({ dataset, compact = false }: { dataset: Dataset; co
       </p>
       {!compact && (
         <>
-          <details className="verification"><summary>Verification</summary><h3>Limitations recorded with the import</h3>
+          <details className="verification"><summary>Source context</summary><h3>Limitations recorded with the import</h3>
           <ul className="plain">
             {dataset.limitations.map((l, i) => (
               <li key={i}>{l}</li>
@@ -554,11 +550,7 @@ export function NewPlanForm({ overview, onCreated, onError }: { overview: Overvi
     <>
       <div className="heading">
         <h1>Save an analysis plan</h1>
-        <p className="lede">
-          Fix the comparison before anything runs. This is a retrospective re-analysis of a published
-          benchmark: the arm counts were inspected before this product existed, so the plan is saved for
-          reproducibility, not as a preregistration.
-        </p>
+        <p className="lede">Choose the campaign arms and save your question.</p>
       </div>
       <div className="landing-grid">
         <form className="panel compose" onSubmit={(e) => void save(e)}>
@@ -588,10 +580,10 @@ export function NewPlanForm({ overview, onCreated, onError }: { overview: Overvi
               </select>
             </div>
           </div>
-          <p className="hint">
+          <details className="disclosure"><summary>Comparison details</summary><p className="hint">
             The third arm stays visible in the source overview but is excluded from this comparison.
             Original assignment is never changed; only original arms can be compared.
-          </p>
+          </p></details>
           <div className="two">
             <div>
               <label htmlFor="plan-seed">Bootstrap seed</label>
@@ -621,11 +613,11 @@ export function NewPlanForm({ overview, onCreated, onError }: { overview: Overvi
               </label>
             ))}
           </fieldset>
-          <p className="hint">
+          <details className="disclosure"><summary>Analysis methods</summary><p className="hint">
             Fixed by the plan: primary outcome purchase conversion per assigned customer; secondary outcomes
             visits and spend per assigned customer (zero spend included); 95% Wilson and Newcombe intervals;
             seeded customer-level bootstrap for spend.
-          </p>
+          </p></details>
           <div className="compose-actions">
             <button className="primary" type="submit" disabled={saving || !title.trim() || !question.trim() || treatment === control}>
               {saving ? "Saving…" : "Save plan"}
@@ -635,7 +627,11 @@ export function NewPlanForm({ overview, onCreated, onError }: { overview: Overvi
             </a>
           </div>
         </form>
-        <DatasetCard dataset={dataset} />
+        <details className="verification"><summary>Verification</summary>        <p className="lede">
+          Fix the comparison before anything runs. This is a retrospective re-analysis of a published
+          benchmark: the arm counts were inspected before this product existed, so the plan is saved for
+          reproducibility, not as a preregistration.
+        </p><DatasetCard dataset={dataset} /></details>
       </div>
     </>
   );
@@ -645,6 +641,7 @@ export function NewPlanForm({ overview, onCreated, onError }: { overview: Overvi
 export function ExperimentView({ planId, onChanged, onError }: { planId: string; onChanged: () => Promise<void>; onError: (m: string) => void }) {
   const [detail, setDetail] = useState<PlanDetail | null>(null);
   const [running, setRunning] = useState(false);
+  const [proposalDirty, setProposalDirty] = useState(false);
   const [missing, setMissing] = useState(false);
   const requestId = useRef<string | null>(null);
   async function load() {
@@ -684,9 +681,9 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
   const latest = detail.runs[0] || null;
   const proposal = detail.proposals[0] || null;
   const analysisJob = detail.jobs.find(j => j.kind === "analyze_plan");
-  const preparation = detail.jobs.find(j => j.kind === "prepare_packet");
+  const task = detail.tasks.find(t => t.proposal_sha256 === proposal?.sha256 && t.status !== "cancelled");
+  const preparation = task ? detail.jobs.find(j => j.kind === "prepare_packet" && j.task_id === task.id) : undefined;
   const activityRun = detail.runs.find(r => r.job_id === analysisJob?.id);
-  const task = detail.tasks[0];
   const approvedCurrent = task?.approval && task.proposal_sha256 === proposal?.sha256;
   const event = (stage: string) => analysisJob?.events.find(e => e.stage === stage)?.at;
   const steps: ActivityStep[] = [
@@ -715,25 +712,22 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
     }
   }
   const working = activeJobs > 0;
+  const metrics = byId(run?.metrics || null);
+  const reading = run?.interpretation?.rendered;
+  const analystHeadline = reading?.question_answered.endsWith("?") && metrics["treatment.conversion_rate"] && metrics["control.conversion_rate"]
+    ? `${metrics["design.treatment_label"].value} recorded a ${pct(metrics["treatment.conversion_rate"].value as number)} purchase rate versus ${pct(metrics["control.conversion_rate"].value as number)} for ${metrics["design.control_label"].value}.`
+    : reading?.question_answered;
+  const takeaway = analystHeadline?.replace(/, with a difference of[\s\S]*$/i, ".") ||
+    (run?.interpretation?.status === "failed" ? "The numbers are ready; the analyst reading failed." : "Your campaign answer will appear here.");
   return (
     <>
-      <div className="prospect-head">
-        <div>
-          <h1>{detail.plan.spec.title}</h1>
-          <p className="lede small">
-            Plan v{detail.plan.version} · {detail.plan.spec.comparison.treatment} vs {detail.plan.spec.comparison.control} ·{" "}
-            <Badge tone={detail.dataset.synthetic ? "synthetic" : "ok"}>{detail.dataset.synthetic ? "Synthetic fixture" : "Public benchmark"}</Badge>{" "}
-
-          </p>
-        </div>
-        <div className="head-actions">
-          {working && <Badge tone="running">Worker busy</Badge>}
-          <button className="primary" onClick={() => void runNow()} disabled={running || working}>
-            {detail.runs.length ? "Run analysis again" : "Run analysis now"}
-          </button>
-        </div>
+      <div className="prospect-head campaign-title">
+        <h1>{detail.plan.spec.title}</h1>
+        <button className={run ? "secondary" : "primary"} onClick={() => void runNow()} disabled={running || working}>
+          {detail.runs.length ? "Run analysis again" : "Run analysis now"}
+        </button>
       </div>
-      <AnalystActivity steps={steps} />
+      <AnalystActivity steps={steps} active={working} shortLabels={["Pickup", "Analyse", "Verify", "Read", "Propose", "Approve", "Prepare", "Ready"]} />
       {latest && latest.status === "failed" && (
         <div className="alert" role="alert">
           <strong>The latest run failed.</strong> Reason <span className="code">{latest.failure_reason}</span>. Earlier
@@ -746,28 +740,67 @@ export function ExperimentView({ planId, onChanged, onError }: { planId: string;
           ). The statistical result below is unchanged; Details are under Verification.
         </div>
       )}
-      <section aria-label="Result" className="stack">
-        <h2>Result</h2>
+      <section aria-label="Answer" className="panel answer-card">
+        <div className="answer-heading">
+          <h2 className="answer-takeaway" title={reading?.question_answered}>{shortCopy(takeaway, 22)}</h2>
+          {run?.interpretation && <ProvenanceBadge provenance={run.interpretation.status === "failed" ? "failed" : run.interpretation.provenance} />}
+        </div>
+        {run?.metrics && <div className="answer-numbers">{["treatment", "control"].map(arm => {
+          const rate = metrics[`${arm}.conversion_rate`];
+          return rate && <div key={arm}>
+            <span>{String(metrics[`design.${arm}_label`]?.value || arm)}</span>
+            <strong>{pct(rate.value as number)}</strong>
+            <small>of {num(rate.denominator?.n || 0)}</small>
+          </div>;
+        })}</div>}
+        {proposal && <p className="answer-next" title={proposal.content.hypothesis}><strong>Next move:</strong> {shortCopy(proposal.content.hypothesis, 16)}</p>}
+        {run && <TaskPanel detail={detail} proposal={proposal} dirty={proposalDirty} onChange={async () => { await load(); await onChanged(); }} onError={onError} />}
+      </section>
+      {run?.metrics && <section className="panel purchase-chart" aria-label="Purchase rates">
+        <RateChart title="Purchase rate by original arm" metrics={[metrics["treatment.conversion_rate"], metrics["control.conversion_rate"]].filter(Boolean)} caption="95% Wilson score intervals." />
+      </section>}
+      <details className="full-analysis disclosure"><summary>See full analysis</summary>
         <InterpretationTab run={run} working={working} />
         <ResultsTab detail={detail} run={run} working={working} />
-      </section>
+      </details>
       <section aria-label="Next move">
-        <NextActionTab detail={detail} run={run} proposal={proposal} onChange={async () => {
+        <NextActionTab detail={detail} run={run} proposal={proposal} onDirty={setProposalDirty} onChange={async () => {
           await load(); await onChanged();
         }} onError={onError} />
       </section>
-      {task && ["scheduled", "running", "ready_for_review", "completed"].includes(task.status) && <section className="panel walk-away" role="status">
-        <p className="lede small">{detail.proposals.find(p => p.id === task.proposal_id)?.content.hypothesis || task.proposed_action}</p>
-        {task.packet_artifact_id && <a className="primary button-link" href={`/api/experiments/artifacts/${task.packet_artifact_id}/packet.md`}>Download packet (.md)</a>}
-        <h2>{task.packet_artifact_id ? "Ready for review" : "Preparing your packet on Vultr, you can close this tab"}</h2>
-        <p className="muted">{stamp(task.updated_at)}{task.title.startsWith("Demo example:") ? " · Seeded demo example with an example approval" : ""}</p>
-        {task.packet_artifact_id && <PacketSummary artifactId={task.packet_artifact_id} />}
-      </section>}
-      <details className="verification"><summary>Verification: source, execution and model receipts</summary>
+      <details className="verification"><summary>Verification</summary>
+        <h2>Activity evidence</h2><pre>{JSON.stringify(steps, null, 2)}</pre>
         <Badge tone="hypothesis">Retrospective re-analysis</Badge>
+        <p>Plan v{detail.plan.version} · {detail.plan.spec.comparison.treatment} vs {detail.plan.spec.comparison.control}</p>
+        {proposal && <p className="hash">Next move v{proposal.version}: {proposal.sha256} · plan {detail.plan.sha256}</p>}
+        {task && <p className="hash">Approval: {JSON.stringify(task.approval)} · updated {stamp(task.updated_at)}{task.title.startsWith("Demo example:") ? " · Seeded demo example with an example approval" : ""}</p>}
+        <p>Edit freely; saving creates a new version and clears any approval bound to an older one. The historical records are never a contact list.</p>
         {run?.metrics && <section className="panel"><h2>Metric references</h2>
           <dl className="facts">{run.metrics.map(metric => <div key={metric.id}><dt>{metric.label}</dt><dd className="metric-id">{metric.id}{metric.exploratory ? " · exploratory" : ""}</dd></div>)}</dl>
         </section>}
+        {run && <>      <section className="panel">
+        <h2>Provenance of every number above</h2>
+        <dl className="facts">
+          <dt>Analysis artifact</dt>
+          <dd className="hash">{run.artifact_id}</dd>
+          <dt>Sandbox execution</dt>
+          <dd className="hash">{run.execution_id}</dd>
+          <dt>Program SHA-256</dt>
+          <dd className="hash">{run.program_sha256}</dd>
+          <dt>Analysis input SHA-256</dt>
+          <dd className="hash">{run.input_sha256}</dd>
+          <dt>Plan SHA-256</dt>
+          <dd className="hash">{run.plan_sha256}</dd>
+          <dt>Reconciliation</dt>
+          <dd>
+            {run.reconciliation?.status} · {run.reconciliation?.independent_implementation}
+          </dd>
+        </dl>
+        <p className="muted">
+          Repeated runs of the same plan, data and program produce the identical artifact; the run list under Scheduled
+          work shows every attempt and its hash.
+        </p>
+      </section></>}
         {run && <ExploratoryBreakdowns run={run} />}
         <SourceTab detail={detail} /><TechnicalTab detail={detail} run={run} />
         <WorkTab detail={detail} onChange={async () => { await load(); await onChanged(); }} onError={onError} />
@@ -947,7 +980,7 @@ function ResultsTab({ detail, run, working }: { detail: PlanDetail; run: Run | n
           Primary outcome: purchase conversion per assigned customer 
         </h2>
         <div className="two">
-          <RateChart title="Purchase rate by original arm" metrics={groups("conversion_rate")} caption={`Purchases divided by all assigned customers in each original arm; whiskers are 95% Wilson score intervals.`} />
+          <p className="muted">Purchases divided by all assigned customers in each original arm; whiskers are 95% Wilson score intervals.</p>
           <DifferenceLine metric={m["conversion.difference_pp"]} unit="pp" />
         </div>
         <div className="metric-grid">
@@ -977,29 +1010,7 @@ function ResultsTab({ detail, run, working }: { detail: PlanDetail; run: Run | n
           under Next move as labelled assumptions.
         </p>
       </section>
-      <details className="verification"><summary>Verification</summary><section className="panel">
-        <h2>Provenance of every number above</h2>
-        <dl className="facts">
-          <dt>Analysis artifact</dt>
-          <dd className="hash">{artifact}</dd>
-          <dt>Sandbox execution</dt>
-          <dd className="hash">{run.execution_id}</dd>
-          <dt>Program SHA-256</dt>
-          <dd className="hash">{run.program_sha256}</dd>
-          <dt>Analysis input SHA-256</dt>
-          <dd className="hash">{run.input_sha256}</dd>
-          <dt>Plan SHA-256</dt>
-          <dd className="hash">{run.plan_sha256}</dd>
-          <dt>Reconciliation</dt>
-          <dd>
-            {run.reconciliation?.status} · {run.reconciliation?.independent_implementation}
-          </dd>
-        </dl>
-        <p className="muted">
-          Repeated runs of the same plan, data and program produce the identical artifact; the run list under Scheduled
-          work shows every attempt and its hash.
-        </p>
-      </section></details>
+
     </div>
   );
 }
@@ -1058,7 +1069,7 @@ function InterpretationTab({ run, working }: { run: Run | null; working: boolean
           </ul>
         </section>
       </div>
-      <details className="verification"><summary>Verification</summary><section className="panel">
+      <details className="verification"><summary>Analysis context</summary><section className="panel">
         <h2>What this result does not establish</h2>
         <p className="muted">
           An original randomized result supports a historical arm comparison under the study assumptions. It does not
@@ -1081,7 +1092,8 @@ function textToList(text: string) {
     .filter(Boolean);
 }
 
-function NextActionTab({ detail, run, proposal, onChange, onError }: { detail: PlanDetail; run: Run | null; proposal: Proposal | null; onChange: () => Promise<void>; onError: (m: string) => void }) {
+function NextActionTab({ detail, run, proposal, onChange, onError, onDirty }: { detail: PlanDetail; run: Run | null; proposal: Proposal | null; onChange: () => Promise<void>; onError: (m: string) => void; onDirty: (dirty: boolean) => void }) {
+  const [editing, setEditing] = useState(false);
   const blank: ProposalContent = {
     hypothesis: "",
     variant_a: "",
@@ -1104,9 +1116,10 @@ function NextActionTab({ detail, run, proposal, onChange, onError }: { detail: P
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [proposal?.sha256]);
   const ready = !!run && run.status === "succeeded";
-  if (!ready) return <Empty title="Run the analysis first." text="A next move is proposed from a validated result." />;
   const dirty = JSON.stringify(draft) !== JSON.stringify(proposal?.content || blank);
-  const set = (key: keyof ProposalContent, value: unknown) => setDraft((d) => ({ ...d, [key]: value }));
+  useEffect(() => { onDirty(dirty); }, [dirty, onDirty]);
+  if (!ready) return <Empty title="Run the analysis first." text="A next move is proposed from a validated result." />;
+  const set = (key: keyof ProposalContent, value: unknown) => { onDirty(true); setDraft((d) => ({ ...d, [key]: value })); };
   const scenario = draft.scenario_assumptions;
   const sample = draft.sample_size_inputs;
   const m = byId(run!.metrics);
@@ -1138,33 +1151,27 @@ function NextActionTab({ detail, run, proposal, onChange, onError }: { detail: P
       });
       requestId.current = null;
       await onChange();
+      setEditing(false);
     } catch (e) {
       onError((e as Error).message);
     } finally {
       setSaving(false);
     }
   }
+  if (!editing) return <section className="panel next-move-summary">
+    <div className="row-between"><h2>Next move</h2><button className="secondary" onClick={() => setEditing(true)}>Edit</button></div>
+    <dl className="move-facts">{[
+      ["Hypothesis", draft.hypothesis],
+      ["Who", draft.audience_requirements.join(" · ")],
+      ["Compare", `${draft.variant_a} / ${draft.variant_b}`],
+      ["Measure", `${draft.primary_outcome} · ${draft.observation_window}`],
+      ["Decision rule", draft.decision_rule],
+    ].map(([label, value]) => <div key={label}><dt>{label}</dt><dd title={value}>{shortCopy(value, 15)}</dd></div>)}</dl>
+  </section>;
   return (
-    <div className="stack">
+    <div className="stack next-move-editor">
       <section className="panel">
-        <div className="row-between">
-          <h2>
-            Next move{" "}
-            {proposal ? (
-              <>
-                <Badge tone="info">v{proposal.version}</Badge> <ProvenanceBadge provenance={proposal.provenance} />
-              </>
-            ) : (
-              <Badge tone="warn">not yet proposed</Badge>
-            )}
-          </h2>
-          {proposal && <span className="muted hash">version {proposal.sha256.slice(0, 12)}</span>}
-        </div>
-        <p className="muted">
-          Edit freely; saving creates a new version and clears any approval bound to an older one. A sensible next
-          action is a repeat experiment with a current, consenting audience and a random holdout. The historical
-          records are never a contact list.
-        </p>
+        <div className="row-between"><h2>Edit next move</h2><button className="secondary" onClick={() => { setDraft(proposal?.content || blank); setEditing(false); }}>Cancel</button></div>
         <label htmlFor="p-hypothesis">Hypothesis</label>
         <textarea id="p-hypothesis" rows={2} value={draft.hypothesis} maxLength={600} onChange={(e) => set("hypothesis", e.target.value)} />
         <div className="two">
@@ -1198,6 +1205,7 @@ function NextActionTab({ detail, run, proposal, onChange, onError }: { detail: P
         <label htmlFor="p-notes">Notes</label>
         <textarea id="p-notes" rows={2} value={draft.notes} maxLength={1500} onChange={(e) => set("notes", e.target.value)} />
       </section>
+      <details className="disclosure advanced-inputs"><summary>Advanced</summary>
       <section className="panel assumptions">
         <h2>
           Scenario assumptions <Badge tone="synthetic">entered, not measured</Badge>
@@ -1261,13 +1269,10 @@ function NextActionTab({ detail, run, proposal, onChange, onError }: { detail: P
           </div>
         </div>
         <p className="hint">Conventional values exist, but none is substituted for you: the packet reports these as missing until entered.</p>
-        <div className="draft-actions">
-          <button className="primary" onClick={() => void save()} disabled={!dirty || saving}>
-            {saving ? "Saving…" : proposal ? "Save next move" : "Save next move"}
-          </button>
-        </div>
-      </section>
-      <TaskPanel detail={detail} proposal={proposal} dirty={dirty} onChange={onChange} onError={onError} />
+      </section></details>
+      <div className="draft-actions">
+        <button className="secondary" onClick={() => void save()} disabled={!dirty || saving}>{saving ? "Saving…" : "Save next move"}</button>
+      </div>
     </div>
   );
 }
@@ -1307,18 +1312,22 @@ function TaskPanel({ detail, proposal, dirty, onChange, onError }: { detail: Pla
     finally { setBusy(false); }
   }
   const scheduled = current && ["scheduled", "running", "ready_for_review", "completed"].includes(current.status);
-  return <section className="panel approval-card">
-    <h2>{scheduled ? "Next move approved" : "Approve your next move"}</h2>
-    <p>{proposal?.content.hypothesis || "Save your next move first."}</p>
-    {!scheduled && <>
-      <label htmlFor="prepare-at">Prepare packet (leave empty to start now)</label>
-      <input id="prepare-at" type="datetime-local" value={due} onChange={e => setDue(e.target.value)} disabled={busy} />
+  return <div className="answer-action" aria-label="Approval and packet">
+    {scheduled ? current.packet_artifact_id ? <>
+      <span className="status-pill" role="status">Ready for review</span>
+      <a className="primary button-link" href={`/api/experiments/artifacts/${current.packet_artifact_id}/packet.md`}>Download packet</a>
+      <PacketSummary artifactId={current.packet_artifact_id} />
+    </> : <span className="status-pill" role="status">Preparing on Vultr · you can close this tab</span> : <>
       <button className="primary" disabled={busy || dirty || !proposal} onClick={() => void approve()}>{busy ? "Scheduling…" : "Approve & schedule"}</button>
+      <details className="schedule-options"><summary>Schedule options</summary>
+        <label htmlFor="prepare-at">Prepare packet (leave empty to start now)</label>
+        <input id="prepare-at" type="datetime-local" value={due} onChange={e => setDue(e.target.value)} disabled={busy} />
+      </details>
       {dirty && <p className="hint">Save your edits before approving.</p>}
     </>}
     {current?.status === "failed" && <p role="alert">Preparation stopped. Review Verification before retrying.</p>}
-    {proposal && <p className="hint hash">Bound to next move {proposal.sha256.slice(0, 12)} · plan {detail.plan.sha256.slice(0, 12)}{current?.approval ? ` · artifact ${String(current.approval.artifact_sha256).slice(0, 12)}` : " · analysis artifact bound on approval"}</p>}
-  </section>;
+  </div>;
+
 }
 
 function PacketSummary({ artifactId }: { artifactId: string }) {
@@ -1338,9 +1347,6 @@ function PacketSummary({ artifactId }: { artifactId: string }) {
   const p = packet.packet;
   return (
     <div className="packet">
-      <p>
-        <Badge tone={p.status === "planning_review" ? "warn" : "ok"}>{p.status.replaceAll("_", " ")}</Badge> {p.what_this_is}
-      </p>
       <details><summary>Inputs to add before launch ({p.readiness_checks.filter(c => c.status === "missing").length})</summary>
       <ul className="plain">
         {p.readiness_checks.filter(c => c.status === "missing").map((c) => (
@@ -1352,7 +1358,7 @@ function PacketSummary({ artifactId }: { artifactId: string }) {
         ))}
       </ul>
       </details>
-      <details className="verification"><summary>Verification: all readiness checks</summary>
+      <details className="verification"><summary>Readiness checks</summary>
       <ul className="plain">
         {p.readiness_checks.map((c) => (
           <li key={c.input}>
@@ -1363,7 +1369,7 @@ function PacketSummary({ artifactId }: { artifactId: string }) {
         ))}
       </ul>
       </details>
-      <details className="verification"><summary>Verification</summary><p className="muted">Not claimed: {p.not_claimed.join(" ")}</p></details>
+      <details><summary>Packet context</summary><p>{p.status.replaceAll("_", " ")}: {p.what_this_is}</p><p className="muted">Not claimed: {p.not_claimed.join(" ")}</p></details>
     </div>
   );
 }
@@ -1628,7 +1634,7 @@ export function QueueView({ overview, onChange, onError }: { overview: Overview;
                         <Badge tone={TONES[t.status] || "warn"}>{taskLabel(t.status)}</Badge>
                       </td>
                       <td>
-                        <a href={`#/experiments/${t.plan_id}`}>{plans[t.plan_id]?.title || t.plan_id.slice(0, 8)}</a>
+                        <a href={`#/experiments/${t.plan_id}`}>{plans[t.plan_id]?.title || "Open analysis"}</a>
                       </td>
                     </tr>
                   ))}
@@ -1637,6 +1643,7 @@ export function QueueView({ overview, onChange, onError }: { overview: Overview;
             </div>
           )}
         </section>
+        <details className="verification"><summary>Verification</summary>
         <section className="panel">
           <h2>Jobs</h2>
           {overview.jobs.length === 0 ? (
@@ -1685,7 +1692,7 @@ export function QueueView({ overview, onChange, onError }: { overview: Overview;
             </div>
           )}
         </section>
-        <details className="verification"><summary>Verification</summary><section className="panel">
+<section className="panel">
           <h2>Scheduler</h2>
           <p className="muted">
             Jobs run on the Vultr-hosted API process: due work is claimed under a {overview.scheduler.lease_seconds}-second lease and executed by a worker subprocess. {overview.scheduler.last_error ? `Last scheduler error: ${overview.scheduler.last_error}.` : "No scheduler error recorded."} Limits in this mode: {overview.limits.max_plans} plans, {overview.limits.max_runs} runs, {overview.limits.max_tasks} tasks, {overview.limits.max_scheduled} queued jobs per session.

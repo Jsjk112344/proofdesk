@@ -1,6 +1,6 @@
 import { AnalystActivity, type ActivityStep } from "./activity";
 import { useEffect, useRef, useState } from "react";
-import { displayCurrency, api, Badge, day, Empty, ERRORS, MODES, money, newId, post, time } from "./shared";
+import { displayCurrency, api, Badge, day, Empty, ERRORS, MODES, money, newId, post, shortCopy, time } from "./shared";
 
 type Sample = { id: string; title: string; note: string; synthetic: boolean };
 type Capability = { id: string; label: string; summary: string };
@@ -225,18 +225,7 @@ function Landing({
     <>
       <div className="heading">
         <h1>Research a prospect, prove one thing, draft the ask.</h1>
-        <p className="lede">
-          Give SalesDesk your offering and a prospect website. It reads a few public pages,
-          separates facts from a hypothesis, decides whether its one supported demonstration
-          is relevant, prepares a worked example when it is, and creates an editable
-          draft you review before anything leaves your desk.
-        </p>
-        {publicDemo && (
-          <p className="public-note" role="note">
-            <Badge tone="synthetic">Public demo</Badge> This copy runs the labelled synthetic
-            scenarios with a Vultr analyst. Records here are demonstration data; drafts stay unsent.
-          </p>
-        )}
+        <p className="lede">Research a prospect, review the evidence, and approve an introduction.</p>
       </div>
       <div className="landing-grid">
         <form
@@ -256,8 +245,7 @@ function Landing({
             disabled={disabled}
           />
           <p className="hint">
-            {offering.length} / {workspace.max_offering_chars} characters. The first demo is
-            written for a technical seller offering document-workflow automation.
+            {offering.length} / {workspace.max_offering_chars} characters.
           </p>
           {!publicDemo && <>
           <label htmlFor="url">Prospect website</label>
@@ -292,12 +280,7 @@ function Landing({
               </button>
             )}
           </div>
-          {primary && (
-            <p className="sample-note">
-              <Badge tone="synthetic">Synthetic</Badge> {primary.title}: {primary.note} The pages
-              are invented and read from disk; no network request is made for them.
-            </p>
-          )}
+          {primary && <p className="sample-note"><Badge tone="synthetic">Example</Badge> {primary.title}</p>}
           {workspace.samples.length > 1 && (
             <div className="more-samples">
               <button
@@ -335,6 +318,8 @@ function Landing({
         </form>
         <details className="verification"><summary>Verification</summary><section className="panel scope" aria-labelledby="scope-heading">
           <h2 id="scope-heading">What SalesDesk can demonstrate</h2>
+          <p>The example pages are invented and read from disk; no network request is made for them. Public records are demonstration data and drafts stay unsent.</p>
+          <p>The first demo is written for a technical seller offering document-workflow automation.</p>
           <p>
             <strong>{workspace.capability.label}.</strong> {workspace.capability.summary}
           </p>
@@ -385,35 +370,16 @@ function ProspectView({
   onChange: (p: Prospect) => void;
   onError: (message: string) => void;
 }) {
-  const [tab, setTab] = useState<"research" | "demo" | "outreach" | "details">("research");
+  const [tab, setTab] = useState<"research" | "demo" | "outreach" | "details">("outreach");
   const active = isActive(prospect);
   const mode = prospect.draft?.provenance || prospect.brief?.provenance || prospect.generation.mode;
   return (
     <>
       <div className="prospect-head">
-        <div>
-          <h1>{prospect.prospect.display_name}</h1>
-          <p className="lede small">
-            {prospect.prospect.kind === "synthetic_fixture" ? (
-              <>
-                <Badge tone="synthetic">Synthetic sample</Badge> Invented pages read from disk.
-              </>
-            ) : (
-              <>
-                Public pages from{" "}
-                <a href={prospect.prospect.input_url!} rel="noreferrer noopener" target="_blank">
-                  {prospect.prospect.input_url}
-                </a>
-              </>
-            )}{" "}
-            <Badge tone={mode}>{MODES[mode]?.label || mode}</Badge>
-          </p>
-        </div>
-        <Badge tone={prospect.status === "failed" ? "failed" : prospect.status === "ready" ? "ok" : "running"}>
-          {statusLabel(prospect)}
-        </Badge>
+        <h1>{prospect.brief?.company_name || prospect.prospect.display_name} {prospect.prospect.kind === "synthetic_fixture" && <Badge tone="synthetic">Example</Badge>}</h1>
+        {active && <span role="status">Preparing your draft…</span>}
       </div>
-      <AnalystActivity steps={[
+      <AnalystActivity active={active} shortLabels={["Research", "Brief", "Demo", "Draft", "Ready"]} steps={[
         ["researching", "Researching the prospect"], ["deciding", "Brief prepared"],
         ["demonstrating", "Demonstration decision"], ["drafting", "Drafting your next move"],
         ["ready", "Awaiting your approval"],
@@ -459,7 +425,7 @@ function ProspectView({
         {tab === "outreach" && (
           <OutreachTab prospect={prospect} onChange={onChange} onError={onError} />
         )}
-        {tab === "details" && <details className="verification"><summary>Verification: saved progress and receipts</summary><DetailsTab prospect={prospect} workspace={workspace} /></details>}
+        {tab === "details" && <DetailsTab prospect={prospect} workspace={workspace} />}
       </div>
     </>
   );
@@ -499,10 +465,10 @@ function ResearchTab({ prospect }: { prospect: Prospect }) {
               </footer>
             </blockquote>
             {brief.company_summary.text_kind === "model_summary" && (
-              <p className="muted restatement">
+              <details className="restatement"><summary>Model summary</summary><div className="muted">
                 <Badge tone="hypothesis">Model summary</Badge> {displayCurrency(brief.company_summary.text)}{" "}
-                <span>(not a verified fact; the quotation above is the evidence)</span>
-              </p>
+                <details><summary>Summary context</summary><span>Not a verified fact; the quotation above is the evidence.</span></details>
+              </div></details>
             )}
           </>
         ) : (
@@ -517,7 +483,7 @@ function ResearchTab({ prospect }: { prospect: Prospect }) {
       <section className="panel">
         <h2>Relevant facts</h2>
         {brief.claims.length ? (
-          <table className="claims">
+          <details><summary>Show {brief.claims.length} facts</summary><table className="claims">
             <thead>
               <tr>
                 <th>Fact (verbatim)</th>
@@ -533,7 +499,7 @@ function ResearchTab({ prospect }: { prospect: Prospect }) {
                     {c.text_kind === "grounded_restatement" && c.text !== c.excerpt && (
                       <div className="muted restatement">
                         <Badge tone="hypothesis">Model restatement</Badge> {displayCurrency(c.text)}{" "}
-                        <span>(built only from the quotation's words; not a separately verified fact)</span>
+                        <details><summary>Restatement context</summary><span>Built only from the quotation's words; not a separately verified fact.</span></details>
                       </div>
                     )}
                   </td>
@@ -552,7 +518,7 @@ function ResearchTab({ prospect }: { prospect: Prospect }) {
                 </tr>
               ))}
             </tbody>
-          </table>
+          </table></details>
         ) : (
           <p className="muted">
             No sentence on the fetched pages relates to document handling or operations. That is
@@ -565,12 +531,12 @@ function ResearchTab({ prospect }: { prospect: Prospect }) {
           <h2>
             Proposed opportunity <Badge tone="hypothesis">Hypothesis</Badge>
           </h2>
-          <p>{displayCurrency(brief.opportunity_hypothesis.text)}</p>
+          <p>{shortCopy(displayCurrency(brief.opportunity_hypothesis.text), 20)}</p><details><summary>Full opportunity</summary><p>{displayCurrency(brief.opportunity_hypothesis.text)}</p></details>
           {brief.opportunity_hypothesis.claim_ids.length > 0 && (
             <p className="muted">Based on {brief.opportunity_hypothesis.claim_ids.join(", ")}.</p>
           )}
         </section>
-        <details className="verification"><summary>Verification</summary><section className="panel">
+        <details className="verification"><summary>Unknowns</summary><section className="panel">
           <h2>Unknowns and missing evidence</h2>
           <ul className="plain">
             {brief.unknowns.map((u, i) => (
@@ -579,7 +545,7 @@ function ResearchTab({ prospect }: { prospect: Prospect }) {
           </ul>
         </section></details>
       </div>
-      <details className="verification"><summary>Verification</summary><section className="panel">
+      <details className="verification"><summary>Sources</summary><section className="panel">
         <h2>Sources</h2>
         <ul className="sources">
           {prospect.sources.map((s) => (
@@ -645,10 +611,8 @@ function DemoTab({ prospect }: { prospect: Prospect }) {
                 : "Skipped: insufficient evidence"}
           </Badge>
         </h2>
-        <p>{demo.reason}</p>
-        {demo.claim_ids.length > 0 && (
-          <p className="muted">Cited facts: {demo.claim_ids.join(", ")}.</p>
-        )}
+        <p>{shortCopy(demo.reason, 20)}</p><details><summary>Decision reasoning</summary><p>{demo.reason}</p></details>
+
       </section>
       {demo.decision === "run" && (
         <>
@@ -663,10 +627,8 @@ function DemoTab({ prospect }: { prospect: Prospect }) {
                     : "Running"}
               </Badge>
             </h2>
-            <p className="input-label">
-              <Badge tone="synthetic">Synthetic input</Badge> {demo.input_label}
-            </p>
-            {demo.status === "verified" && demo.result_text && <p>{displayCurrency(demo.result_text)}</p>}
+
+            {demo.status === "verified" && demo.result_text && <p title={displayCurrency(demo.result_text)}>{shortCopy(displayCurrency(demo.result_text), 23)}</p>}
             {demo.status === "failed" && (
               <p>
                 The run did not pass verification ({demo.failure_reason}). The draft does not
@@ -718,35 +680,7 @@ function DemoTab({ prospect }: { prospect: Prospect }) {
               </>
             )}
           </section>
-          <details className="verification"><summary>Verification</summary><section className="panel">
-            <h2>What this proves</h2>
-            <p>{demo.proves}</p>
-            {execution && (
-              <dl className="facts">
-                <dt>Extractor</dt>
-                <dd>
-                  {demo.extractor?.label}{" "}
-                  <Badge tone="synthetic">{demo.extractor?.source_kind.replaceAll("_", " ")}</Badge>
-                </dd>
-                <dt>Execution</dt>
-                <dd>{execution.id}</dd>
-                <dt>Task exit code</dt>
-                <dd>{execution.exit_code ?? "Unknown"}</dd>
-                <dt>Sandbox removed</dt>
-                <dd>{execution.cleanup.removed ? "Verified" : "Unverified"}</dd>
-                <dt>Artifact validation</dt>
-                <dd>{execution.validated_artifacts[0]?.validation || "No accepted artifact"}</dd>
-                <dt>Result SHA-256</dt>
-                <dd>{execution.validated_artifacts[0]?.sha256 || "none"}</dd>
-              </dl>
-            )}
-            {execution?.input && (
-              <details>
-                <summary>Synthetic input document</summary>
-                <pre>{execution.input}</pre>
-              </details>
-            )}
-          </section></details>
+
         </>
       )}
       {demo.decision !== "run" && (
@@ -844,86 +778,35 @@ function OutreachTab({
     link.click();
     URL.revokeObjectURL(link.href);
   }
+  const sourceCount = new Set((draft.citations || []).map(c => c.url)).size;
   return (
     <div className="stack">
-      <section className="panel draft">
+      <section className="panel draft draft-hero">
         <div className="draft-head">
-          <h2>
-            Draft v{draft.version}{" "}
-            <Badge tone={draft.provenance}>{MODES[draft.provenance]?.label || draft.provenance}</Badge>{" "}
-            {reviewed ? (
-              <Badge tone="ok">Reviewed · v{draft.version}</Badge>
-            ) : (
-              <Badge tone="warn">Not reviewed</Badge>
-            )}
-          </h2>
-          <span className="muted hash">version {draft.sha256.slice(0, 12)}</span>
+          <h2>Your introduction <Badge tone={draft.provenance}>{MODES[draft.provenance]?.label || draft.provenance}</Badge></h2>
+          <button className="primary" onClick={() => void review()} disabled={dirty || reviewed}>{reviewed ? "Draft approved" : "Approve draft"}</button>
         </div>
-        <label htmlFor="subject">Subject</label>
-        <input id="subject" value={subject} maxLength={160} onChange={(e) => setSubject(e.target.value)} />
-        <label htmlFor="body">Body</label>
-        <textarea id="body" value={displayCurrency(body)} rows={18} maxLength={6000} onChange={(e) => setBody(e.target.value)} />
+        <h3 className="draft-subject" title={subject}>{shortCopy(subject, 12)}</h3>
+        <p className="draft-preview">{shortCopy(displayCurrency(body).split("\n").filter(Boolean).slice(0, 2).join(" "), 25)}</p>
+        <details className="draft-editor disclosure"><summary>Read & edit draft</summary>
+          <label htmlFor="subject">Subject</label>
+          <input id="subject" value={subject} maxLength={160} onChange={(e) => setSubject(e.target.value)} />
+          <label htmlFor="body">Body</label>
+          <textarea id="body" value={displayCurrency(body)} rows={12} maxLength={6000} onChange={(e) => setBody(e.target.value)} />
+          {dirty && <button className="secondary" onClick={() => void save()} disabled={saving}>{saving ? "Saving…" : "Save edits as new version"}</button>}
+        </details>
         <div className="draft-actions">
-          <button className="primary" onClick={() => void save()} disabled={!dirty || saving}>
-            {saving ? "Saving…" : "Save edits as new version"}
-          </button>
-          <button className="secondary" onClick={() => void review()} disabled={dirty || reviewed}>
-            {reviewed ? "Reviewed" : "Mark this version reviewed"}
-          </button>
-          <button className="secondary" onClick={() => void copy()} disabled={dirty}>
-            {copied ? "Copied" : "Copy draft"}
-          </button>
-          <button className="secondary" onClick={download} disabled={dirty}>
-            Download .txt
-          </button>
+          <button className="ghost" onClick={() => void copy()} disabled={dirty}>{copied ? "Copied" : "Copy draft"}</button>
+          <button className="ghost" onClick={download} disabled={dirty}>Download .txt</button>
         </div>
-        <p className="hint">
-          {dirty
-            ? "Unsaved edits. Saving creates a new version and clears any review."
-            : reviewed
-              ? `Reviewed ${time(prospect.review.reviewed_at)} for exactly this version. Editing invalidates it.`
-              : "Review binds to this exact version. Nothing is sent by SalesDesk."}
-        </p>
       </section>
-      <section className="panel">
+      <details className="draft-sources disclosure"><summary>{sourceCount} {sourceCount === 1 ? "source" : "sources"}</summary>
         <h2>Evidence used in this draft</h2>
-        {draft.citations && draft.citations.length ? (
-          <ol className="citations">
-            {draft.citations.map((c) => (
-              <li key={c.marker}>
-                <span className="claim-id">[{c.marker}]</span> “{c.excerpt}”{" "}
-                <span className="muted">
-                  {c.url} · captured {day(c.fetched_at)}
-                </span>
-              </li>
-            ))}
-          </ol>
-        ) : (
-          <p className="muted">
-            This draft cites no page facts, so it makes no claims about the prospect.
-          </p>
-        )}
-        {prospect.demo?.decision === "run" && (
-          <p className="muted">
-            Demonstration: {prospect.demo.status === "verified"
-              ? "verified and described as a synthetic sample run."
-              : "failed verification and is left out of the draft."}
-          </p>
-        )}
-      </section>
-      {prospect.drafts_history.length > 0 && (
-        <section className="panel">
-          <h2>Previous versions</h2>
-          <ul className="plain">
-            {prospect.drafts_history.map((d) => (
-              <li key={d.sha256}>
-                v{d.version} · {MODES[d.provenance]?.label || d.provenance} · {time(d.created_at)} ·{" "}
-                <span className="hash">{d.sha256.slice(0, 12)}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+        {draft.citations && draft.citations.length ? <ol className="citations">{draft.citations.map(c => <li key={c.marker}>
+          <span className="claim-id">[{c.marker}]</span> “{c.excerpt}” <span className="muted">{c.url} · captured {day(c.fetched_at)}</span>
+        </li>)}</ol> : <p>This draft cites no page facts, so it makes no claims about the prospect.</p>}
+        {prospect.demo?.decision === "run" && <p>Demonstration: {prospect.demo.status === "verified" ? "verified and described as a synthetic sample run." : "failed verification and is left out of the draft."}</p>}
+      </details>
     </div>
   );
 }
@@ -931,8 +814,50 @@ function OutreachTab({
 function DetailsTab({ prospect, workspace }: { prospect: Prospect; workspace: Workspace }) {
   const execution = prospect.execution;
   const gen = prospect.generation;
+  const demo = prospect.demo;
+  const draft = prospect.draft;
   return (
     <div className="stack">
+      {demo && <>
+          <section className="panel">
+            <h2>What this proves</h2>
+            <p>{demo.proves}</p>
+            {execution && (
+              <dl className="facts">
+                <dt>Extractor</dt>
+                <dd>
+                  {demo.extractor?.label}{" "}
+                  <Badge tone="synthetic">{demo.extractor?.source_kind.replaceAll("_", " ")}</Badge>
+                </dd>
+                <dt>Execution</dt>
+                <dd>{execution.id}</dd>
+                <dt>Task exit code</dt>
+                <dd>{execution.exit_code ?? "Unknown"}</dd>
+                <dt>Sandbox removed</dt>
+                <dd>{execution.cleanup.removed ? "Verified" : "Unverified"}</dd>
+                <dt>Artifact validation</dt>
+                <dd>{execution.validated_artifacts[0]?.validation || "No accepted artifact"}</dd>
+                <dt>Result SHA-256</dt>
+                <dd>{execution.validated_artifacts[0]?.sha256 || "none"}</dd>
+              </dl>
+            )}
+            {execution?.input && (
+              <details>
+                <summary>Synthetic input document</summary>
+                <pre>{execution.input}</pre>
+              </details>
+            )}
+          </section>
+<p>{demo.input_label}</p><p>{demo.result_text}</p><p>Cited facts: {demo.claim_ids.join(", ")}</p></>}
+      <section className="panel"><h2>Draft and example context</h2>
+        <p>{prospect.prospect.kind === "synthetic_fixture" ? "Synthetic sample. Invented pages read from disk." : prospect.prospect.input_url}</p>
+        {draft && <><p className="hash">Draft v{draft.version} · {draft.sha256}</p>
+          <p>{MODES[draft.provenance]?.detail}</p>
+          <p>{prospect.review.state === "reviewed" ? `Reviewed ${time(prospect.review.reviewed_at)} for exactly this version.` : "Review binds to this exact version."} Editing invalidates it. Nothing is sent by SalesDesk.</p>
+          <p>Unsaved edits create a new version when saved and clear the previous review.</p>
+        </>}
+        {prospect.drafts_history.length > 0 && <><h3>Previous versions</h3><ul>{prospect.drafts_history.map(d => <li key={d.sha256}>v{d.version} · {MODES[d.provenance]?.label} · {time(d.created_at)} · {d.sha256}</li>)}</ul></>}
+      </section>
       <section className="panel">
         <h2>Saved progress</h2>
         <ul className="plain">

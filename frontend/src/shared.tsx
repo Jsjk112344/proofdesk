@@ -118,3 +118,9 @@ export const ERRORS: Record<string, string> = {
   dataset_not_found: "That dataset is not imported in this workspace.",
   experiment_not_found: "That record does not exist in this session.",
 };
+
+// Visual excerpts only; full saved wording remains in the expanded view.
+export const shortCopy = (text: string, words = 18) => {
+  const parts = text.trim().split(/\s+/);
+  return parts.length <= words ? text : parts.slice(0, words).join(" ") + "…";
+};

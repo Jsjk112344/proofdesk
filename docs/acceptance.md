@@ -147,3 +147,19 @@ Valid extraction, wrong-output rejection, unsafe artifacts, output quotas, deadl
 CPU/RAM/process/write limits, network isolation, host canary, credential allowlist,
 lifecycle, interruption, hard-crash recovery, missing Docker and record schema; see git
 history for the full table.
+
+
+## Compact demo presentation
+
+- At 1440×900, campaign answer and approval/download action, and prospect draft and
+  Approve draft action, are visible without scrolling. At most one filled action is
+  visible on each default page.
+- Activity defaults to a labelled horizontal stepper; active jobs expand it and job
+  completion collapses it. Manual expansion exposes timestamps; raw evidence stays in
+  Verification. No completion text, hashes or version bindings appear by default.
+- See full analysis retains every detailed reading/metric/secondary outcome. Next move
+  defaults to a read-only summary, with Edit and an Advanced disclosure for assumptions.
+- Draft save appears only while edited; approving/reviewing the exact saved version and
+  invalidating review on edit use the existing endpoints and hashes.
+- Measure default document heights in a fresh public session before and after approval;
+  verify one primary action and the absence of page overflow, including mobile.

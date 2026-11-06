@@ -4,20 +4,26 @@ SalesDesk has two entry doors: **See what worked** for campaign analysis and
 **Starting from zero** for prospect research. Both lead to an evidenced next move,
 human approval and work prepared by Vultr workers while the user is away.
 
-The campaign page follows Analyst activity, Result (interpretation and charts), Next move
-(editable content, schedule and one approval card), then the packet card. Missing launch
-inputs and Verification (source, saved plan, execution, reconciliation, model receipts and
-job history) are collapsed by default. Analyst activity is derived
-from persisted job events, execution records and generation receipts. Pending work is
-never marked complete before evidence exists. Per-step evidence is disclosed on demand.
-The same timeline component shows prospect research, brief, demonstration decision,
-draft and approval readiness.
+The campaign opens with a compact activity stepper and an answer card: the analyst's
+headline, two purchase rates and one approval/download slot. A purchase-rate chart remains
+visible; See full analysis retains the complete reading, uncertainty, metrics, secondary
+outcomes and spend. Next move defaults to a five-line read-only summary; Edit reveals the
+existing form and Advanced holds scenario/sample-size inputs. The approval/download slot
+uses the existing task operations and saved packet records.
+
+Activity expands while jobs are active or when clicked, then collapses after completion.
+Default steps show labelled dots; timestamps and completion detail are disclosed on demand.
+Hash/version/metric references and raw activity evidence live under one Verification entry.
+Prospects open on the draft, with a short excerpt, an exact-version Approve draft action,
+Read & edit draft, collapsed sources, and the existing Research/Demonstration tabs.
+Home keeps its hero, two entry doors and stats; its single Verification link opens source
+context in a dialog. The sidebar keeps navigation and saved analyses.
 
 Approve & schedule invokes the existing idempotent create-task, exact-version approval
 and schedule endpoints in order. Request ids persist through a retried click; editing
 resets them. Each server operation retains its ownership, quota and version checks;
 a partial network failure keeps the saved task for recovery. Packet status and Markdown
-download remain visible across tabs and reloads. The browser polls active jobs; the
+download remain in the answer card across reloads. The browser polls active jobs; the
 server scheduler owns execution.
 
 Live Vultr analysis, research and outreach have passed their unchanged validators.
