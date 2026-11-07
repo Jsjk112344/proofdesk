@@ -33,7 +33,7 @@ size and whole-frame scaling directly. Native 1.5× stills need no correction.
 - Scene 6: genuine Group mid-run insert, then Sandy's actual trace transitions.
 - Scene 7: whole Sandy trace and Maria's expanded match breakdown.
 - Scene 8: Sandy's Qwen/brief and completed draft-count trace.
-- Scene 10: whole Maria payoff and SMS; slow 1.06× push-in and pull-back.
+- Scene 10: whole Maria payoff and SMS; locked camera and stationary cursor.
 - Scene 11: ranked queue, actual approval click and Ready downloads.
 - Additional completed Group take is retained in the source manifest.
 
@@ -72,3 +72,15 @@ Record the voiceover from [narration-v2.txt](narration-v2.txt), align it with
 export. Confirm the signed-in event form's upload limits, upload the final video
 and slides, and **submit by Sunday November 8, 2026 at 16:00 ET**, the owner's target.
 Save the submission receipt. No voice track, upload or submission is claimed here.
+
+## Cursor and camera polish
+
+Maria’s opening, match and SMS holds now use a locked camera. The separate expanded
+match view is captured before the hold; the main drawer never opens and closes the
+breakdown while the viewer reads. The cursor stays parked off the drawer text.
+The mid-run Group insert starts after the pointer has settled. Approval is re-recorded
+with one smooth, bounded move to the button, a genuine click and no panel-centre sweeps.
+That approval/Ready pair uses a separate saved-sample session with the identical
+Maria SMS; it starts no review or inference. The measured Group/trace run is unchanged.
+The new title and end-card tagline is **SalesDesk: Your AI enterprise sales analyst**;
+the maintained VO script and captions include “enterprise”.

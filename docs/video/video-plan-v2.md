@@ -8,7 +8,7 @@ Record the deployed public platform at **1280×720, deviceScaleFactor 1.5**,
 output **1920×1080, 30 fps**. Show the whole platform screen most of the time.
 No hard crops, transplanted badges or fabricated product values. Slow push-ins,
 if used in the final edit, stay at or below **1.3×**, hold, then pull back to full.
-The assembled cut uses full frames; Maria’s payoff has a slow 1.06× push-in and pull-back.
+The assembled cut uses full frames; Maria’s payoff uses a locked camera with no animated crop.
 
 App text is at least **13 px**; desktop Agent trace text is **15 px**. During a run
 the map collapses, keeping the headline, counters, progress and at least eight tiles
@@ -33,7 +33,7 @@ VO, optional documented licensed music and effects belong to the owner's final e
 | 1 · Maria | 0:00–0:15 | “Nine days ago…” slide, then whole Maria drawer: wanted car, sold timeline, silver car aged 74 days |
 | 2 · Scale | 0:15–0:23 | Stylised map and count-up to 1,050 leads at risk |
 | 3 · Thesis | 0:23–0:35 | Two thesis beats, then separate promise card at 0:31 |
-| 4 · Title | 0:35–0:38 | SalesDesk · Your AI sales analyst |
+| 4 · Title | 0:35–0:38 | SalesDesk: Your AI enterprise sales analyst |
 | 5 · Fan out | 0:38–0:50 | Group logo at 2 AM splits into 24 map nodes; six at once light “Analysing on Vultr”, then checks; lead/car/brief icons; stores 0→24, leads 0→9,000; Vultr compute label |
 | 6 · Find who's slipping | 0:50–1:05 | Whole real Group mid-run 0:50–0:53, then whole Sandy Agent trace |
 | 7 · Find the right car | 1:05–1:20 | Whole Sandy trace, then whole Maria drawer with match breakdown expanded |
@@ -43,7 +43,7 @@ VO, optional documented licensed music and effects belong to the owner's final e
 | 11 · Approval | 2:01–2:13 | Whole ranked queue, actual Approve all click, Ready downloads |
 | 12 · Group impact | 2:13–2:25 | Headline “Increase your sales without adding headcount.” above 1,007 matched and $3,434,800 estimated gross cards |
 | 13 · Vultr | 2:25–2:37 | Nightly scheduler (Vultr VM) → 24 sandboxed jobs (six parallel) → Qwen (Vultr Serverless Inference) → manager approval |
-| 14 · Close | 2:37–2:45 | Large “Never lose a sale again.”; “SalesDesk · Sell more with your AI sales analyst”; URL, GitHub and footer |
+| 14 · Close | 2:37–2:45 | Large “Never lose a sale again.”; “SalesDesk: Your AI enterprise sales analyst”; URL, GitHub and footer |
 
 Step 1 pill spans the explainer and real Group insert (0:38–0:53). Steps 2–4 span
 0:53–1:05, 1:05–1:20 and 1:20–1:31 respectively.
@@ -55,7 +55,7 @@ nobody connects the lead to the car in time. SalesDesk makes sure you never lose
 sale to a missed follow-up again.” The separate third card reads **Never lose a
 sale to a missed follow-up again.**
 
-Scene 4: “SalesDesk. Your AI sales analyst.”
+Scene 4: “SalesDesk. Your AI enterprise sales analyst.”
 
 Scene 14: “SalesDesk. Every lead, every store, every morning. Never lose a sale again.”
 

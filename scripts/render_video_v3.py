@@ -1,6 +1,7 @@
 """Render animated 1080p HTML cards with exact measured figures."""
 
 # ruff: noqa: E501
+import argparse
 import asyncio
 import json
 import subprocess
@@ -10,7 +11,7 @@ from playwright.async_api import async_playwright
 from scripts.render_demo_assets import CSS, LOGO, ROOT, VIDEO
 
 
-async def main():
+async def main(only=None):
     facts = json.loads((VIDEO / "recording-facts-v2.json").read_text())
     out = VIDEO / "cards-v3"
     out.mkdir(exist_ok=True)
@@ -30,7 +31,11 @@ async def main():
             8,
         ),
         "promise": ("Never lose a sale to a<br>missed follow-up again.", "", 4),
-        "title": ("Your AI sales analyst", "Connects every lead to the right car. Every night.", 3),
+        "title": (
+            "Your AI enterprise<br>sales analyst",
+            "Connects every lead to the right car. Every night.",
+            3,
+        ),
         "skip": (elapsed, "All 24 stores reviewed on Vultr", 4),
         "matched": (
             str(facts["group"]["matched_in_stock"]),
@@ -42,7 +47,7 @@ async def main():
             "estimated gross back in play",
             6,
         ),
-        "end": ("Never lose a sale again.", "SalesDesk · Sell more with your AI sales analyst", 11),
+        "end": ("Never lose a sale again.", "SalesDesk: Your AI enterprise sales analyst", 11),
     }
     for i, label in enumerate(
         ["Fan out", "Find who's slipping", "Find the right car", "Write the brief"], 1
@@ -52,6 +57,8 @@ async def main():
         browser = await p.chromium.launch()
         page = await browser.new_page(viewport={"width": 1920, "height": 1080})
         for name, (title, sub, duration) in cards.items():
+            if only and name not in only:
+                continue
             bg = ""
             if name == "scale":
                 bg = '<div style="position:absolute;inset:180px 180px;background:#80dabb;opacity:.08;clip-path:polygon(5% 20%,35% 5%,70% 15%,95% 50%,65% 95%,25% 80%)"></div>'
@@ -73,6 +80,8 @@ async def main():
                 }.get(name, "")
             )
             body = f'{bg}<div class="motion"><div class="brand">{LOGO}<b>SalesDesk.</b></div><h1 id="number">{title}</h1><p>{sub}</p>{urls}</div>{footer}'
+            if name == "title":
+                body = body.replace("<b>SalesDesk.</b>", "<b>SalesDesk:</b>")
             style = (
                 CSS
                 + """
@@ -134,6 +143,9 @@ section{padding:90px; background:#142e34;color:#f5f7f6}.brand{font-size:48px;mar
             )
             print(name, flush=True)
         # Four honest architecture nodes, revealed from left to right.
+        if only and "architecture" not in only:
+            await browser.close()
+            return
         nodes = [
             ("Nightly scheduler", "Vultr VM"),
             ("24 store jobs", "Docker · 6 parallel"),
@@ -196,4 +208,7 @@ section{padding:90px; background:#142e34;color:#f5f7f6}.brand{font-size:48px;mar
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--only", nargs="+")
+    args = parser.parse_args()
+    asyncio.run(main(args.only))

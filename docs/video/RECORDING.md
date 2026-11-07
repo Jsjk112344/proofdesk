@@ -15,7 +15,7 @@ Now multiply that by 24 stores. Every morning, over a thousand leads like Maria 
 
 Dealers don't lose these sales for lack of cars. They lose them because nobody connects the lead to the car in time. SalesDesk makes sure you never lose a sale to a missed follow-up again.
 
-SalesDesk. Your AI sales analyst.
+SalesDesk. Your AI enterprise sales analyst.
 
 At 2 AM, SalesDesk starts its review. It splits the group into 24 jobs, one per store, running in parallel in isolated sandboxes on Vultr.
 
@@ -82,7 +82,7 @@ under VO, and retain the licence with the final project.
 ## Footage and visual integrity
 
 All app scenes were re-recorded from the public HTTPS platform at 1280×720 with
-1.5× device scale and 1920×1080 video output. Whole screens replace v2 detail crops; Maria has a slow 1.06× push-in and pull-back.
+1.5× device scale and 1920×1080 video output. Whole screens replace v2 detail crops; Maria uses a locked camera and a stationary cursor during reading holds.
 Playwright video uses the native CSS viewport and is scaled as a whole to 1080p;
 the retained takes had empty recorder padding removed, with the entire app frame preserved.
 Native sample labels and replay provenance remain in the app. No extra frame label
@@ -102,7 +102,7 @@ are retained and updated to match v3 messaging.
 uv sync --locked
 uv run playwright install chromium
 uv run python -m scripts.record_demo_v3
-uv run python -m scripts.record_demo_v3 --ready-only
+uv run python -m scripts.record_demo_v3 --polish-only
 # Reconcile the measured time and all facts with video-plan-v2.md / subtitles-v2.srt.
 uv run python -m scripts.render_video_v3
 uv run python -m scripts.render_fanout_v3
@@ -112,8 +112,8 @@ uv run python -m scripts.assemble_video_v3
 These commands reuse the existing recorder, asset style and assembler helpers.
 FFmpeg needs libx264, libass and drawtext. This workstation uses
 `/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg`. Recording executes actual session work under
-existing quotas; never reset ledgers. The detail-only pass uses the session saved by
-the preceding recorder and makes no new inference calls.
+existing quotas; never reset ledgers. The polish pass uses the completed review for Maria and the match view, plus a fresh
+saved-sample session for a genuine approval/Ready take. It starts no new review or inference.
 
 ## Pre-export and submission checklist
 

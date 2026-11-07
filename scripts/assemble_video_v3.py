@@ -23,7 +23,6 @@ def encode(
     still=False,
     lower=None,
     fade=False,
-    push=False,
     lower_offset=0,
 ):
     out = WORK / (name + ".mp4")
@@ -31,8 +30,6 @@ def encode(
     vf = "setpts=PTS-STARTPTS,fps=30,"
     vf += "scale=1920:1080:flags=lanczos,"
     vf += f"tpad=stop_mode=clone:stop_duration={duration},setsar=1,format=yuv420p"
-    if push:
-        vf += f",zoompan=z='1+0.06*sin(PI*min(on/(30*{duration}),1))':x='(iw-iw/zoom)*0.8':y='(ih-ih/zoom)/2':d=1:s=1920x1080:fps=30"
     if fade:
         vf += ",fade=t=in:st=0:d=.25"
     filters = ["-vf", vf]
@@ -98,7 +95,7 @@ def main():
     add("03b", cards / "promise.mp4", 4)
     add("04", cards / "title.mp4", 3)
     add("05", cards / "fanout.mp4", 12, lower="Step 1 · Fan out")
-    add("06a", scenes / "v3-run.mp4", 3, offset=5, lower="Step 1 · Fan out", lower_offset=12)
+    add("06a", scenes / "v3-run.mp4", 3, offset=8, lower="Step 1 · Fan out", lower_offset=12)
     start = beats["v3-run-trace-live"]["seconds"]
     done = beats["v3-run-trace-succeeded"]["seconds"]
     add(
@@ -111,7 +108,7 @@ def main():
     add("07a", scenes / "v3-run.mp4", 7, offset=done + 1, lower="Step 3 · Find the right car")
     add(
         "07b",
-        stills / "v3-maria-score.png",
+        stills / "v3-match-score.png",
         8,
         still=True,
         lower="Step 3 · Find the right car",
@@ -125,7 +122,7 @@ def main():
         lower="Step 4 · Write the brief",
     )
     add("09", cards / "skip.mp4", 4)
-    add("10", scenes / "v3-maria.mp4", 26, push=True)
+    add("10", scenes / "v3-maria.mp4", 26)
     add("11a", scenes / "v3-approve.mp4", 5)
     add("11b", scenes / "v3-ready.mp4", 7)
     add("12a", cards / "matched.mp4", 6)

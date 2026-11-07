@@ -4,7 +4,7 @@ Now multiply that by 24 stores. Every morning, over a thousand leads like Maria 
 
 Dealers don't lose these sales for lack of cars. They lose them because nobody connects the lead to the car in time. SalesDesk makes sure you never lose a sale to a missed follow-up again.
 
-SalesDesk. Your AI sales analyst.
+SalesDesk. Your AI enterprise sales analyst.
 
 At 2 AM, SalesDesk starts its review. It splits the group into 24 jobs, one per store, running in parallel in isolated sandboxes on Vultr.
 

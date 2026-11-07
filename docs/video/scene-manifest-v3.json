@@ -19,14 +19,6 @@
       "raw": ".local/video-prep/raw-v3/page@fd6b0f057ee271d284f88a358245c35b.webm"
     },
     {
-      "scene": "v3-approve",
-      "file": "docs/video/scenes/v3-approve.mp4",
-      "seconds": 12,
-      "captured_seconds": 12.001,
-      "trim_start_seconds": 2.647,
-      "raw": ".local/video-prep/raw-v3/page@66174a8ca666825ed87ee1177ef089e7.webm"
-    },
-    {
       "scene": "v3-group",
       "file": "docs/video/scenes/v3-group.mp4",
       "seconds": 3,
@@ -35,20 +27,36 @@
       "raw": ".local/video-prep/raw-v3/page@ad2961daa325ec065da02b8313b32eb8.webm"
     },
     {
+      "scene": "v3-maria",
+      "file": "docs/video/scenes/v3-maria.mp4",
+      "seconds": 26,
+      "captured_seconds": 26.002,
+      "trim_start_seconds": 4.086,
+      "raw": ".local/video-prep/raw-v3/page@a1325ce99bed7caafb7b2c2428d32e75.webm"
+    },
+    {
+      "scene": "v3-match",
+      "file": "docs/video/scenes/v3-match.mp4",
+      "seconds": 2,
+      "captured_seconds": 2.003,
+      "trim_start_seconds": 2.932,
+      "raw": ".local/video-prep/raw-v3/page@e8cf35c8208e1083c75c03ebe4ac4d1d.webm"
+    },
+    {
+      "scene": "v3-approve",
+      "file": "docs/video/scenes/v3-approve.mp4",
+      "seconds": 6,
+      "captured_seconds": 6.001,
+      "trim_start_seconds": 9.796,
+      "raw": ".local/video-prep/raw-v3/page@0ec01e326d2259b9b04240cc9ae3cc5f.webm"
+    },
+    {
       "scene": "v3-ready",
       "file": "docs/video/scenes/v3-ready.mp4",
       "seconds": 7,
       "captured_seconds": 7.001,
-      "trim_start_seconds": 3.042,
-      "raw": ".local/video-prep/raw-v3/page@45acf64f67eb62a4fdae1cafc3b447ba.webm"
-    },
-    {
-      "scene": "v3-maria",
-      "file": "docs/video/scenes/v3-maria.mp4",
-      "seconds": 26,
-      "captured_seconds": 26.001,
-      "trim_start_seconds": 2.48,
-      "raw": ".local/video-prep/raw-v3/page@9e80e494d128dd43f66a3697dd032abf.webm"
+      "trim_start_seconds": 2.723,
+      "raw": ".local/video-prep/raw-v3/page@4d8a3f31f7b2ee90cd621ed875a535e0.webm"
     }
   ],
   "beats": [
@@ -101,24 +109,6 @@
       "screenshot": "docs/video/stills/v3-run-trace-done.png"
     },
     {
-      "scene": "v3-approve",
-      "beat": "start",
-      "seconds": 0.155,
-      "screenshot": "docs/video/stills/v3-approve-start.png"
-    },
-    {
-      "scene": "v3-approve",
-      "beat": "queue",
-      "seconds": 0.909,
-      "screenshot": "docs/video/stills/v3-approve-queue.png"
-    },
-    {
-      "scene": "v3-approve",
-      "beat": "ready",
-      "seconds": 6.791,
-      "screenshot": "docs/video/stills/v3-approve-ready.png"
-    },
-    {
       "scene": "v3-group",
       "beat": "start",
       "seconds": 0.163,
@@ -131,60 +121,61 @@
       "screenshot": "docs/video/stills/v3-group-totals.png"
     },
     {
-      "scene": "v3-ready",
-      "beat": "start",
-      "seconds": 0.177,
-      "screenshot": "docs/video/stills/v3-ready-start.png"
-    },
-    {
-      "scene": "v3-ready",
-      "beat": "collapsed",
-      "seconds": 1.022,
-      "screenshot": "docs/video/stills/v3-ready-collapsed.png"
-    },
-    {
-      "scene": "v3-maria",
-      "beat": "start",
-      "seconds": 0.139,
-      "screenshot": "docs/video/stills/v3-maria-start.png"
-    },
-    {
       "scene": "v3-maria",
       "beat": "wanted",
-      "seconds": 3.765,
+      "seconds": 0.299,
       "screenshot": "docs/video/stills/v3-maria-wanted.png"
     },
     {
       "scene": "v3-maria",
       "beat": "sold",
-      "seconds": 6.738,
+      "seconds": 3.286,
       "screenshot": "docs/video/stills/v3-maria-sold.png"
     },
     {
       "scene": "v3-maria",
       "beat": "match",
-      "seconds": 9.834,
+      "seconds": 6.288,
       "screenshot": "docs/video/stills/v3-maria-match.png"
     },
     {
       "scene": "v3-maria",
-      "beat": "score",
-      "seconds": 13.755,
-      "screenshot": "docs/video/stills/v3-maria-score.png"
-    },
-    {
-      "scene": "v3-maria",
       "beat": "trade",
-      "seconds": 16.736,
+      "seconds": 10.294,
       "screenshot": "docs/video/stills/v3-maria-trade.png"
     },
     {
       "scene": "v3-maria",
       "beat": "sms",
-      "seconds": 19.707,
+      "seconds": 14.28,
       "screenshot": "docs/video/stills/v3-maria-sms.png"
+    },
+    {
+      "scene": "v3-match",
+      "beat": "score",
+      "seconds": 0.302,
+      "screenshot": "docs/video/stills/v3-match-score.png"
+    },
+    {
+      "scene": "v3-approve",
+      "beat": "queue",
+      "seconds": 0.112,
+      "screenshot": "docs/video/stills/v3-approve-queue.png"
+    },
+    {
+      "scene": "v3-approve",
+      "beat": "ready",
+      "seconds": 4.941,
+      "screenshot": "docs/video/stills/v3-approve-ready.png"
+    },
+    {
+      "scene": "v3-ready",
+      "beat": "settled",
+      "seconds": 0.105,
+      "screenshot": "docs/video/stills/v3-ready-settled.png"
     }
   ],
   "retake_note": "Same completed session; detail retakes after approval, no new inference or message edits.",
-  "recording_normalization": "Playwright captured the complete 1280x720 CSS viewport in the top-left of a padded 1920x1080 recorder canvas. Only empty recorder padding was removed; the full platform viewport was scaled to 1920x1080. No app UI was cropped. Future recorder uses native 1280x720 video then whole-frame scaling; 1.5x stills remain native 1920x1080."
+  "recording_normalization": "Playwright captured the complete 1280x720 CSS viewport in the top-left of a padded 1920x1080 recorder canvas. Only empty recorder padding was removed; the full platform viewport was scaled to 1920x1080. No app UI was cropped. Future recorder uses native 1280x720 video then whole-frame scaling; 1.5x stills remain native 1920x1080.",
+  "polish_note": "Locked Maria/score holds from the existing completed review, pointer parked off text. Approval and Ready retaken in a separate saved-sample session with identical Maria SMS; actual approval/handoff, no new review or inference. Group/trace footage retains the original measured run."
 }

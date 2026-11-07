@@ -4,6 +4,7 @@
 import argparse
 import asyncio
 import json
+import math
 import subprocess
 import time
 from decimal import Decimal
@@ -21,6 +22,34 @@ class V3Recorder(Recorder):
         self.manifest.update(
             viewport=[1280, 720], device_scale_factor=1.5, video_resolution=[1920, 1080]
         )
+
+    async def move_to(self, x, y, duration=0.9):
+        """A paced cosine path with zero velocity at both ends."""
+        sx, sy = self.position
+        started = time.monotonic()
+        frames = round(duration * 60)
+        for frame in range(1, frames + 1):
+            progress = frame / frames
+            eased = (1 - math.cos(math.pi * progress)) / 2
+            await self.page.mouse.move(sx + (x - sx) * eased, sy + (y - sy) * eased)
+            await asyncio.sleep(max(0, started + duration * progress - time.monotonic()))
+        self.position = [x, y]
+
+    async def point(self, locator, click=False):
+        await locator.wait_for(state="visible")
+        box = await locator.bounding_box()
+        assert box
+        viewport = self.page.viewport_size
+        if click and (box["y"] < 55 or box["y"] + box["height"] > viewport["height"]):
+            await locator.scroll_into_view_if_needed()
+            box = await locator.bounding_box()
+        x = max(24, min(viewport["width"] - 24, box["x"] + box["width"] / 2))
+        y = max(72, min(viewport["height"] - 24, box["y"] + min(box["height"] / 2, 80)))
+        await self.move_to(x, y)
+        if click:
+            await self.page.mouse.down()
+            await asyncio.sleep(0.1)
+            await self.page.mouse.up()
 
     async def finish(self, duration):
         await self.at(duration)
@@ -228,61 +257,112 @@ async def main():
         )
 
 
-async def ready_take():
+async def polish_take():
+    """Retake reading holds and one real sample approval; no review/inference."""
+    storage = ROOT / ".local/video-prep/scene-storage.json"
+    original_storage = storage.read_bytes()
+    facts = json.loads((VIDEO / "recording-facts-v3.json").read_text())
     async with async_playwright() as p:
         browser = await p.chromium.launch()
-        ctx = await browser.new_context(
-            storage_state=str(ROOT / ".local/video-prep/scene-storage.json"),
-            viewport={"width": 1280, "height": 720},
-            device_scale_factor=1.5,
-            record_video_dir=str(ROOT / ".local/video-prep/raw-v3"),
-            record_video_size={"width": 1280, "height": 720},
-        )
-        await ctx.add_init_script(CURSOR)
-        r = V3Recorder(ctx, BASE)
-        r.manifest = json.loads((VIDEO / "scene-manifest-v3.json").read_text())
-        r.manifest["scenes"] = [
-            x for x in r.manifest["scenes"] if x["scene"] not in ("v3-ready", "v3-maria")
-        ]
-        r.manifest["beats"] = [
-            x for x in r.manifest["beats"] if x["scene"] not in ("v3-ready", "v3-maria")
-        ]
-        r.manifest["retake_note"] = (
-            "Same completed session; detail retakes after approval, no new inference or message edits."
-        )
-        await r.open("v3-ready", "#/store/r02", store_ready)
-        await r.page.locator(".agent-trace summary").click()
-        await r.page.locator(".handoff-panel.ready").wait_for()
-        await r.point(r.page.locator(".handoff-panel"))
-        await r.beat("collapsed")
-        await r.finish(7)
-        await r.open("v3-maria", "#/store/r02", store_ready)
-        await r.point(r.page.get_by_role("button", name="Open Maria G. details"), click=True)
-        dialog = r.page.get_by_role("dialog", name="Maria G. lead detail")
-        await dialog.wait_for()
-        for second, selector, name in [
-            (2, ".lead-context", "wanted"),
-            (5, ".lead-timeline .sold", "sold"),
-            (8, ".candidate.chosen", "match"),
-            (12, ".candidate.chosen details", "score"),
-            (15, ".lead-context span", "trade"),
-            (18, ".drawer-message", "sms"),
-        ]:
-            await r.at(second)
-            if name == "score":
-                await dialog.locator(selector).locator("summary").click()
-            await r.point(dialog.locator(selector))
-            await r.page.mouse.move(500, 680, steps=30)
+
+        async def context(saved=False):
+            ctx = await browser.new_context(
+                **({"storage_state": str(storage)} if saved else {}),
+                viewport={"width": 1280, "height": 720},
+                device_scale_factor=1.5,
+                record_video_dir=str(ROOT / ".local/video-prep/raw-v3"),
+                record_video_size={"width": 1280, "height": 720},
+            )
+            await ctx.add_init_script(CURSOR)
+            return ctx
+
+        def settled(r):
+            # Exclude page loading and preparation from the visible take.
+            r.manifest["beats"] = [b for b in r.manifest["beats"] if b["scene"] != r.name]
+            r.started = time.monotonic()
+            r.offset = r.started - r.origin
+
+        try:
+            ctx = await context(saved=True)
+            r = V3Recorder(ctx, BASE)
+            r.manifest = json.loads((VIDEO / "scene-manifest-v3.json").read_text())
+            names = {"v3-maria", "v3-match", "v3-approve", "v3-ready"}
+            for key in ("scenes", "beats"):
+                r.manifest[key] = [s for s in r.manifest[key] if s["scene"] not in names]
+            await r.open("v3-maria", "#/store/r02", store_ready)
+            await r.page.get_by_role("button", name="Open Maria G. details").click()
+            drawer = r.page.get_by_role("dialog", name="Maria G. lead detail")
+            await drawer.wait_for()
+            assert (await drawer.locator(".drawer-message > p").inner_text()) == facts["maria_sms"]
+            await r.page.mouse.move(500, 680)
             r.position = [500, 680]
-            await r.beat(name)
-            if name == "score":
-                await dialog.locator(selector).locator("summary").click()
-        await r.finish(26)
-        await browser.close()
+            settled(r)
+            for second, beat in [
+                (0, "wanted"),
+                (3, "sold"),
+                (6, "match"),
+                (10, "trade"),
+                (14, "sms"),
+            ]:
+                await r.at(second)
+                await r.beat(beat)
+            await r.finish(26)
+
+            await r.open("v3-match", "#/store/r02", store_ready)
+            await r.page.get_by_role("button", name="Open Maria G. details").click()
+            await r.page.locator(".candidate.chosen .score-details summary").click()
+            await r.page.mouse.move(500, 680)
+            r.position = [500, 680]
+            settled(r)
+            await r.beat("score")
+            await r.finish(2)
+
+            # A separate saved-sample session permits a genuine new approval click.
+            # It reuses the accepted sample and schedules no analysis or inference.
+            fresh = await context()
+            r.ctx = fresh
+            await r.open("v3-approve", "#/store/r02", store_ready)
+            state = await (await fresh.request.get(BASE + "/api/dealer")).json()
+            assert state["review"] is None and state["saved_sample_review"]
+            sandy = next(s for s in state["rooftops"] if s["id"] == "r02")
+            maria = next(s for s in sandy["result"]["queue"] if s["customer"] == "Maria G.")
+            draft = next(d for d in sandy["followups"] if d["lead_id"] == maria["lead_id"])
+            assert draft["content"]["sms"] == facts["maria_sms"]
+            button = r.page.get_by_role("button", name="Approve all for Sandy", exact=True)
+            box = await button.bounding_box()
+            x, y = box["x"] + box["width"] / 2, box["y"] + box["height"] / 2
+            await r.page.mouse.move(x - 150, y + 45)
+            r.position = [x - 150, y + 45]
+            settled(r)
+            await r.beat("queue")
+            await r.at(1)
+            await r.point(button, click=True)
+            await r.page.get_by_role("link", name="CRM tasks", exact=True).wait_for()
+            await r.beat("ready")
+            await r.finish(6)
+
+            await r.open("v3-ready", "#/store/r02", store_ready)
+            await r.page.locator(".handoff-panel.ready").wait_for()
+            await r.page.mouse.move(228, 680)
+            r.position = [228, 680]
+            settled(r)
+            await r.beat("settled")
+            await r.finish(7)
+            r.manifest["polish_note"] = (
+                "Locked Maria/score holds from the existing completed review, pointer parked off text. "
+                "Approval and Ready retaken in a separate saved-sample session with identical Maria SMS; "
+                "actual approval/handoff, no new review or inference. Group/trace footage retains the original measured run."
+            )
+            assert not r.errors, r.errors
+            r.save()
+        finally:
+            storage.write_bytes(original_storage)
+            await browser.close()
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--ready-only", action="store_true")
+    parser.add_argument("--polish-only", action="store_true")
     args = parser.parse_args()
-    asyncio.run(ready_take() if args.ready_only else main())
+    asyncio.run(polish_take() if args.polish_only or args.ready_only else main())

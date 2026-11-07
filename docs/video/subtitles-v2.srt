@@ -43,7 +43,8 @@ to a missed follow-up again.
 
 10
 00:00:35,100 --> 00:00:37,800
-SalesDesk. Your AI sales analyst.
+SalesDesk. Your AI enterprise
+sales analyst.
 
 11
 00:00:38,300 --> 00:00:41,800
