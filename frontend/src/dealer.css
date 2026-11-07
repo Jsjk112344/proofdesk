@@ -2333,7 +2333,7 @@
  .candidate-main { padding: 10px 12px; }
  .candidate-heading { margin-bottom: 7px; }
  .candidate-list { display: flex; flex-direction: column; }
- .candidate-list .candidate:not(:first-child) { display: none; }
+ .candidate-list:not(.show-alternatives) .candidate:not(:first-child) { display: none; }
  .drawer-message { margin: 12px 0; }
  .drawer-message > p { font-size: 15px; line-height: 1.5; padding: 12px; margin-top: 7px; }
  .drawer-approval { bottom: -16px; padding-top: 10px; }
@@ -2344,3 +2344,10 @@
 @keyframes store-pulse { 50% { background: #dceef5; border-color: #4389b3; } }
 @keyframes ready-pop { 0% { transform: scale(.5); } 65% { transform: scale(1.25); } 100% { transform: scale(1); } }
 @media (prefers-reduced-motion: reduce) { .rooftop-tile, .rooftop-tile * { animation: none !important; transition: none !important; } }
+@media (min-width: 1000px) {
+ .d-content:has(.agent-trace[open]) .store-stats { display: none; }
+ .agent-trace li { padding: 1px 0; }
+ .d-content:has(.agent-trace[open]) .followup-person { padding: 10px 14px; }
+ .d-content:has(.agent-trace[open]) .followup-content { padding: 10px 14px; }
+ .d-content:has(.agent-trace[open]) .followup-footer { padding: 7px 14px; }
+}

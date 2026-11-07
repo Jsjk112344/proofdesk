@@ -368,6 +368,7 @@ function LeadDrawer({
   dataLabel: string;
 }) {
   const [tab, setTab] = useState("sms");
+  const [showAlternatives, setShowAlternatives] = useState(false);
   const ref = useRef<HTMLElement>(null);
   const dayAgo = (date?: string) =>
     date
@@ -496,9 +497,9 @@ function LeadDrawer({
         </ol>
         <div className="candidate-heading">
           <h3>The best available matches</h3>
-          <span>Score out of 100</span>
+          <button className="d-text-button" onClick={() => setShowAlternatives(!showAlternatives)}>{showAlternatives ? "Hide alternatives" : "Show alternatives"} · Score out of 100</button>
         </div>
-        <div className="candidate-list">
+        <div className={`candidate-list ${showAlternatives ? "show-alternatives" : ""}`}>
           {lead.matches.map((unit, index) => (
             <div
               className={`candidate ${index === 0 ? "chosen" : ""}`}
