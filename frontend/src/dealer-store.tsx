@@ -40,7 +40,7 @@ function AgentTrace({ roof }: { roof: Rooftop }) {
   const failed = roof.job?.status === "failed" || roof.result?.brief.status === "failed";
   const done = roof.job?.status === "succeeded" && !failed;
   const n = (key: string) => amount(counts?.[key]);
-  const qwen = roof.followups.filter((f) => ["live_model", "saved_replay"].includes(f.provenance || "")).length;
+  const qwen = ["live_model", "saved_replay"].includes(roof.result?.brief.provenance || "") ? (roof.result?.brief.rendered?.follow_ups?.length || 0) : 0;
   const steps = [
     { label: "Picked up on Vultr", value: validated ? "Sandbox verified" : has("started") ? "Worker started" : "Queued", done: validated, running: active && !validated },
     { label: "Read open leads", value: n("open_leads"), done: validated, running: active && !validated },
@@ -48,7 +48,7 @@ function AgentTrace({ roof }: { roof: Rooftop }) {
     { label: "Searched cars here · sister stores", value: validated ? `${n("cars_here")} · ${n("cars_sister")}` : "Pending", done: validated, running: active && !validated },
     { label: "Scored lead / car pairs", value: validated ? `${n("scored_pairs")} · top ${n("top_score")}` : "Pending", done: validated, running: active && !validated },
     { label: "Qwen on Vultr Inference", value: roof.result ? `Brief + ${qwen} follow-ups` : has("metrics_validated") ? "Writing brief + follow-ups" : "Pending", done: done, running: active && has("metrics_validated") },
-    { label: "Ready for manager review", value: done ? `${roof.followups.length} drafts` : failed ? "Needs attention" : "Pending", done, running: active && has("brief_written") },
+    { label: "Ready for manager review", value: done ? `${roof.result?.queue.filter((lead) => lead.matches.length > 0).length || 0} drafts` : failed ? "Needs attention" : "Pending", done, running: active && has("brief_written") },
   ];
   if (!roof.job) return null;
   return <details className="agent-trace d-panel" open>

@@ -10,6 +10,7 @@ export type Brief = {
   label?: string;
   rendered?: {
     headline: string;
+    follow_ups?: unknown[];
     findings: string[];
     recommendations?: string[];
   };
