@@ -245,7 +245,8 @@ async def main():
         }
         await r.open("scene4", "#/", group_ready)
         r.manifest["recorded_run"]["visible_group_seconds"] = round(time.monotonic() - clicked, 3)
-        for second, idx in [(0, 0), (3, 1), (6, 2), (9, 3), (12, 4)]:
+        await r.beat("stat-0")
+        for second, idx in [(0, 1), (3, 2), (5, 3), (9, 4)]:
             await r.at(second)
             await r.point(r.page.locator(".d-stat-strip .d-stat").nth(idx))
             await r.beat(f"stat-{idx}")

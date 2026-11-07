@@ -1,0 +1,52 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Inter,42,&H00FFFFFF,&H00FFFFFF,&H66000000,&H66000000,0,0,0,0,100,100,0,0,3,12,0,2,100,100,56,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.50,0:00:03.60,Default,,0,0,0,,It's 6 AM. Summit Auto Group\Nruns 24 dealerships,
+Dialogue: 0,0:00:03.60,0:00:07.60,Default,,0,0,0,,with 3,000 vehicles\Nand 9,000 open leads.
+Dialogue: 0,0:00:07.80,0:00:10.80,Default,,0,0,0,,In this sample,\N652 leads are cold.
+Dialogue: 0,0:00:11.00,0:00:13.80,Default,,0,0,0,,Which customer should\Neach store call first?
+Dialogue: 0,0:00:14.30,0:00:18.30,Default,,0,0,0,,SalesDesk.\NSell more: your AI sales analyst.
+Dialogue: 0,0:00:18.30,0:00:21.80,Default,,0,0,0,,It works every lead,\Nat every rooftop, every night.
+Dialogue: 0,0:00:22.30,0:00:25.00,Default,,0,0,0,,Here's tonight's review.
+Dialogue: 0,0:00:25.00,0:00:28.50,Default,,0,0,0,,SalesDesk fans the work out\Nacross all 24 rooftops:
+Dialogue: 0,0:00:28.50,0:00:31.80,Default,,0,0,0,,six isolated workers\Nrunning in parallel on Vultr.
+Dialogue: 0,0:00:31.80,0:00:36.80,Default,,0,0,0,,Each one checks every lead's risk\Nand searches the inventory
+Dialogue: 0,0:00:36.80,0:00:39.30,Default,,0,0,0,,at its own store\Nand nearby sister stores.
+Dialogue: 0,0:00:39.30,0:00:42.50,Default,,0,0,0,,This sample reuses\Naccepted Qwen briefs.
+Dialogue: 0,0:00:46.30,0:00:50.80,Default,,0,0,0,,By morning: 1,050 leads at risk,\N1,007 matched to a car in stock,
+Dialogue: 0,0:00:50.80,0:00:54.80,Default,,0,0,0,,and 792 distinct\Naged units matched.
+Dialogue: 0,0:00:55.00,0:01:01.50,Default,,0,0,0,,That's an estimated $3.4 million\Nin recoverable gross.
+Dialogue: 0,0:01:01.70,0:01:05.70,Default,,0,0,0,,Leadership sees the group.\NEvery store manager gets a queue.
+Dialogue: 0,0:01:06.30,0:01:09.00,Default,,0,0,0,,Let's open Sandy.
+Dialogue: 0,0:01:09.20,0:01:13.50,Default,,0,0,0,,Forty follow-ups, ranked by risk\Nand by what's on the lot.
+Dialogue: 0,0:01:14.30,0:01:18.80,Default,,0,0,0,,Maria asked about a blue\N2024 RAV4 Hybrid nine days ago.
+Dialogue: 0,0:01:18.80,0:01:25.00,Default,,0,0,0,,Her last contact was a week ago,\Nand the car she wanted sold.
+Dialogue: 0,0:01:25.20,0:01:28.00,Default,,0,0,0,,Without a fresh match,\Nshe needs another search.
+Dialogue: 0,0:01:28.20,0:01:33.50,Default,,0,0,0,,SalesDesk found a silver one on this lot:\Nsame model, same trim, in budget.
+Dialogue: 0,0:01:33.50,0:01:39.50,Default,,0,0,0,,It has sat for 74 days,\Nwith an entered daily carrying-cost assumption.
+Dialogue: 0,0:01:39.70,0:01:44.00,Default,,0,0,0,,It knows she has\Na 2017 CR-V to trade in.
+Dialogue: 0,0:01:44.20,0:01:51.50,Default,,0,0,0,,And Qwen drafts the text\Nusing only this car's recorded facts.
+Dialogue: 0,0:01:52.30,0:01:58.30,Default,,0,0,0,,The manager reads, edits if needed,\Nand approves Sandy in one click.
+Dialogue: 0,0:01:58.30,0:02:05.00,Default,,0,0,0,,Vultr prepares the drafts, CRM tasks\Nand sister-store transfer requests.
+Dialogue: 0,0:02:05.20,0:02:09.50,Default,,0,0,0,,These are drafts and tasks.\NSalesDesk never sends customer messages.
+Dialogue: 0,0:02:12.30,0:02:17.30,Default,,0,0,0,,Then close the laptop.\NThe next review runs at 2 AM,
+Dialogue: 0,0:02:17.30,0:02:20.30,Default,,0,0,0,,every night, for every store,\Non Vultr.
+Dialogue: 0,0:02:20.50,0:02:23.50,Default,,0,0,0,,Tomorrow, the queue\Nis waiting again.
+Dialogue: 0,0:02:24.30,0:02:29.30,Default,,0,0,0,,Before: managers dig through leads,\Nsold units and other stores' stock.
+Dialogue: 0,0:02:29.30,0:02:33.30,Default,,0,0,0,,After: they approve\Na ranked list.
+Dialogue: 0,0:02:33.50,0:02:37.30,Default,,0,0,0,,The full 24-store review\Nran in about two minutes.
+Dialogue: 0,0:02:38.30,0:02:43.30,Default,,0,0,0,,Under the hood: a durable scheduler\Non a Vultr VM,
+Dialogue: 0,0:02:43.30,0:02:47.30,Default,,0,0,0,,a disposable Docker sandbox\Nfor every rooftop,
+Dialogue: 0,0:02:47.30,0:02:52.00,Default,,0,0,0,,and Qwen on Vultr Serverless Inference\Nfor under one cent a run.
+Dialogue: 0,0:02:52.50,0:02:55.50,Default,,0,0,0,,Automotive is our first vertical.
+Dialogue: 0,0:02:55.50,0:02:59.50,Default,,0,0,0,,SalesDesk: sell more,\Nwith your AI sales analyst.

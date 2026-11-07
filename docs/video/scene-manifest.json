@@ -30,9 +30,9 @@
       "scene": "scene4",
       "file": "docs/video/scenes/scene4.mp4",
       "seconds": 20,
-      "captured_seconds": 20.001,
-      "trim_start_seconds": 2.621,
-      "raw": ".local/video-prep/raw-scenes/page@e0182786f4163fb8a0cefc421d3e10b2.webm"
+      "captured_seconds": 20.003,
+      "trim_start_seconds": 2.935,
+      "raw": ".local/video-prep/raw-scenes/page@fdd4ab6a43207ed8859351ee0900b8f4.webm"
     },
     {
       "scene": "scene5",
@@ -121,49 +121,49 @@
     {
       "scene": "scene4",
       "beat": "start",
-      "seconds": 0.266,
+      "seconds": 0.245,
       "screenshot": "docs/video/stills/scene4-start.png"
     },
     {
       "scene": "scene4",
       "beat": "stat-0",
-      "seconds": 1.049,
+      "seconds": 2.645,
       "screenshot": "docs/video/stills/scene4-stat-0.png"
     },
     {
       "scene": "scene4",
       "beat": "stat-1",
-      "seconds": 3.784,
+      "seconds": 3.413,
       "screenshot": "docs/video/stills/scene4-stat-1.png"
     },
     {
       "scene": "scene4",
       "beat": "stat-2",
-      "seconds": 6.764,
+      "seconds": 4.153,
       "screenshot": "docs/video/stills/scene4-stat-2.png"
     },
     {
       "scene": "scene4",
       "beat": "stat-3",
-      "seconds": 9.78,
+      "seconds": 5.747,
       "screenshot": "docs/video/stills/scene4-stat-3.png"
     },
     {
       "scene": "scene4",
       "beat": "stat-4",
-      "seconds": 12.746,
+      "seconds": 9.803,
       "screenshot": "docs/video/stills/scene4-stat-4.png"
     },
     {
       "scene": "scene4",
       "beat": "group-brief",
-      "seconds": 15.779,
+      "seconds": 15.822,
       "screenshot": "docs/video/stills/scene4-group-brief.png"
     },
     {
       "scene": "scene4",
       "beat": "sandy-tile",
-      "seconds": 18.872,
+      "seconds": 18.84,
       "screenshot": "docs/video/stills/scene4-sandy-tile.png"
     },
     {
@@ -346,5 +346,9 @@
     "schedule_survived_tab_close": true,
     "test_schedule_disabled": true,
     "page_errors": []
+  },
+  "scene4_retake": {
+    "same_review_verified": true,
+    "reason": "Cursor now follows spoken risk, stock matches, aged units and gross; no new review or inference."
   }
 }

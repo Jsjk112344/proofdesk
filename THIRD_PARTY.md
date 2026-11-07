@@ -189,7 +189,7 @@ sources. No vendor connection, endorsement, integration or affiliation is claime
 ## Video preparation assets
 
 - [Inter, by Rasmus Andersson](https://github.com/rsms/inter), SIL Open Font License 1.1.
-  `docs/video/fonts/InterVariable.woff2` is the upstream font; `Inter-SemiBold.ttf` is a
+  `docs/video/fonts/InterVariable.woff2` and `InterVariable-Italic.woff2` are upstream fonts; `Inter-SemiBold.ttf` is a
   static weight-600 instance for subtitle rendering. The license is included alongside
   both files. Original SalesDesk mark and app styling are reused in original HTML cards.
 - Playwright (Apache-2.0), Chromium and FFmpeg render and record the public app and

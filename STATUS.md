@@ -1210,3 +1210,27 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
 - `docs/video/scene-manifest.json`, `recorded-run.json` and `inference-accounting.json`
   identify captures and the read-only 25-request / $0.0502400 durable reservation audit.
   The stat strip displays full **$3,434,800**; narration rounds to **$3.4 million**.
+
+
+## Timed rough cut verified: 2026-11-06 ET
+
+- Exported `rough-cut.mp4` (burned captions) and `rough-cut-nosubs.mp4`, both exactly
+  **180.000 seconds**, 1920×1080, H.264, 30 fps, one video stream and no audio.
+- All app footage is actual public output at normal speed. The full-run shortening is
+  visibly labelled with the recorded 124.177-second time and accepted-Qwen-replay
+  disclosure. No numbers or progress were composited onto the app.
+- The edit follows the supplied slot boundaries, with 0.4-second card crossfades, black
+  opening/closing fades, gentle opening zoom, stat/drawer punch-ins, and an eight-second
+  hold on the completed architecture after its initial one-step-per-second build.
+- The Group cursor sweep was re-taken against the exact same completed review to align
+  risk, stock, aged-unit and gross narration. No new review or inference was triggered.
+  The CSV plays at 2:06–2:09, followed by three seconds back on the real Ready state.
+- Inter SemiBold captions are styled on a 1920×1080 ASS canvas, 42 px, white, 60% dark
+  box, bottom center. The ASS is derived from the 39 SRT cues. Narration and caption
+  words match after punctuation/spacing normalization. Voice audio is intentionally absent.
+- Thirteen 1920×1080 PNG cards include transparent/composited titles, jump cut, before/after,
+  full architecture plus seven builds, and end card. The eight-page PDF was rendered
+  and visually checked; Inter loaded successfully, with included OFL font licenses.
+- Media properties passed ffprobe assertions. Visual samples across the app, title, jump
+  cut, stat strip, Maria, export, Ready, schedule and slides were inspected. Evidence is
+  in `rough-cut-check.json`; source takes and all 33 2x stills remain available for editing.

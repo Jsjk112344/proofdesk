@@ -1,0 +1,28 @@
+{
+  "timeline_seconds": 180,
+  "subtitle_cues": 39,
+  "files": {
+    "rough-cut-nosubs.mp4": {
+      "duration": 180.0,
+      "codec": "h264",
+      "size_bytes": 11970180,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": 30,
+      "audio": false
+    },
+    "rough-cut.mp4": {
+      "duration": 180.0,
+      "codec": "h264",
+      "size_bytes": 12516645,
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": 30,
+      "audio": false
+    }
+  }
+}
