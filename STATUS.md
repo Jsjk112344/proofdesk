@@ -3,13 +3,16 @@
 Product name: **SalesDesk** (renamed from ProofDesk on 2026-11-05). Existing operational
 identifiers and dated historical entries retain their original names.
 
-Current checkpoint: **The dealer-group product is deployed and directly verified on
-public HTTPS.** CSV ingestion, 24-rooftop fan-out, reconciled matching/KPIs, accepted
-Qwen briefs/replay, store approvals/exports, recurring schedules and the regional/store
-UI are implemented. Final full public run: **119.419 s**, six concurrent rooftop workers.
-Dealer inference: **51 live requests**, **$0.0223900** conservative token-cost estimate,
-**$0.1024896** reserved. Video recording, PDF export and official submission remain
-owner actions; no submission receipt exists.
+Current checkpoint: **Public camera fixes and the three-minute video kit are verified.**
+Store risks vary 12–85; Sandy/Maria are preserved. The brief and dashboard agree on
+1,007 in-stock matches. Both silent rough cuts are **180.000 s**, 1080p/30fps; 13 cards,
+eight scene clips, 33 crisp stills and an eight-page slide PDF are ready.
+Recorded take: **124.177 s** from click through visible finished Group. Separate full-live
+measurement: **140.131 s / 25 responses / $0.0077789 token-based inference cost**, excluding
+compute. Video reservations: **25 / $0.0502400**, distinct from usage and older ledgers.
+Offline suite passed (114 tests, seven skips); the broader local Docker filesystem probe
+exceeded its unchanged deadline and is recorded below. Owner: record voice, finish edit,
+confirm the signed-in form limits, upload video/PDF and submit. No receipt exists.
 
 Public URL: https://salesdesk.149.28.51.139.sslip.io
 
@@ -1234,3 +1237,28 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
 - Media properties passed ffprobe assertions. Visual samples across the app, title, jump
   cut, stat strip, Maria, export, Ready, schedule and slides were inspected. Evidence is
   in `rough-cut-check.json`; source takes and all 33 2x stills remain available for editing.
+
+
+## Video owner hand-off complete: 2026-11-06 ET
+
+- `docs/video/RECORDING.md` contains the clean final narration, voiceover workflow, exact
+  start states for optional Screen Studio takes, current facts and pre-export checklist.
+  `narration.txt` is the plain-text read. `ARTIFACTS.md` indexes every deliverable;
+  `artifact-manifest.json` records sizes and SHA-256 hashes for the prepared kit.
+- Final public fresh-session check passed again: saved Group results, Run available,
+  correct metrics, preserved Maria and the sample label inside the actual drawer.
+- README, deployment, acceptance, public-demo and inference docs now describe the
+  observed camera fixes, separate full-live cost and recorded replay-based take.
+- Both final MP4s are 180.000 seconds, silent, H.264, 1920×1080, 30 fps. The architecture
+  reveals six successive steps over six seconds and holds the completed seventh build
+  for eight seconds. CSV/Ready positions match the supplied plan. The eight-page PDF
+  and all 13 cards use the actual app palette, logo and locally loaded Inter fonts.
+- The final script and all 39 subtitle cues have identical normalized words. There is
+  no recorded voice track. The owner must record VO, align the final edit/captions,
+  optionally re-take the hero/export/tab-close scenes, upload video and slide PDF, and
+  submit by the owner's **Nov 8, 16:00 ET target**, ahead of the supplied 18:00 ET deadline.
+- Official event page requires video but did not state a length limit in the checked
+  content. General LabLab guidance recommends under five minutes / up to 300 MB; the
+  event form prevails. Its signed-in limit remains **unconfirmed**, explicitly left on
+  the pre-export checklist. No submission was made and no receipt is claimed.
+- The separate pre-existing recording-plan work and session notes remain untouched.

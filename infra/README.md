@@ -15,8 +15,10 @@ The default UI is the dealer group dashboard. The separate dealer SQLite store i
 1.5-GiB cgroup cap accommodates controller and worker processes. Individual Docker caps
 remain 128 MiB and half CPU; no sandbox policy was relaxed.
 
-`/etc/systemd/system/proofdesk.service.d/dealer.conf` supplies the plan directory
-`/opt/proofdesk/.local/dealer-plans` and concurrency. The existing root-only inference
+`/etc/systemd/system/proofdesk.service.d/dealer.conf` supplies concurrency. The video
+measurement adds `video.conf`, selecting `/opt/proofdesk/.local/dealer-video-plans` for
+`SALESDESK_DEALER_LIVE_PLANS`. Original `.local/dealer-plans` and all existing ledgers
+remain intact; the new video envelope is separately bounded at $0.15 / 64 requests. The existing root-only inference
 configuration supplies the key. Accepted replay files remain in `.local/replays/`, and
 `.local/dealer-sample-review.json` holds the accepted sample baseline. Fresh public
 sessions can read it immediately; Run now always executes actual sandbox jobs.

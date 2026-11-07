@@ -7,6 +7,12 @@ review. No fake jobs or automatic dealer approvals are seeded. Run now creates 2
 rooftop child jobs and a waiting parent; six workers execute on Vultr. Model replay is
 accepted exact-input output, revalidated and labelled. Primary UI follows real job events.
 
+The sample has 12–85 at-risk leads per store, including Sandy’s original 40, from
+varied source records rather than a queue cap. The stat strip and group brief both
+show 1,007 best matches in stock. The sample label stays visible in the scrolling
+header and inside the lead drawer. [Recording facts](video/measured-run.json) identify
+the accepted sample and its separate live-inference measurement.
+
 CSV uploads are untrusted, session-scoped, 10 MiB/file and 50,000 rows/file, with three-file
 validation before replacement. Anonymous workspaces are capped at 200, global jobs at 5,000,
 reviews at six per session, and handoff jobs at 72. Per-rooftop analysis also retains the

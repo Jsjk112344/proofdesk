@@ -1,0 +1,21 @@
+It's 6 AM. Summit Auto Group runs 24 dealerships, with 3,000 vehicles and 9,000 open leads. In this sample, 652 leads are cold. Which customer should each store call first?
+
+SalesDesk. Sell more: your AI sales analyst. It works every lead, at every rooftop, every night.
+
+Here's tonight's review. SalesDesk fans the work out across all 24 rooftops: six isolated workers running in parallel on Vultr. Each one checks every lead's risk and searches the inventory at its own store and nearby sister stores. This sample reuses accepted Qwen briefs.
+
+By morning: 1,050 leads at risk, 1,007 matched to a car in stock, and 792 distinct aged units matched. That's an estimated $3.4 million in recoverable gross. Leadership sees the group. Every store manager gets a queue.
+
+Let's open Sandy. Forty follow-ups, ranked by risk and by what's on the lot.
+
+Maria asked about a blue 2024 RAV4 Hybrid nine days ago. Her last contact was a week ago, and the car she wanted sold. Without a fresh match, she needs another search. SalesDesk found a silver one on this lot: same model, same trim, in budget. It has sat for 74 days, with an entered daily carrying-cost assumption. It knows she has a 2017 CR-V to trade in. And Qwen drafts the text using only this car's recorded facts.
+
+The manager reads, edits if needed, and approves Sandy in one click. Vultr prepares the drafts, CRM tasks and sister-store transfer requests. These are drafts and tasks. SalesDesk never sends customer messages.
+
+Then close the laptop. The next review runs at 2 AM, every night, for every store, on Vultr. Tomorrow, the queue is waiting again.
+
+Before: managers dig through leads, sold units and other stores' stock. After: they approve a ranked list. The full 24-store review ran in about two minutes.
+
+Under the hood: a durable scheduler on a Vultr VM, a disposable Docker sandbox for every rooftop, and Qwen on Vultr Serverless Inference for under one cent a run.
+
+Automotive is our first vertical. SalesDesk: sell more, with your AI sales analyst.

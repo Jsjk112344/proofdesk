@@ -33,6 +33,19 @@ provenance and a cached-response tooltip. Stable serialization sorts tied roofto
 Do not run disconnected copies of the same spend ledger on concurrent hosts: this release
 handed authority from the stopped local acceptance server to the existing Vultr VM.
 
+## Camera-readiness measurement
+
+The updated full sample completed 25 live Qwen responses for **$0.0077789** in token
+usage cost at catalog rates, excluding compute. The separate video envelope durably
+reserved **25 requests / $0.0502400**; reservations are pessimistic, not actual spend.
+Old envelopes remain intact. See [the run receipts](video/measured-run.json) and
+[the read-only ledger audit](video/inference-accounting.json). Recorded identical-input
+takes execute sandbox analysis live and retain `saved_replay` model provenance.
+
+Group inputs explicitly distinguish at-risk leads, matches including in-transit stock,
+and best matches in stock. The in-stock finding uses `matched_in_stock`, the same
+denominator as the dashboard. Validators and all execution/approval limits are unchanged.
+
 ## Historical engine contracts and authorization schema
 
 The sections below preserve the earlier campaign/prospect implementation and its dated

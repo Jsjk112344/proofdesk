@@ -1,0 +1,383 @@
+{
+  "created_at": "2026-11-07T02:49:44.895821+00:00",
+  "counts": {
+    "cards": 13,
+    "scene_mp4s": 8,
+    "stills_2x": 33,
+    "pdf_pages": 8,
+    "subtitle_cues": 39
+  },
+  "rough_cut_seconds": 180.0,
+  "files": [
+    {
+      "file": "docs/video/rough-cut.mp4",
+      "bytes": 12516645,
+      "sha256": "aa27fc78758f13e3babf05e61d9481fdacb3939104b597ada15a4589019674e6"
+    },
+    {
+      "file": "docs/video/rough-cut-nosubs.mp4",
+      "bytes": 11970180,
+      "sha256": "3ebd5c00dcfd79979ed634110fba31e68e02a2f10738e9848763bbd60bb46453"
+    },
+    {
+      "file": "docs/video/rough-cut-check.json",
+      "bytes": 485,
+      "sha256": "3e54ca36938dec9ace9f0e9176567a92265f53c0f0a6261f67fb31ab09080668"
+    },
+    {
+      "file": "docs/video/SalesDesk-slides.pdf",
+      "bytes": 2456255,
+      "sha256": "2976146e510c6805bd7003f1c9a00996ba9db482f51dbdcf827a7c9ccc8dd0f6"
+    },
+    {
+      "file": "docs/video/SalesDesk-slides.html",
+      "bytes": 7326,
+      "sha256": "1031850fe225a9b93b209d2488c95dd715135dcff7b506cf3af9b8fa0a632aa5"
+    },
+    {
+      "file": "docs/video/video-plan.md",
+      "bytes": 10257,
+      "sha256": "261d89e49491797f59cdd060935999dbd3e5776be2f5f93adfab2ae17a765dd8"
+    },
+    {
+      "file": "docs/video/subtitles.srt",
+      "bytes": 3323,
+      "sha256": "59acde7b47109221349fd558e055f2351111f930a8f3d14b29c79386b46a134d"
+    },
+    {
+      "file": "docs/video/subtitles.ass",
+      "bytes": 4548,
+      "sha256": "d35b07e9e0310e83ca6f3531089dae16747e1a2b2a98ca58ea1dafcd14b1ece5"
+    },
+    {
+      "file": "docs/video/narration.txt",
+      "bytes": 2017,
+      "sha256": "af6769d34136b07a3fc6ffe3489fce1fc5618e5c693faae13038bff7526ed996"
+    },
+    {
+      "file": "docs/video/RECORDING.md",
+      "bytes": 9955,
+      "sha256": "6531391f6adb358f1b6bf231992af4222a0ad773c04dcb652c6a5b7689b11ce7"
+    },
+    {
+      "file": "docs/video/ARTIFACTS.md",
+      "bytes": 3630,
+      "sha256": "37a8bbcd898892dfc7961e207b6d1de605c9f43bfe75fec5694752df024ed593"
+    },
+    {
+      "file": "docs/video/measured-run.json",
+      "bytes": 20682,
+      "sha256": "5f6126ba232b05741ef8888b82887799943b77384076a14154a25c021f121d57"
+    },
+    {
+      "file": "docs/video/recorded-run.json",
+      "bytes": 1803,
+      "sha256": "c7aeaf23a47aab6eb137ce712b0639bee2b2a7e7813f7a317365e54d265bd01a"
+    },
+    {
+      "file": "docs/video/scene-manifest.json",
+      "bytes": 9744,
+      "sha256": "e217cb2a7791c1895cbe367cdf4c65b1614e1ca375e2718a3c06b7c3ae448281"
+    },
+    {
+      "file": "docs/video/inference-accounting.json",
+      "bytes": 596,
+      "sha256": "e334cef67bd098c9f145fe4e6e5b72ab6cdd2a879b1dee7125a73f53ac2f1687"
+    },
+    {
+      "file": "docs/video/cards/01-title-composited.png",
+      "bytes": 200030,
+      "sha256": "387553ba8099d9ffe23153d788bc051b142a00fe4951426bf9a2f82232a275ef"
+    },
+    {
+      "file": "docs/video/cards/01-title.png",
+      "bytes": 34240,
+      "sha256": "62a0b60f935081a9bf25ea54b76c3eab957e32f457f348f675fbb9c60efce5e2"
+    },
+    {
+      "file": "docs/video/cards/02-jumpcut.png",
+      "bytes": 64759,
+      "sha256": "7920de6b73885394ec39b925a19fbe1443d6a7740ea56d31fa38044d98346380"
+    },
+    {
+      "file": "docs/video/cards/03-before-after.png",
+      "bytes": 110781,
+      "sha256": "3ad48cafc2f46dee53c98212c074b3aafea1e584c7bfa098e9cc1f18836171db"
+    },
+    {
+      "file": "docs/video/cards/04-architecture-build-1.png",
+      "bytes": 89643,
+      "sha256": "dc9091b1392f6ef3aa085ed0c8eaa91bb1e15f320f9fa7fd2430f8829bf94573"
+    },
+    {
+      "file": "docs/video/cards/04-architecture-build-2.png",
+      "bytes": 97103,
+      "sha256": "05ab8e0d85bd3fa25726ad73ab4b123e7a0f98e2fcb0cab838ee1164b84342b7"
+    },
+    {
+      "file": "docs/video/cards/04-architecture-build-3.png",
+      "bytes": 107475,
+      "sha256": "d979eb9e77458b91ae2d91c5badcedd5796badbc240c5eff8e60624068af6fe8"
+    },
+    {
+      "file": "docs/video/cards/04-architecture-build-4.png",
+      "bytes": 115199,
+      "sha256": "8bec88a97a90beba8fb76c6093c510f25ec2a51d4854166a81a5a2ff415e449f"
+    },
+    {
+      "file": "docs/video/cards/04-architecture-build-5.png",
+      "bytes": 123248,
+      "sha256": "39d746df6879facd4f180314ca3db5e5c3564c83ecb7eacff4400a5c4e5556fe"
+    },
+    {
+      "file": "docs/video/cards/04-architecture-build-6.png",
+      "bytes": 127454,
+      "sha256": "438e2535336deefbba0e3d0c679eba322c6a359e5d4adb39947b46aae0917db0"
+    },
+    {
+      "file": "docs/video/cards/04-architecture-build-7.png",
+      "bytes": 138551,
+      "sha256": "922f68e6bb141f5458eb7881b43838539e3acf116d21d82a7529f16e3aade466"
+    },
+    {
+      "file": "docs/video/cards/04-architecture.png",
+      "bytes": 138551,
+      "sha256": "922f68e6bb141f5458eb7881b43838539e3acf116d21d82a7529f16e3aade466"
+    },
+    {
+      "file": "docs/video/cards/05-end.png",
+      "bytes": 63321,
+      "sha256": "0ce67468b8f1a6e24a4ba80aa9de123f5301441d93d7e04e9dc7d96412a2b0a9"
+    },
+    {
+      "file": "docs/video/scenes/crm-tasks.csv",
+      "bytes": 13776,
+      "sha256": "47df8ba52d51a9836ff816823c1d581fb90e2d2aeada74ff2ff7a79f7cd7774a"
+    },
+    {
+      "file": "docs/video/scenes/scene1.mp4",
+      "bytes": 272619,
+      "sha256": "304566e50ed5b62c1630c45154e12082b37f400b9840b657909a03535af84064"
+    },
+    {
+      "file": "docs/video/scenes/scene3.mp4",
+      "bytes": 987052,
+      "sha256": "13d5ad29c4ae56ada0433e606561d95df9f1f991947eccdfef4a39b8d3bcf0b9"
+    },
+    {
+      "file": "docs/video/scenes/scene4.mp4",
+      "bytes": 858680,
+      "sha256": "a37258e876cdd17b0061edf6b21ddbb6c0b198969c8d3cdb9d64f716f5e23ae4"
+    },
+    {
+      "file": "docs/video/scenes/scene5.mp4",
+      "bytes": 247693,
+      "sha256": "df998953863ebd1b04bd613534758514d20524cd99e3ec7eb5ccfe854f4d53cb"
+    },
+    {
+      "file": "docs/video/scenes/scene6.mp4",
+      "bytes": 1032837,
+      "sha256": "79f77c1ecddef19cfc869742873f1dfca91fb6ae2e13ea438fa06431626446d6"
+    },
+    {
+      "file": "docs/video/scenes/scene7-csv.mp4",
+      "bytes": 520913,
+      "sha256": "6830dfa0fdb881b68a8e75cc2f11f827be1f93345b81e823712e2db462a6b2ee"
+    },
+    {
+      "file": "docs/video/scenes/scene7.mp4",
+      "bytes": 370605,
+      "sha256": "e6de82d47fc80a7d3ce1400135d3874daa7b4bb867e7d9d462be872b6001b450"
+    },
+    {
+      "file": "docs/video/scenes/scene8.mp4",
+      "bytes": 223510,
+      "sha256": "b4d943fbddbc4f43643df225091aeea831e2b4d41b98375f50695b1c2e45f484"
+    },
+    {
+      "file": "docs/video/stills/scene1-idle-group.png",
+      "bytes": 356762,
+      "sha256": "6d3598aa48a6642002e2a0edf2643268145097ee373e6f4111fa4e9866137ca5"
+    },
+    {
+      "file": "docs/video/stills/scene1-start.png",
+      "bytes": 356762,
+      "sha256": "6d3598aa48a6642002e2a0edf2643268145097ee373e6f4111fa4e9866137ca5"
+    },
+    {
+      "file": "docs/video/stills/scene3-counters.png",
+      "bytes": 300190,
+      "sha256": "66f7aee290feeca68469f2b80fc81bbaa9086b815dfd0a8fbec6a9eb7f89d848"
+    },
+    {
+      "file": "docs/video/stills/scene3-real-progress.png",
+      "bytes": 268556,
+      "sha256": "a9b1ef2f34928a68c3872f339226ba35a9f9bd3f1d472b066bcd7591cbbf0085"
+    },
+    {
+      "file": "docs/video/stills/scene3-real-reset.png",
+      "bytes": 297570,
+      "sha256": "d6ddc442674f6f709ceb8077e0860dcc4800b5bc0cfc99635c722bd417f6ebda"
+    },
+    {
+      "file": "docs/video/stills/scene3-six-tiles.png",
+      "bytes": 268556,
+      "sha256": "a9b1ef2f34928a68c3872f339226ba35a9f9bd3f1d472b066bcd7591cbbf0085"
+    },
+    {
+      "file": "docs/video/stills/scene3-start.png",
+      "bytes": 361501,
+      "sha256": "59f0ec3bac93ea8737af24bf683fea4da3677fc3cdac9aa394205524fa2b6fb5"
+    },
+    {
+      "file": "docs/video/stills/scene4-group-brief.png",
+      "bytes": 350559,
+      "sha256": "8da3231b64466d59b300ddc2cbe562fa396e32d2a3c2193924958fe9d0acf1c2"
+    },
+    {
+      "file": "docs/video/stills/scene4-sandy-tile.png",
+      "bytes": 352508,
+      "sha256": "4624c5a809796d8b82f5953e3f61a2c85a2dd40b552c197b9f70d76045a016f8"
+    },
+    {
+      "file": "docs/video/stills/scene4-start.png",
+      "bytes": 350022,
+      "sha256": "e4530a791e85708aef4b4eb0d966993bbc9828c97962b2f1bc310a4042a1676c"
+    },
+    {
+      "file": "docs/video/stills/scene4-stat-0.png",
+      "bytes": 350022,
+      "sha256": "e4530a791e85708aef4b4eb0d966993bbc9828c97962b2f1bc310a4042a1676c"
+    },
+    {
+      "file": "docs/video/stills/scene4-stat-1.png",
+      "bytes": 350448,
+      "sha256": "499489f78f82ff6ceb664b0575cd3199f26e657b670c67a4f4f7cc51b2a79965"
+    },
+    {
+      "file": "docs/video/stills/scene4-stat-2.png",
+      "bytes": 350457,
+      "sha256": "f8befaf2bef86f08583fe52edffb38fcfc7478588cd8ef392b3773009b5a97ac"
+    },
+    {
+      "file": "docs/video/stills/scene4-stat-3.png",
+      "bytes": 350449,
+      "sha256": "9fb82c4e31f4b4111494542085e71034f25f568155e715e28e34dcb3ec118507"
+    },
+    {
+      "file": "docs/video/stills/scene4-stat-4.png",
+      "bytes": 350147,
+      "sha256": "bcf66a58b3cbc1ec577fffb25fc389f9a8b973e60d7c1b51048505e1fbf7cc19"
+    },
+    {
+      "file": "docs/video/stills/scene5-sandy-queue.png",
+      "bytes": 308978,
+      "sha256": "04ee0f6d9d546c646ae34ec27be7f80bd0092d04f5a541768dbaf51b924e3818"
+    },
+    {
+      "file": "docs/video/stills/scene5-start.png",
+      "bytes": 352508,
+      "sha256": "4624c5a809796d8b82f5953e3f61a2c85a2dd40b552c197b9f70d76045a016f8"
+    },
+    {
+      "file": "docs/video/stills/scene6-best-match.png",
+      "bytes": 568448,
+      "sha256": "8fdf3a442dd18e1873cdc407f1d78bc97f31a0b7337894f53c16d85ec1e90387"
+    },
+    {
+      "file": "docs/video/stills/scene6-crv-trade.png",
+      "bytes": 568615,
+      "sha256": "e90273a94a16874cfa93c25f3ff72afe121771e0dc2d8a5cb0c5578f9e5c312d"
+    },
+    {
+      "file": "docs/video/stills/scene6-email.png",
+      "bytes": 555525,
+      "sha256": "f5a8168935ce9a4d32a47d1c068fa28a7f7fa77c780b62c13e0e20bcf2c3c001"
+    },
+    {
+      "file": "docs/video/stills/scene6-match-breakdown.png",
+      "bytes": 568354,
+      "sha256": "317c94b7a9812f23e4421192e7691b2b6f2e107eadb043703e15e3d0f0eca327"
+    },
+    {
+      "file": "docs/video/stills/scene6-sms-return.png",
+      "bytes": 568921,
+      "sha256": "0a192725bb7ae197f0ab35b8b4e2d774b66974ba5f7dec4a61d431b2cb52a95d"
+    },
+    {
+      "file": "docs/video/stills/scene6-sms.png",
+      "bytes": 568563,
+      "sha256": "754a4490b301327f0394c61cec5a548cc9f5904440cb4c4639a56d99c0d658d4"
+    },
+    {
+      "file": "docs/video/stills/scene6-sold-six-days.png",
+      "bytes": 568700,
+      "sha256": "194f1a0517cffeacd55a5369391ae79659ae3ebdcc512b9f63e4245813e743f7"
+    },
+    {
+      "file": "docs/video/stills/scene6-start.png",
+      "bytes": 309016,
+      "sha256": "cd8bd91185d6817d19a957c65afa8306317adb5ede3c346a4b89e6409d4c9ae3"
+    },
+    {
+      "file": "docs/video/stills/scene6-wanted-trade.png",
+      "bytes": 569034,
+      "sha256": "84254419f1327c776430e316e9c4480d19c74904a243c541b3f508f50021cc0f"
+    },
+    {
+      "file": "docs/video/stills/scene7-crm-download.png",
+      "bytes": 296895,
+      "sha256": "8f10979fb227be7446b5e5344f9f5e5ca38118530fbcc9165c77eb2dfb8d7295"
+    },
+    {
+      "file": "docs/video/stills/scene7-csv-actual-export.png",
+      "bytes": 738131,
+      "sha256": "c127d2eb68860a62359ba5a86652a83d727715e4041b92d5e2e8b127d2a897dc"
+    },
+    {
+      "file": "docs/video/stills/scene7-ready.png",
+      "bytes": 296925,
+      "sha256": "6aa8921d37c912230820f8f32c0d7e50c5c4c114928e0e976ad17eab3201e7c5"
+    },
+    {
+      "file": "docs/video/stills/scene7-start.png",
+      "bytes": 307206,
+      "sha256": "0935737275c7d78323e3a4dda930618515e7328a44e822cda0ad92e6123bdda7"
+    },
+    {
+      "file": "docs/video/stills/scene8-nightly-on.png",
+      "bytes": 201546,
+      "sha256": "c4d4c633944a91f9f4e1cb450d57590cd45bebf2149c9e82d2cb1970c8d28826"
+    },
+    {
+      "file": "docs/video/stills/scene8-server-schedule.png",
+      "bytes": 201782,
+      "sha256": "c5892b39b4307164cf5e0b56b6356f91f7986183cb63c8d45a9b4acebc307322"
+    },
+    {
+      "file": "docs/video/stills/scene8-start.png",
+      "bytes": 201794,
+      "sha256": "5ba75f585ed8978709facd7597f21c10c611467de18532676229327599438178"
+    },
+    {
+      "file": "docs/video/fonts/Inter-LICENSE.txt",
+      "bytes": 4380,
+      "sha256": "262481e844521b326f5ecd053e59b98c8b2da78c8ee1bdbb6e8174305e54935a"
+    },
+    {
+      "file": "docs/video/fonts/Inter-SemiBold.ttf",
+      "bytes": 343200,
+      "sha256": "9e1a7049b821cdd1e20b548240df16737539eff1efbad3c88508a14871fcde55"
+    },
+    {
+      "file": "docs/video/fonts/InterVariable-Italic.woff2",
+      "bytes": 387976,
+      "sha256": "e564f652916db6c139570fefb9524a77c4d48f30c92928de9db19b6b5c7a262a"
+    },
+    {
+      "file": "docs/video/fonts/InterVariable.woff2",
+      "bytes": 352240,
+      "sha256": "693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3"
+    }
+  ]
+}

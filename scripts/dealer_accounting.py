@@ -76,7 +76,10 @@ def accounting():
         uncertain_pessimistic_allowance_usd=str(uncertain),
         known_plus_uncertain_estimate_usd=str(known + uncertain),
         pessimistic_reserved_usd=str(reserved),
-        note="Dealer envelope only; provider token estimates, not compute billing receipts.",
+        note=(
+            "Dealer envelopes only; token estimates, not compute billing receipts. "
+            "Uncertainty includes historical accepted responses absent from this host cache."
+        ),
     )
 
 

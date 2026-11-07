@@ -5,6 +5,21 @@ or Docker execution), **offline** (unit tests with injected resolvers, recording
 and fixture responses) or **mocked UI** (browser interaction against a mocked API).
 Security claims never exceed observations.
 
+## Dealer video preparation, observed 2026-11-06 ET
+
+- **Real public app:** fresh Group view, saved accepted results, Run available, counter
+  reset and six analysing tiles within the first 20 seconds; all 24 jobs complete.
+- **Real full live inference:** 25 accepted Qwen responses, no replay or failed briefs;
+  9,000 reviewed, 1,050 at risk, 1,007 best matches in stock, 792 distinct aged units,
+  $3,434,800 estimated gross. The group brief uses the same in-stock count.
+- **Real approvals:** Sandy/Maria facts preserved; 40-row byte-identical CRM download,
+  cross-session refusal and durable schedule after tab closure. The test schedule is
+  disabled afterward. See the scene manifest in docs/video.
+- **Local checks:** offline suite 114 tests, seven opt-in skips. Dealer Docker
+  reconciliation/cleanup passed. Broader Docker checks hit concurrent lock contention;
+  the isolated signals/recovery checks passed, but the filesystem probe exceeded its
+  unchanged deadline. The full containment suite is not reported as passed.
+
 ## Hackathon refactor: public acceptance
 
 - **Live inference:** unchanged analysis, research and outreach contracts accepted actual

@@ -47,9 +47,12 @@ SQLite, scheduler and worker subprocesses behind Caddy. It has **2 logical CPUs*
 approximately **4 GiB RAM**. Default rooftop concurrency is **6**, configurable with
 `SALESDESK_DEALER_CONCURRENCY` (bounded to 1–12).
 
-The measured public full run took **119.419 seconds** from browser click to visible group
-result, with six concurrent rooftop jobs. Current and prior-night inputs executed in
-48 disposable containers. Observed application memory peaked at **641.59 MiB**; host
+The camera-readiness measurement took **140.131 seconds** from Run click through final
+public result capture, including final render/screenshot overhead, with six concurrent
+rooftop jobs and 25 fresh live Qwen responses. Recorded sample takes reuse accepted Qwen
+briefs while executing the Docker analysis live; their own measured runtime is in
+[the recording evidence](docs/video/scene-manifest.json). Current and prior-night inputs executed in
+48 disposable containers. On the earlier release, observed application memory peaked at **641.59 MiB**; host
 available memory stayed above **2,682 MiB**. These are observed checks on this sample,
 not capacity or performance promises. [STATUS.md](STATUS.md) records release-specific evidence.
 
@@ -60,7 +63,10 @@ response tooltip. New inputs can use the same bounded live plans; failures stay 
 No provider or rule-based output silently substitutes for a failed live brief.
 
 The owner authorized up to $150 of existing hackathon credit for compute and inference.
-The dealer inference envelope is $0.15 / 64 requests; six-request plans share that envelope.
+Dealer inference envelopes are $0.15 / 64 requests; six-request plans share each envelope.
+The video measurement uses a separate envelope while preserving the original ledgers.
+One complete live run used **$0.0077789** in provider-reported token usage at catalog rates,
+under one cent, with compute billed separately.
 Existing exhausted ledgers are never reset. Compute billing and credit balance are distinct
 from the token-cost estimates in [STATUS.md](STATUS.md). No new VM was provisioned.
 
@@ -192,8 +198,9 @@ and a one-day anonymous schedule lifetime. This is a hackathon demo, not product
 
 Earlier campaign/prospect code and routes remain unlinked. The proprietary/raw historical
 campaign dataset remains ignored and unserved; its separate rights boundary is in
-[THIRD_PARTY.md](THIRD_PARTY.md). Video, PDF slide export and official submission remain
-owner actions. Nothing has been submitted without a receipt.
+[THIRD_PARTY.md](THIRD_PARTY.md). The [video hand-off](docs/video/RECORDING.md) includes the silent rough cut, caption files,
+scene takes, cards and submission PDF. Record the voiceover, finish the edit and upload
+the video and PDF. Official submission remains an owner action; no receipt exists.
 
 ## License
 
