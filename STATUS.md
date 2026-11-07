@@ -1020,3 +1020,29 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
 - Group briefing input now sorts rooftop ties by id before serialization. Canonicalizing
   these inputs required additional accepted group requests; final accounting follows the
   deployment check. All rooftop replay requests remained exact matches.
+
+## Public dealer deployment acceptance: 2026-11-06
+
+- Runtime `ca5b45d` deployed to the existing Vultr VM. Release SHA-256
+  `c3fa60c6b14619c5a4eea47ce1efdde8107f6b653a83e75e4447b12c21aba07f`;
+  all 85 runtime files verified on the VM. Rollback snapshot retained. Existing stores,
+  root-owned credentials, Caddy configuration and exhausted budget ledgers preserved.
+- Direct external Chromium acceptance passed on public HTTPS, without mocks, local asset
+  overrides or TLS exceptions. All 24 child jobs succeeded, group roll-up succeeded and
+  Sandy's approved handoff succeeded. Three exports downloaded; reload, cross-session
+  refusal, schedule persistence, template links and mobile checks passed.
+- **Measured full-run wall-clock: 108.396 s** from browser click to visible group result.
+  Child execution span was 104.844237 s; the roll-up worker took 1.004630 s. This run
+  actually executed current and prior-night analyses on Vultr; inference used accepted
+  exact-input replay, revalidated through the unchanged contracts.
+- Observed VM: 2 CPUs, 3,910 MiB reported RAM (nominal 4 GiB), EWR/New Jersey. Peak
+  concurrent rooftop jobs **6**; observed application cgroup peak **581.55 MiB**; minimum
+  available host memory **2,755.46 MiB** during acceptance. Service cap raised to 1.5 GiB;
+  individual Docker limits remain 128 MiB and half CPU. No new compute provisioned.
+- Screens captured directly from deployment: Group, real live run, Sandy store, Maria
+  drawer, downloads and mobile. Evidence: `.local/dealer-public-acceptance/` plus
+  `.local/deployment/dealer-vm-monitor.json`.
+- Final review adds a per-run clock for recurrence (uploaded source timestamps stay fixed;
+  inventory age advances; sample dates move together) and explicit Qwen/template/human-edit
+  draft labels. These refinements passed 108 backend tests (7 opt-in skips); real Sandy
+  Docker and clock tests passed separately. A final release and public recheck follow.

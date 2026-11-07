@@ -101,11 +101,18 @@ def edit(store, owner, fid, base_sha256, content):
             raise RunError("approval_version_conflict")
         new = dict(saved["content"], **content)
         version = saved["version"] + 1
-        digest = content_hash(new, saved["snapshot"], version)
+        snapshot = dict(
+            saved["snapshot"],
+            provenance="human_edited",
+            origin_provenance=saved["snapshot"].get(
+                "origin_provenance", saved["snapshot"]["provenance"]
+            ),
+        )
+        digest = content_hash(new, snapshot, version)
         conn.execute(
-            "UPDATE dealer_followups SET content=?,version=?,sha256=?,approval=NULL,"
+            "UPDATE dealer_followups SET content=?,snapshot=?,version=?,sha256=?,approval=NULL,"
             "status='pending' WHERE id=?",
-            (dump(new), version, digest, fid),
+            (dump(new), dump(snapshot), version, digest, fid),
         )
         return read(store, conn, owner, fid)
 

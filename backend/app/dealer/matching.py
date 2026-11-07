@@ -1,5 +1,6 @@
 """Controller-side reconciliation and expansion, independent of the sandbox program."""
 
+import copy
 import math
 import statistics
 from datetime import datetime
@@ -49,6 +50,40 @@ SCORE_NAMES = [
     "aged inventory",
     "same store",
 ]
+
+
+def review_snapshot(group, at):
+    """Advance review time without pretending an unchanged CSV is a live CRM feed.
+
+    Synthetic timestamps move together so the published sample story stays relative
+    to its review date. Uploaded timestamps remain source facts; inventory age advances
+    by elapsed whole days since the export was imported.
+    """
+    from .ingestion import DATES
+
+    snapshot = copy.deepcopy(group)
+    current = datetime.fromisoformat(at)
+    reference = datetime.fromisoformat(group["reference_time"])
+    delta = current - reference
+    snapshot["reference_time"] = at
+    if group.get("synthetic"):
+        blocks = [snapshot]
+        if snapshot.get("previous"):
+            blocks.append(snapshot["previous"])
+            snapshot["previous"]["reference_time"] = (
+                datetime.fromisoformat(group["previous"]["reference_time"]) + delta
+            ).isoformat()
+        for block in blocks:
+            for row in block["leads"] + block["inventory"]:
+                for key in set(row) & DATES:
+                    if row.get(key):
+                        row[key] = (datetime.fromisoformat(row[key]) + delta).isoformat()
+    else:
+        elapsed = max(0, delta.days)
+        for unit in snapshot["inventory"]:
+            if unit["status"] != "sold":
+                unit["days_on_lot"] += elapsed
+    return snapshot
 
 
 def typed_input(group, rid, *, previous=False):

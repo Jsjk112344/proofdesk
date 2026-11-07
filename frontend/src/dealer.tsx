@@ -52,6 +52,7 @@ export type Lead = {
   priority: number;
 };
 export type Followup = {
+  provenance?: string;
   id: string;
   lead_id: string;
   content: {

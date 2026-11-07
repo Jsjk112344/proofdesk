@@ -39,3 +39,21 @@ class IngestionTests(unittest.TestCase):
             with store.reading() as conn:
                 self.assertRaises(RunError, store.group, conn, "owner-b")
             self.assertRaises(RunError, store.finish_import, "owner-b")
+
+    def test_review_clock_advances_uploaded_age_and_preserves_sample_story(self):
+        from datetime import timedelta
+
+        from backend.app.dealer.matching import review_snapshot
+
+        group = sample_group()
+        at = (datetime.fromisoformat(group["reference_time"]) + timedelta(days=2)).isoformat()
+        shifted = review_snapshot(group, at)
+        self.assertEqual(shifted["inventory"][137]["days_on_lot"], 74)
+        maria = next(lead for lead in shifted["leads"] if lead["customer"] == "Maria G.")
+        self.assertEqual(
+            (datetime.fromisoformat(at) - datetime.fromisoformat(maria["created_at"])).days, 9
+        )
+        group["synthetic"] = False
+        uploaded = review_snapshot(group, at)
+        self.assertEqual(uploaded["inventory"][137]["days_on_lot"], 76)
+        self.assertEqual(uploaded["leads"][475]["created_at"], group["leads"][475]["created_at"])

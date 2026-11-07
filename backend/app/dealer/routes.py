@@ -144,7 +144,13 @@ def register(app, owner, body):
             with store.reading() as conn:
                 cards = list_followups(store, conn, identity, source) if source else []
             cards = [
-                {k: row[k] for k in ("id", "lead_id", "content", "version", "sha256", "status")}
+                {
+                    **{
+                        k: row[k]
+                        for k in ("id", "lead_id", "content", "version", "sha256", "status")
+                    },
+                    "provenance": row["snapshot"]["provenance"],
+                }
                 for row in cards
             ]
             rooftops.append(

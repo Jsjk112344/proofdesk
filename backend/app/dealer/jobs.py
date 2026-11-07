@@ -17,7 +17,7 @@ from ..execution.controller import (
 from ..execution.runner import DockerRunner, RunError, Task
 from ..experiments.jobs import LEASE_SECONDS, Scheduler, _finish, _interrupted
 from ..experiments.store import dump
-from .matching import expand, reconcile, typed_input
+from .matching import expand, reconcile, review_snapshot, typed_input
 
 PROGRAM = Path(__file__).with_name("analysis_program.py")
 
@@ -158,6 +158,8 @@ def save_result(store, job, token, result):
 
 def rooftop(store, job, token, group, runner, interpreter):
     rid = job["payload"]["rooftop_id"]
+    if job["payload"].get("review_at"):
+        group = review_snapshot(group, job["payload"]["review_at"])
     data = typed_input(group, rid)
     raw = json.dumps(data, separators=(",", ":"), sort_keys=True).encode()
     directory = store.root / "executions" / job["id"]

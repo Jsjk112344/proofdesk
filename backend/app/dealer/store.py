@@ -172,6 +172,7 @@ class DealerStore(Store):
             payload = dict(
                 group_sha256=group["sha256"],
                 mode=mode,
+                review_at=now(),
                 program_sha256=sha256(Path(__file__).with_name("analysis_program.py").read_bytes()),
                 previous_parent_id=previous["id"]
                 if previous and previous["status"] == "succeeded"

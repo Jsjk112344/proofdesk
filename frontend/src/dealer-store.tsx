@@ -255,7 +255,14 @@ function FollowupCard({
             >
               Email
             </button>
-            <span>Draft for {lead.salesperson.split(" ")[0]}</span>
+            <span>
+              {row?.provenance === "deterministic_template"
+                ? "Template"
+                : row?.provenance === "human_edited"
+                  ? "Your edit"
+                  : "Qwen draft"}{" "}
+              · {lead.salesperson.split(" ")[0]}
+            </span>
           </div>
           <p>
             {row

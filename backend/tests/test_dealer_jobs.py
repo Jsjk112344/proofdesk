@@ -8,7 +8,7 @@ from pathlib import Path
 
 from backend.app.dealer.ingestion import sample_group
 from backend.app.dealer.jobs import run_job
-from backend.app.dealer.matching import reconcile, typed_input
+from backend.app.dealer.matching import reconcile
 from backend.app.dealer.store import DealerStore
 from backend.app.execution.artifacts import Rejected
 from backend.app.execution.controller import now
@@ -60,8 +60,8 @@ class DealerJobTests(unittest.TestCase):
             value = json.loads((directory / record["id"] / "result.json").read_bytes())
             tampered = copy.deepcopy(value)
             tampered["k"]["cold_leads"] += 1
-            self.assertRaises(Rejected, reconcile, tampered, typed_input(group, "r02"), raw)
+            self.assertRaises(Rejected, reconcile, tampered, json.loads(raw), raw)
             bad_score = copy.deepcopy(value)
             bad_score["r"][0][2][0][1][0] += 1
-            self.assertRaises(Rejected, reconcile, bad_score, typed_input(group, "r02"), raw)
+            self.assertRaises(Rejected, reconcile, bad_score, json.loads(raw), raw)
             self.assertEqual(parent["kind"], "dealer_rollup")
