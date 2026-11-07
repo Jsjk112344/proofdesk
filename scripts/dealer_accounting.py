@@ -13,7 +13,12 @@ def accounting():
     requests = 0
     reserved = Decimal(0)
     unit_reservations = set()
-    for path in (ROOT / ".local/dealer-plans").glob("*.json"):
+    identities = set()
+    # Keep separate authorized runs cumulative, including the video measurement.
+    # The same plan copied to another directory must never be counted twice.
+    for path in sorted((ROOT / ".local").glob("dealer*plans/*.json")):
+        if path.name.startswith("."):
+            continue
         auth = Authorization.load(path)
         policy = auth.budget.record()
         for key in ("reserved_requests", "reserved_tokens", "reserved_usd"):
@@ -23,6 +28,9 @@ def accounting():
                 dict(config=asdict(auth.config), budget=policy, **auth.record()), sort_keys=True
             ).encode()
         )
+        if identity in identities:
+            continue
+        identities.add(identity)
         saved = json.loads((ROOT / ".local/model-budgets" / (identity + ".json")).read_text())
         requests += saved["reserved_requests"]
         reserved += Decimal(saved["reserved_usd"])
@@ -35,6 +43,8 @@ def accounting():
         )
     responses = []
     for path in (ROOT / ".local/replays").glob("*.json"):
+        if path.name.startswith("."):
+            continue  # macOS archive metadata is not a model response.
         value = json.loads(path.read_text())
         try:
             content = json.loads(value["choices"][0]["message"]["content"])

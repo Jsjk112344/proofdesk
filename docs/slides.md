@@ -60,10 +60,10 @@ Source: [Cox Automotive, June 13, 2025](https://www.coxautoinc.com/insights/used
 
 Our fictional sample: **24 stores · 3,000 vehicles · 9,000 open leads**.
 
-The run found **600 cold leads**, **960 at-risk leads**, **889 best matches in stock**,
-and **836 distinct aged units matched**.
+The run found **652 cold leads**, **1,050 at-risk leads**, **1,007 best matches in stock**,
+and **792 distinct aged units matched**.
 
-**$3,111,400 estimated recoverable gross** = listed price minus cost over best risk-lead
+**$3,434,800 estimated recoverable gross** = listed price minus cost over best risk-lead
 matches. A car can match multiple leads. This is not a sales forecast or realized revenue.
 
 Floorplan uses an **entered $8/unit/day assumption**, not a market interest-rate claim.
@@ -105,8 +105,8 @@ SMS and email with her CR-V trade → manager approval.
 | Group leaders ask each store for the picture | Regional map, store ranking and validated roll-up |
 | Preparation stops when the tab closes | Server-owned workers and recurring reviews |
 
-**Measured public full run: 119.419 seconds.** Six concurrent child jobs; observed application
-peak 641.59 MiB on the existing Vultr VM. [Release-specific observations](../STATUS.md).
+**Measured public full run: 140.131 seconds, through final public result capture.** Six concurrent child jobs; observed application
+peak 641.59 MiB on the earlier release of the same Vultr VM. [Release-specific observations](../STATUS.md).
 
 Human triage time and business uplift have not been measured; no time-saved ratio is claimed.
 
@@ -138,7 +138,9 @@ Nothing is sent to customers. Transfers are review requests, not executed moves.
 
 # Cost, next, and the platform
 
-The dealer inference envelope is **$0.15 / 64 requests**, inside the owner’s existing
+A complete live run used **25 responses / $0.0077789** in token-based inference cost, under one cent. Compute is separate; these are provider usage estimates, not billing receipts.
+
+The separate video inference envelope is **$0.15 / 64 requests**, inside the owner’s existing
 $150 compute/inference authorization. Actual requests, usage estimates, uncertain rejected
 calls and pessimistic reservations are itemized in [STATUS.md](../STATUS.md).
 
@@ -159,3 +161,6 @@ Current input is CSV; no named CRM/DMS integration is claimed.
 [MIT source](https://github.com/Jsjk112344/salesdesk)
 
 Challenge 2: Powering the Future of Work · Vultr Agent Rush
+
+
+Submission PDF: [SalesDesk slides](video/SalesDesk-slides.pdf). Rebuild with `uv run python -m scripts.render_demo_assets`; pass `--capture` to refresh the public screenshots. The PDF uses the same video cards, Inter font, logo mark and current public captures.

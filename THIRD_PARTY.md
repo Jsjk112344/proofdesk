@@ -185,3 +185,13 @@ Linked factual evidence, checked 2026-11-06; no report graphics or third-party c
 
 The sample's $8/unit/day floorplan figure is an entered assumption, independent of these
 sources. No vendor connection, endorsement, integration or affiliation is claimed.
+
+## Video preparation assets
+
+- [Inter, by Rasmus Andersson](https://github.com/rsms/inter), SIL Open Font License 1.1.
+  `docs/video/fonts/InterVariable.woff2` is the upstream font; `Inter-SemiBold.ttf` is a
+  static weight-600 instance for subtitle rendering. The license is included alongside
+  both files. Original SalesDesk mark and app styling are reused in original HTML cards.
+- Playwright (Apache-2.0), Chromium and FFmpeg render and record the public app and
+  assemble the silent edit. FFmpeg with libass renders captions derived from the SRT.
+  These tools do not supply stock footage, artificial UI values or customer data.
