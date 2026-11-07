@@ -54,6 +54,12 @@ def messages(kind, result, group):
     payload = dict(
         metrics={f"[metric:{key}]": value for key, value in metrics.items()},
         data_label=group["data_label"],
+        metric_definitions={
+            "at_risk": "Leads needing attention; not necessarily matched.",
+            "matched_leads": "Best match may be in stock OR in transit.",
+            "matched_in_stock": "Best match is in stock; this is the dashboard stat.",
+            "aged_matched": "Distinct aged units among top-three candidates, not buyers or sales.",
+        },
     )
     if kind == "rooftop_brief":
         payload["safe_findings"] = [
@@ -77,7 +83,7 @@ def messages(kind, result, group):
     else:
         payload["safe_findings"] = [
             "[metric:cold_leads] cold leads need attention across the group.",
-            "[metric:matched_leads] at-risk leads have matching vehicles.",
+            "[metric:matched_in_stock] at-risk leads have a best match in stock.",
             "[metric:aged_matched] aged units match at-risk leads.",
             "Listed figures imply [metric:recoverable_gross] estimated recoverable gross.",
         ]

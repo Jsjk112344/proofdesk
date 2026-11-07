@@ -73,6 +73,34 @@ FIRST = [
 ]
 LAST = ["Vale", "Mercer", "Hollis", "Finch", "Calder", "Wren", "Arden", "Ellis", "Linden", "Hart"]
 SOURCES = ["OEM site", "third-party marketplace", "dealer website", "phone", "walk-in", "chat"]
+# Different fictional operating conditions, not a display cap. Sandy's original
+# records (including Maria) are preserved byte for byte.
+RISK_COUNTS = [
+    58,
+    40,
+    32,
+    85,
+    24,
+    47,
+    19,
+    37,
+    12,
+    63,
+    29,
+    76,
+    51,
+    81,
+    68,
+    43,
+    35,
+    22,
+    17,
+    31,
+    26,
+    54,
+    39,
+    61,
+]
 
 
 def stamp(days=0, hours=0):
@@ -238,6 +266,26 @@ def generate():
         status="contacted",
         notes="Interested in the blue RAV4 Hybrid XLE; has a CR-V to trade.",
     )
+    by_stock = {u["stock_no"]: u for u in inventory}
+    for ix, target in enumerate(RISK_COUNTS):
+        if ix == 1:
+            continue
+        own = inventory[ix * 125 : (ix + 1) * 125]
+        sold = next(u for u in own if u["status"] == "sold")
+        available = [u for u in own if u["status"] == "in_stock"]
+        cold_count = round(target * 0.62)
+        for j, lead in enumerate(leads[ix * 475 : ix * 475 + 375]):
+            lead["last_contact_at"] = (
+                stamp(hours=96 + j % 72) if j < cold_count else stamp(hours=12 + j % 36)
+            )
+            if cold_count <= j < target:
+                lead["vehicle_of_interest"] = sold["stock_no"]
+            elif j >= target:
+                wanted = by_stock.get(lead["vehicle_of_interest"])
+                if wanted and wanted["status"] == "sold":
+                    lead["vehicle_of_interest"] = available[j % len(available)]["stock_no"]
+                if lead["status"] == "appointment":
+                    lead["appointment_at"] = stamp(days=-1)
     return roofs, inventory, leads
 
 

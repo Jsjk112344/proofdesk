@@ -2,7 +2,7 @@ import re
 import unittest
 from datetime import datetime
 
-from scripts.generate_dealer_group import REFERENCE, generate
+from scripts.generate_dealer_group import REFERENCE, RISK_COUNTS, generate
 
 
 class DealerFixtures(unittest.TestCase):
@@ -19,7 +19,7 @@ class DealerFixtures(unittest.TestCase):
                 >= 72 * 3600
                 for lead in active
             ),
-            600,
+            25 + sum(round(n * 0.62) for i, n in enumerate(RISK_COUNTS) if i != 1),
         )
         maria = next(lead for lead in leads if lead["customer"] == "Maria G.")
         self.assertEqual(maria["rooftop_id"], "r02")
@@ -28,6 +28,27 @@ class DealerFixtures(unittest.TestCase):
             "sold",
         )
         self.assertEqual(next(u for u in units if u["stock_no"] == "S00138")["days_on_lot"], 74)
+
+    def test_store_variation_is_in_source_records_and_sandy_stays_unchanged(self):
+        from collections import Counter
+
+        _, units, leads = generate()
+        sold = {u["stock_no"] for u in units if u["status"] == "sold"}
+        counts = Counter()
+        for lead in leads:
+            if lead["status"] in ("sold", "lost"):
+                continue
+            cold = (
+                REFERENCE - datetime.fromisoformat(lead["last_contact_at"])
+            ).total_seconds() >= 72 * 3600
+            overdue = (
+                bool(lead["appointment_at"])
+                and datetime.fromisoformat(lead["appointment_at"]) < REFERENCE
+            )
+            if cold or lead["vehicle_of_interest"] in sold or overdue:
+                counts[lead["rooftop_id"]] += 1
+        self.assertEqual([counts[f"r{i + 1:02d}"] for i in range(24)], RISK_COUNTS)
+        self.assertEqual(counts["r02"], 40)
 
     def test_generator_reproduces_committed_data(self):
         import io

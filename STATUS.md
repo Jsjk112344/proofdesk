@@ -1126,3 +1126,20 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   2:45 demo script and submission copy describe the dealer product. All changes are committed
   and pushed to main. **Owner actions:** record the narrated video, export slides as PDF,
   verify the final LabLab form and submit. Nothing has been submitted; no receipt exists.
+
+## Video preparation, source fixes: 2026-11-06 ET
+
+- Camera-readiness source changes vary the fictional store contact/sold-interest records:
+  12–85 at risk per rooftop, 1,050 group total, 652 cold. Sandy's original 40-lead queue,
+  Maria, inventory, match rules and sandbox limits are preserved. Counts are not capped.
+- Group brief inputs now explain the metric denominators and use `matched_in_stock` for
+  the in-stock finding, matching the dashboard. Old replay inputs no longer match.
+- Focused fixture/contract checks passed (six); offline suite passed (113, seven opt-in
+  skips before the additional source-variation check). Frontend production build passed.
+  A concurrent broad Docker check encountered the controller's exclusive lock; a serial
+  containment recheck is in progress. No validator or execution policy was weakened.
+- A separate bounded video inference envelope ($0.15 / 64 requests, six per plan) was
+  prepared under the existing $150 hackathon authorization for the requested complete
+  live measurement. Original plans and all durable ledgers remain unchanged. Provider
+  catalog authenticated successfully: $0.10 input / $0.20 output per million tokens.
+- Deployment, refreshed sample acceptance, public measurements and video assets follow.

@@ -46,6 +46,29 @@ class DealerContracts(unittest.TestCase):
         self.assertNotIn("last_contact_at", wire)
         self.assertNotIn("assigned_salesperson", wire)
 
+    def test_group_match_finding_uses_dashboard_stock_denominator(self):
+        result = dict(
+            totals=dict(at_risk=85, matched_leads=80, matched_in_stock=71), rooftops=[], sources=[]
+        )
+        payload = json.loads(messages("group_brief", result, self.group)[1]["content"])
+        self.assertIn(
+            "[metric:matched_in_stock] at-risk leads have a best match in stock.",
+            payload["safe_findings"],
+        )
+        reading = dict(
+            headline="Review available stock.",
+            findings=[payload["safe_findings"][1]],
+            recommendations=[],
+        )
+        from backend.app.dealer.contracts import rendered
+
+        self.assertEqual(
+            rendered(
+                validate(json.dumps(reading), "group_brief", result, self.group), result, self.group
+            )["findings"],
+            ["71 at-risk leads have a best match in stock."],
+        )
+
     def test_rejects_untrusted_refs_quantities_features_and_sends(self):
         good = deterministic("rooftop_brief", self.result, self.group)
         for field, value in [

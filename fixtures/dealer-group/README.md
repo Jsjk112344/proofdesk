@@ -13,7 +13,11 @@ The **entered floorplan assumption** is **$8 per unit per day**, configurable pe
 workspace. This is an illustrative flat rate, not a measured interest charge.
 Cost to date = days on lot × entered daily rate. Review distance defaults to 250 miles.
 
-Planted evidence includes 600 open leads without contact for at least 72 hours,
+Planted evidence includes 652 open leads without contact for at least 72 hours,
 sold vehicle interests, aged stock, slower response at Ogden and Reno, and a higher
 historical close rate for dealer website leads. Maria G. at Sandy enquired about a
 blue 2024 Toyota RAV4 Hybrid XLE that sold; silver stock S00138 has 74 days on lot.
+
+Underlying contact gaps and sold interests produce 12–85 at-risk leads per store,
+1,050 across the group. These are full reviewed counts, not a queue cap. Sandy's
+original 40-lead queue and Maria's inventory and contact facts are preserved.
