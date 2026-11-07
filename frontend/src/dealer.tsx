@@ -766,6 +766,7 @@ export function DealerApp() {
   useEffect(() => {
     if (route === "#/stores" && data)
       document.getElementById("stores")?.scrollIntoView({ block: "start" });
+    else window.scrollTo(0, 0);
   }, [route, !!data]);
   const page =
     route === "#/schedule"

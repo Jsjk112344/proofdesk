@@ -164,6 +164,15 @@ try {
       .waitFor();
     assert.equal(await page.getByRole("link", { name: /template/ }).count(), 3);
     checks.push("data validation counts and three downloadable templates");
+    await page.getByRole("link", { name: /^Stores/ }).click();
+    await page.locator('.rooftop-tile[href="#/store/r24"]').click();
+    await page
+      .getByRole("heading", { name: "Summit West Valley", exact: true })
+      .waitFor();
+    await page.waitForFunction(() => window.scrollY === 0);
+    checks.push(
+      "opening a store from the bottom of the group grid restores its header and primary action",
+    );
   }
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(base + "/#/");
