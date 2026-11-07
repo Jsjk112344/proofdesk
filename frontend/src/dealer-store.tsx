@@ -47,7 +47,7 @@ function AgentTrace({ roof }: { roof: Rooftop }) {
     { label: "Flagged at risk · gone cold", value: validated ? `${n("at_risk")} · ${n("cold_leads")}` : "Pending", done: validated, running: active && !validated },
     { label: "Searched cars here · sister stores", value: validated ? `${n("cars_here")} · ${n("cars_sister")}` : "Pending", done: validated, running: active && !validated },
     { label: "Scored lead / car pairs", value: validated ? `${n("scored_pairs")} · top ${n("top_score")}` : "Pending", done: validated, running: active && !validated },
-    { label: "Qwen on Vultr Inference", value: roof.result ? `Brief + ${qwen} follow-ups` : "Writing brief + follow-ups", done: done, running: active && has("metrics_validated") },
+    { label: "Qwen on Vultr Inference", value: roof.result ? `Brief + ${qwen} follow-ups` : has("metrics_validated") ? "Writing brief + follow-ups" : "Pending", done: done, running: active && has("metrics_validated") },
     { label: "Ready for manager review", value: done ? `${roof.followups.length} drafts` : failed ? "Needs attention" : "Pending", done, running: active && has("brief_written") },
   ];
   if (!roof.job) return null;
