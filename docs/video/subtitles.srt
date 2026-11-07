@@ -1,0 +1,191 @@
+1
+00:00:00,500 --> 00:00:03,600
+It's 6 AM. Summit Auto Group
+runs 24 dealerships,
+
+2
+00:00:03,600 --> 00:00:07,600
+with 3,000 cars on the lots
+and 9,000 open leads.
+
+3
+00:00:07,800 --> 00:00:10,800
+In this sample,
+652 leads are cold.
+
+4
+00:00:11,000 --> 00:00:13,800
+Which customer should
+each store call first?
+
+5
+00:00:14,300 --> 00:00:18,300
+SalesDesk.
+Sell more: your AI sales analyst.
+
+6
+00:00:18,300 --> 00:00:21,800
+It works every lead,
+at every rooftop, every night.
+
+7
+00:00:22,300 --> 00:00:25,000
+Here's tonight's review.
+
+8
+00:00:25,000 --> 00:00:28,500
+SalesDesk fans the work out
+across all 24 rooftops:
+
+9
+00:00:28,500 --> 00:00:31,800
+six isolated workers
+running in parallel on Vultr.
+
+10
+00:00:31,800 --> 00:00:36,800
+Each one checks every lead's risk
+and searches the inventory
+
+11
+00:00:36,800 --> 00:00:39,300
+at its own store
+and nearby sister stores.
+
+12
+00:00:39,300 --> 00:00:42,500
+Then Qwen on Vultr Inference
+writes that store's brief.
+
+13
+00:00:46,300 --> 00:00:50,800
+By morning: 1,050 leads at risk,
+1,007 matched to a car in stock,
+
+14
+00:00:50,800 --> 00:00:54,800
+and 792 distinct
+aged units matched.
+
+15
+00:00:55,000 --> 00:01:01,500
+That's an estimated $3.4 million
+in recoverable gross.
+
+16
+00:01:01,700 --> 00:01:05,700
+Leadership sees the group.
+Every store manager gets a queue.
+
+17
+00:01:06,300 --> 00:01:09,000
+Let's open Sandy.
+
+18
+00:01:09,200 --> 00:01:13,500
+Forty follow-ups, ranked by risk
+and by what's on the lot.
+
+19
+00:01:14,300 --> 00:01:18,800
+Maria asked about a blue
+2024 RAV4 Hybrid nine days ago.
+
+20
+00:01:18,800 --> 00:01:25,000
+Her last contact was a week ago,
+and the car she wanted sold.
+
+21
+00:01:25,200 --> 00:01:28,000
+Without a fresh match,
+she needs another search.
+
+22
+00:01:28,200 --> 00:01:33,500
+SalesDesk found a silver one on this lot:
+same model, same trim, in budget.
+
+23
+00:01:33,500 --> 00:01:39,500
+It has sat for 74 days,
+with an entered daily carrying-cost assumption.
+
+24
+00:01:39,700 --> 00:01:44,000
+It knows she has
+a 2017 CR-V to trade in.
+
+25
+00:01:44,200 --> 00:01:51,500
+And Qwen drafts the text
+using only this car's recorded facts.
+
+26
+00:01:52,300 --> 00:01:58,300
+The manager reads, edits if needed,
+and approves Sandy in one click.
+
+27
+00:01:58,300 --> 00:02:05,000
+Vultr prepares the drafts, CRM tasks
+and sister-store transfer requests.
+
+28
+00:02:05,200 --> 00:02:09,500
+These are drafts and tasks.
+SalesDesk never sends customer messages.
+
+29
+00:02:12,300 --> 00:02:17,300
+Then close the laptop.
+The next review runs at 2 AM,
+
+30
+00:02:17,300 --> 00:02:20,300
+every night, for every store,
+on Vultr.
+
+31
+00:02:20,500 --> 00:02:23,500
+Tomorrow, the queue
+is waiting again.
+
+32
+00:02:24,300 --> 00:02:29,300
+Before: managers dig through leads,
+sold units and other stores' stock.
+
+33
+00:02:29,300 --> 00:02:33,300
+After: they approve
+a ranked list.
+
+34
+00:02:33,500 --> 00:02:37,300
+The full 24-store review
+ran in about two minutes twenty seconds.
+
+35
+00:02:38,300 --> 00:02:43,300
+Under the hood: a durable scheduler
+on a Vultr VM,
+
+36
+00:02:43,300 --> 00:02:47,300
+a disposable Docker sandbox
+for every rooftop,
+
+37
+00:02:47,300 --> 00:02:52,000
+and Qwen on Vultr Serverless Inference
+for under one cent a run.
+
+38
+00:02:52,500 --> 00:02:55,500
+Automotive is our first vertical.
+
+39
+00:02:55,500 --> 00:02:59,500
+SalesDesk: sell more,
+with your AI sales analyst.

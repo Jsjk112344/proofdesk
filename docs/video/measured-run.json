@@ -1,0 +1,685 @@
+{
+  "url": "https://salesdesk.149.28.51.139.sslip.io",
+  "wall_clock_seconds": 140.131,
+  "review": {
+    "id": "0c577751009d4c94bf712a3dac25c183",
+    "status": "succeeded",
+    "events": [
+      {
+        "at": "2026-11-07T02:07:20.421303+00:00",
+        "due_at": "2026-11-07T02:07:20.420597+00:00",
+        "stage": "scheduled"
+      },
+      {
+        "at": "2026-11-07T02:09:31.180928+00:00",
+        "attempt": 1,
+        "lease_until": "2026-11-07T02:11:31.180216+00:00",
+        "stage": "claimed"
+      },
+      {
+        "at": "2026-11-07T02:09:31.876394+00:00",
+        "stage": "started"
+      },
+      {
+        "at": "2026-11-07T02:09:31.995949+00:00",
+        "stage": "writing_group_brief"
+      },
+      {
+        "at": "2026-11-07T02:09:33.550797+00:00",
+        "stage": "succeeded"
+      }
+    ],
+    "created_at": "2026-11-07T02:07:20.421303+00:00",
+    "started_at": "2026-11-07T02:09:31.180216+00:00",
+    "finished_at": "2026-11-07T02:09:33.550650+00:00",
+    "failure_reason": null
+  },
+  "totals": {
+    "aged_60": 948,
+    "aged_90": 357,
+    "aged_matched": 792,
+    "at_risk": 1050,
+    "cold_leads": 652,
+    "floorplan_daily": 7584.0,
+    "floorplan_to_date": 703784.0,
+    "matched_in_stock": 1007,
+    "matched_leads": 1050,
+    "open_leads": 9000,
+    "recoverable_gross": 3434800.0
+  },
+  "cold_leads": 652,
+  "rooftop_risk_counts": {
+    "Salt Lake City": 58,
+    "Sandy": 40,
+    "Provo": 32,
+    "Ogden": 85,
+    "Orem": 24,
+    "Lehi": 47,
+    "St. George": 19,
+    "Logan": 37,
+    "Park City": 12,
+    "Boise": 63,
+    "Idaho Falls": 29,
+    "Las Vegas": 76,
+    "Henderson": 51,
+    "Reno": 81,
+    "Denver": 68,
+    "Colorado Springs": 43,
+    "Fort Collins": 35,
+    "Grand Junction": 22,
+    "Cheyenne": 17,
+    "Pocatello": 31,
+    "Twin Falls": 26,
+    "Layton": 54,
+    "Draper": 39,
+    "West Valley": 61
+  },
+  "live_calls": 25,
+  "replay_calls": 0,
+  "failed_briefs": [],
+  "inference_cost_usd": "0.0077789",
+  "first20_observed_running": [
+    "r01",
+    "r02",
+    "r03",
+    "r04",
+    "r05",
+    "r06"
+  ],
+  "maria": {
+    "created_at": "2026-10-28T19:07:20.420968-07:00",
+    "customer": "Maria G.",
+    "first_name": "Maria",
+    "last_contact_at": "2026-10-30T19:07:20.420968-07:00",
+    "lead_id": "L000476",
+    "matches": [
+      {
+        "body": "SUV",
+        "color": "silver",
+        "components": {
+          "aged inventory": 6,
+          "body": 8,
+          "budget": 10,
+          "color": 0,
+          "make": 20,
+          "mileage": 3,
+          "model": 25,
+          "same store": 8,
+          "trim": 10,
+          "year": 8
+        },
+        "cost": 29500.0,
+        "days_on_lot": 74,
+        "eta": "",
+        "list_price": 32900.0,
+        "make": "Toyota",
+        "mileage": 18420,
+        "model": "RAV4 Hybrid",
+        "rooftop_id": "r02",
+        "score": 98,
+        "sold_date": "",
+        "status": "in_stock",
+        "stock_no": "S00138",
+        "store_name": "Summit Sandy",
+        "transfer": false,
+        "trim": "XLE",
+        "year": 2024
+      },
+      {
+        "body": "SUV",
+        "color": "silver",
+        "components": {
+          "aged inventory": 6,
+          "body": 8,
+          "budget": 10,
+          "color": 0,
+          "make": 20,
+          "mileage": 3,
+          "model": 25,
+          "same store": 8,
+          "trim": 10,
+          "year": 8
+        },
+        "cost": 31900.0,
+        "days_on_lot": 83,
+        "eta": "",
+        "list_price": 34400.0,
+        "make": "Toyota",
+        "mileage": 14344,
+        "model": "RAV4 Hybrid",
+        "rooftop_id": "r02",
+        "score": 98,
+        "sold_date": "",
+        "status": "in_stock",
+        "stock_no": "S00222",
+        "store_name": "Summit Sandy",
+        "transfer": false,
+        "trim": "XLE",
+        "year": 2024
+      },
+      {
+        "body": "SUV",
+        "color": "silver",
+        "components": {
+          "aged inventory": 6,
+          "body": 8,
+          "budget": 10,
+          "color": 0,
+          "make": 20,
+          "mileage": 0,
+          "model": 25,
+          "same store": 8,
+          "trim": 10,
+          "year": 8
+        },
+        "cost": 30100.0,
+        "days_on_lot": 92,
+        "eta": "",
+        "list_price": 33700.0,
+        "make": "Toyota",
+        "mileage": 55414,
+        "model": "RAV4 Hybrid",
+        "rooftop_id": "r02",
+        "score": 95,
+        "sold_date": "",
+        "status": "in_stock",
+        "stock_no": "S00198",
+        "store_name": "Summit Sandy",
+        "transfer": false,
+        "trim": "XLE",
+        "year": 2024
+      }
+    ],
+    "priority": 248,
+    "risks": [
+      "Cold lead",
+      "Vehicle sold"
+    ],
+    "salesperson": "Jordan Finch",
+    "trade_in": "2017|Honda|CR-V|85000",
+    "wanted": {
+      "body": "SUV",
+      "color": "blue",
+      "cost": 30600.0,
+      "days_on_lot": 32,
+      "eta": "",
+      "list_price": 33900.0,
+      "make": "Toyota",
+      "mileage": 39700,
+      "model": "RAV4 Hybrid",
+      "rooftop_id": "r02",
+      "sold_date": "2026-10-31T19:07:20.420968-07:00",
+      "status": "sold",
+      "stock_no": "S00126",
+      "trim": "XLE",
+      "year": 2024
+    }
+  },
+  "measurement_note": "Browser click through final public result capture; includes final API, render and screenshot overhead. Token cost is reported provider usage at catalog rates, not a billing receipt; compute excluded.",
+  "receipts": [
+    {
+      "rooftop": "r01",
+      "elapsed_seconds": 3.378,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "a80028ce850090060e948801f7d8430101100cfeae0d5c8957552f445148f301",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "5f864b58a6229903f648e659874bdf499baec14972d9038deb9ea119a4a9d063",
+      "usage": {
+        "completion_tokens": 561,
+        "prompt_tokens": 1871,
+        "total_tokens": 2432
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r02",
+      "elapsed_seconds": 3.211,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "fd1f90e94bd78de98f9db6bd842d9d348a992455217398527661ce804a075edf",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "1ce87fd3c8563bd910ba86effb51bb994e6229c4b3c21dcc389105ed6d1ebfb0",
+      "usage": {
+        "completion_tokens": 570,
+        "prompt_tokens": 1872,
+        "total_tokens": 2442
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r03",
+      "elapsed_seconds": 3.0,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "f61e9f5b49a1663945c776b610dad17b1dc52a91c28feccd261125dafdb978ac",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "3120a1529fd06278434c6c0ea6df76590bf9243dfed2ce35e69b79855ffb4270",
+      "usage": {
+        "completion_tokens": 562,
+        "prompt_tokens": 1885,
+        "total_tokens": 2447
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r04",
+      "elapsed_seconds": 3.224,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "791d36835475dc3b1f73d0ed6af64481e8754d7611bb4a0a0a8f30e5daa0aec2",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "39ecfec6205753fa1e704f343276e7126c8a42c716150676bdbb772b35c50e29",
+      "usage": {
+        "completion_tokens": 550,
+        "prompt_tokens": 1862,
+        "total_tokens": 2412
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r05",
+      "elapsed_seconds": 3.031,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "bfea13614fd0fc862a1a95be89c67148db5c660b1d32d8db9acbfc0be3a59fac",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "6f40bbc69e7486b490da2c1290f53cfdd9a895e80fbb46e413323c61919cae6b",
+      "usage": {
+        "completion_tokens": 587,
+        "prompt_tokens": 1866,
+        "total_tokens": 2453
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r06",
+      "elapsed_seconds": 3.446,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "648576d79c7e2c5c3bbebc549f7a36bb169dbaf3e3bd92f848cf5d4833915d54",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "146091790d3db1f78db4d32075c4e8237e769ee7d412ae41da88d357c83d22a3",
+      "usage": {
+        "completion_tokens": 559,
+        "prompt_tokens": 1861,
+        "total_tokens": 2420
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r07",
+      "elapsed_seconds": 3.101,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "22f4e19664f604053afd5336339c5cce4215653740a4bfad5224a65f165d55b0",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "4daa235d8f206320b127fab0a7d629ee112ae5156a1394faf34f1089bd6ced7e",
+      "usage": {
+        "completion_tokens": 550,
+        "prompt_tokens": 1880,
+        "total_tokens": 2430
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r08",
+      "elapsed_seconds": 3.507,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "1822374cfd52cbe61e27a98560af21539bf4abd748692cfd3cf86350e44e0f1f",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "2b2042bac15e3f47826fec4e19ebc2056e85e4f970f45aba0945d622a9c59c27",
+      "usage": {
+        "completion_tokens": 549,
+        "prompt_tokens": 1875,
+        "total_tokens": 2424
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r09",
+      "elapsed_seconds": 4.631,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "05f3515ba85d762917238253489d2c25fccc3c567fd4e55b284b47b60a9e7626",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "b4af4420a8d8dcc8acd04a19975acce4588c29d287b54e7f0bf6cc9f7d0af610",
+      "usage": {
+        "completion_tokens": 575,
+        "prompt_tokens": 1878,
+        "total_tokens": 2453
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r10",
+      "elapsed_seconds": 3.591,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "ccebe7436abceb20c06dc84cc4bc552d5144a01b28da94fc2434830a7abaf70b",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "b9423042492b6e6163e5067128b89d3b3a442410cfb0567de2f78ea42043bdc8",
+      "usage": {
+        "completion_tokens": 570,
+        "prompt_tokens": 1867,
+        "total_tokens": 2437
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r11",
+      "elapsed_seconds": 3.556,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "2546dfee3c6dfe42edc7429e38a3fcf2057920617c7248fb26fc3bfd8731e633",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "7ef678bb1bfdc7e4b6332b329f52c36173acf9f02be9bfa0dd7f831ad8a0b701",
+      "usage": {
+        "completion_tokens": 558,
+        "prompt_tokens": 1878,
+        "total_tokens": 2436
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r12",
+      "elapsed_seconds": 2.858,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "323dd5d6b47d234eb08cc9e72387e026f928c2f86461700b9bf331e277e33e42",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "94d1011e24201c1e42a9b086c758152799f6e18e22799eab8f1b3cb9690ece52",
+      "usage": {
+        "completion_tokens": 549,
+        "prompt_tokens": 1858,
+        "total_tokens": 2407
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r13",
+      "elapsed_seconds": 3.398,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "a2a890f546377f0ffa532248d74b1c9c0562305847c1cddd0f5859a9d9b91cb4",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "77919c8961bff56d05fbaf25cb69b2f89420aabdecdaf4636f59e145387ab59d",
+      "usage": {
+        "completion_tokens": 561,
+        "prompt_tokens": 1880,
+        "total_tokens": 2441
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r14",
+      "elapsed_seconds": 4.116,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "2977eda70d6631c9b547167d67001362143ce3048271a38d01fba148a44b75f5",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "2eb37d41ba525fd5c291da9c359a2d7f62423d5661219fe2a90c495957ef8172",
+      "usage": {
+        "completion_tokens": 549,
+        "prompt_tokens": 1870,
+        "total_tokens": 2419
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r15",
+      "elapsed_seconds": 4.321,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "2162f5050e4c750f2e6d78da0d446af88bfd1540c9d78f8198fc168930a688a1",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "1332e4b1e91a760e8bc6e458bf5665cc38587b655b93e570ca4e74025d4b6290",
+      "usage": {
+        "completion_tokens": 570,
+        "prompt_tokens": 1882,
+        "total_tokens": 2452
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r16",
+      "elapsed_seconds": 3.663,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "ef26fe9ce5f3e1a07a2049a92e548024928624c65b6b97bfe1e28c4fe16b11cd",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "046550a8bfce74fa8d8da7dc94a2bf499d2aab234447236ec390b146268ff943",
+      "usage": {
+        "completion_tokens": 570,
+        "prompt_tokens": 1887,
+        "total_tokens": 2457
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r17",
+      "elapsed_seconds": 3.422,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "dbaa303f4e4bf2ca5e21fe32b6422f2ec27dd6c7f0f828f16ce246959ed35b45",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "83b0b573286db2ce73fb72709185fd2191c8f456aa9fcf7b353ac0e70e437781",
+      "usage": {
+        "completion_tokens": 549,
+        "prompt_tokens": 1860,
+        "total_tokens": 2409
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r18",
+      "elapsed_seconds": 3.966,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "0046de136b872b24e2265c7187bd192d39725d5355f04d61084abdd796b62ee3",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "36e1b32387b9a877b74da9b5379c29ff0ce8e64afbf1ea9c72c112c392c36d3d",
+      "usage": {
+        "completion_tokens": 561,
+        "prompt_tokens": 1865,
+        "total_tokens": 2426
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r19",
+      "elapsed_seconds": 4.097,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "a89106be234ee054fca6624f218ffb72d89195452f04cae94f5a99788835021f",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "17c1baa7d5a89e7f899e6757a56bef1de89f4a928a330fbf3f00cad773de55bd",
+      "usage": {
+        "completion_tokens": 583,
+        "prompt_tokens": 1871,
+        "total_tokens": 2454
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r20",
+      "elapsed_seconds": 3.859,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "a421db242986451924893863f40671fac71357fd1cf45a3fff98471d859fa74b",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "ebb9bc7d4ddea2bb08c568c65b326eaada3f896bd21579bd937a26fef175b0f3",
+      "usage": {
+        "completion_tokens": 560,
+        "prompt_tokens": 1889,
+        "total_tokens": 2449
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r21",
+      "elapsed_seconds": 3.179,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "caec988083f0b81390ef290c45ae4c0574de85524fa99254ccb6c4fbd0dd7eae",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "ad723c7743b67650e18884801abc0d133ee8037babf965d6fd83f28231400911",
+      "usage": {
+        "completion_tokens": 561,
+        "prompt_tokens": 1872,
+        "total_tokens": 2433
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r22",
+      "elapsed_seconds": 2.416,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "e2319e4ebca15c2972cd079e986f2e075439f635946736023c41d34d49833851",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "465e96cd0d4039b61d3758ee7693d92af5bd2e717b1383c01ffc47407c8876db",
+      "usage": {
+        "completion_tokens": 561,
+        "prompt_tokens": 1867,
+        "total_tokens": 2428
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r23",
+      "elapsed_seconds": 2.322,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "d115a9287fa4ce6be75e9cbfce2ee17bdf826f9494585054358483a1e948b8df",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "21291d3d322ae2e4f0f0db1d291316a2f158a259f54bdbe0afa42f401d243618",
+      "usage": {
+        "completion_tokens": 571,
+        "prompt_tokens": 1872,
+        "total_tokens": 2443
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "r24",
+      "elapsed_seconds": 1.971,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "7543e8b7641025cec026cc73a84a99d022bb797316deca03d6592156f12339f2",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "b347c104ccbabf84150edf613bc17318fd4381cc8486bda4615c73b9258f09c5",
+      "usage": {
+        "completion_tokens": 580,
+        "prompt_tokens": 1888,
+        "total_tokens": 2468
+      },
+      "usage_kind": "provider_reported"
+    },
+    {
+      "rooftop": "group",
+      "elapsed_seconds": 1.501,
+      "provider": "vultr_serverless_inference",
+      "request_sha256": "84c095105ffa82b45cb75621b321d1ba06380b28eaae8c6a3fcc8fe9764e834e",
+      "reservation": {
+        "input_tokens": 16000,
+        "output_tokens": 2048,
+        "usd": "0.0020096"
+      },
+      "response_sha256": "92edcb009ff1d315f7ac2c9dba00fee6fb18e8dc3882588bee5339c5e5ca78db",
+      "usage": {
+        "completion_tokens": 194,
+        "prompt_tokens": 5413,
+        "total_tokens": 5607
+      },
+      "usage_kind": "provider_reported"
+    }
+  ],
+  "group_brief": {
+    "findings": [
+      "652 cold leads need attention across the group.",
+      "1007 at-risk leads have a best match in stock.",
+      "792 aged units match at-risk leads.",
+      "Listed figures imply $3,434,800 estimated recoverable gross."
+    ],
+    "headline": "Summit Auto Group shows high at-risk volume with significant aged inventory and slow response outliers.",
+    "recommendations": [
+      "Review response times at Summit Ogden and Summit Reno for process gaps.",
+      "Analyze dealer website performance versus third-party marketplace to optimize channel strategy.",
+      "Audit aged inventory at Summit Ogden to reduce floorplan costs."
+    ]
+  }
+}

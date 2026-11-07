@@ -1143,3 +1143,38 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   live measurement. Original plans and all durable ledgers remain unchanged. Provider
   catalog authenticated successfully: $0.10 input / $0.20 output per million tokens.
 - Deployment, refreshed sample acceptance, public measurements and video assets follow.
+
+## Video camera fixes, live acceptance: 2026-11-06 ET
+
+- Runtime `4bf709e` deployed to public HTTPS; archive SHA-256
+  `268f5c6a37414c321591bb2dd351b90c539676082eb284ea0acb30b4edd1593d`,
+  all 85 runtime file hashes verified. Rollback and original sample/ledgers preserved.
+- Fresh public full run succeeded: 24 child jobs plus group roll-up, **25 live Qwen
+  responses / zero replay / zero failed briefs**. Six real stores entered running state
+  in the first 20 seconds. Final result capture completed **140.131 s** after Run click;
+  this includes final API/render/screenshot overhead, not just server compute.
+- Final stat strip: **9,000 leads reviewed / 1,050 at risk / 1,007 best matches in stock /
+  792 distinct aged units matched / $3,434,800 estimated recoverable gross** (UI $3.4M).
+  Store risks range 12–85. Sandy is 40. No queue cap exists. Updated accepted sample
+  installed separately; fresh public sessions open it on Group view with Run available.
+- Group brief now says **1,007 at-risk leads have a best match in stock**, matching the
+  stat strip. The 1,050 wider count includes in-transit best matches. All contracts,
+  sandbox limits, exact-version approvals and replay labelling are unchanged.
+- Actual complete-run live inference: **$0.0077789**, calculated from the 25 provider
+  usage receipts at authenticated catalog rates ($0.10 input / $0.20 output per million).
+  Say **“under one cent a run”**, replacing “a few cents.” This excludes VM compute and
+  is a token-cost calculation, not a provider billing receipt. Durable reservations
+  remain pessimistic and are never refunded/reset. Prior aggregate $0.0223900 includes
+  unrelated debugging/uncertain calls; it was not the cost of one complete run.
+- Maria remains: enquiry nine days earlier, contact seven days earlier, blue unit sold
+  six days earlier; silver 2024 RAV4 Hybrid XLE, S00138, 74 days, $32,900, score 98;
+  2017 Honda CR-V trade. Video copy now calls carrying cost an entered assumption and
+  makes explicit that SalesDesk prepares drafts/tasks and sends no customer messages.
+- Offline checks: 113 passed/discovered with seven opt-in skips; focused fixture/contract
+  suite six passed after adding source-variation coverage. Broad Docker run had lock
+  contention; isolated rerun passed signals/recovery and reuse, but filesystem probe
+  exceeded its unchanged deadline. This is a failed local containment check, not a pass.
+  Dealer's real Docker reconciliation/cleanup passed; public full execution passed.
+- Evidence: `docs/video/measured-run.json` has metrics, Maria and 25 inference receipts;
+  private raw browser/job observations remain under `.local/video-prep/`. No credentials
+  or session cookies enter published video artifacts.
