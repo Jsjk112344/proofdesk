@@ -37,127 +37,130 @@ They lose them because nobody connects
 the lead to the car in time.
 
 9
-00:00:31,300 --> 00:00:37,600
-SalesDesk is an AI sales analyst
-that makes that connection, every night.
+00:00:31,050 --> 00:00:34,850
+SalesDesk makes sure you never lose a sale
+to a missed follow-up again.
 
 10
+00:00:35,100 --> 00:00:37,800
+SalesDesk. Your AI sales analyst.
+
+11
 00:00:38,300 --> 00:00:41,800
 At 2 AM, SalesDesk
 starts its review.
 
-11
+12
 00:00:41,800 --> 00:00:45,800
 It splits the group into 24 jobs,
 one per store,
 
-12
+13
 00:00:45,800 --> 00:00:49,800
 running in parallel
 in isolated sandboxes on Vultr.
 
-13
-00:00:50,300 --> 00:00:53,300
+14
+00:00:53,300 --> 00:00:56,300
 Let's follow one store: Sandy.
 
-14
-00:00:53,300 --> 00:00:57,300
+15
+00:00:56,300 --> 00:01:00,300
 First, the agent reads every open lead
 and flags the ones going cold:
 
-15
-00:00:57,300 --> 00:01:01,600
+16
+00:01:00,300 --> 00:01:04,600
 no contact in three days,
 or the car they wanted is gone.
 
-16
-00:01:02,300 --> 00:01:06,800
+17
+00:01:05,300 --> 00:01:09,800
 Next, it searches every car on this lot
 and at nearby sister stores,
 
-17
-00:01:06,800 --> 00:01:11,800
+18
+00:01:09,800 --> 00:01:14,800
 and scores each one against the request:
 model, trim, budget, mileage.
 
-18
-00:01:11,800 --> 00:01:16,600
+19
+00:01:14,800 --> 00:01:19,600
 Cars that have sat the longest
 get priority.
 
-19
-00:01:17,300 --> 00:01:22,300
+20
+00:01:20,300 --> 00:01:25,300
 Then Qwen, on Vultr Serverless Inference,
 writes the store's morning brief
 
-20
-00:01:22,300 --> 00:01:27,600
+21
+00:01:25,300 --> 00:01:30,600
 and three personal follow-ups,
 using only recorded vehicle facts.
 
-21
-00:01:28,300 --> 00:01:31,600
+22
+00:01:31,300 --> 00:01:34,600
 Two minutes, five seconds later,
 all 24 stores are done.
 
-22
-00:01:32,300 --> 00:01:34,800
+23
+00:01:35,300 --> 00:01:37,800
 Remember Maria?
 
-23
-00:01:34,800 --> 00:01:38,800
+24
+00:01:37,800 --> 00:01:41,800
 Here's what the agent found:
 the silver RAV4 Hybrid on her own lot,
 
-24
-00:01:38,800 --> 00:01:41,800
+25
+00:01:41,800 --> 00:01:44,800
 a 98 out of 100 match.
 
-25
-00:01:42,000 --> 00:01:45,800
+26
+00:01:45,000 --> 00:01:48,800
 It knows about her CR-V trade-in.
 Her message is already written.
 
-26
-00:01:58,300 --> 00:02:03,300
+27
+00:02:01,300 --> 00:02:06,300
 At 7 AM, Sandy's manager opens
 a ranked queue of 40 follow-ups
 
-27
-00:02:03,300 --> 00:02:06,800
+28
+00:02:06,300 --> 00:02:09,800
 and approves them in one click.
 
-28
-00:02:06,800 --> 00:02:09,800
+29
+00:02:09,800 --> 00:02:12,800
 Each salesperson gets
 their tasks and drafts.
 
-29
-00:02:10,300 --> 00:02:15,800
+30
+00:02:13,300 --> 00:02:18,800
 Across the group, that's over a thousand
 customers matched to a car in stock,
 
-30
-00:02:15,800 --> 00:02:21,600
+31
+00:02:18,800 --> 00:02:24,600
 and an estimated $3.4 million
 in gross back in play.
 
-31
-00:02:22,300 --> 00:02:27,300
+32
+00:02:25,300 --> 00:02:30,300
 It all runs on Vultr: the scheduler
 and sandboxes on a Vultr VM,
 
-32
-00:02:27,300 --> 00:02:33,600
+33
+00:02:30,300 --> 00:02:36,600
 and Qwen on Vultr Serverless Inference,
 with validated drafts for manager review.
 
-33
-00:02:34,300 --> 00:02:38,300
+34
+00:02:37,300 --> 00:02:41,200
 SalesDesk. Every lead, every store,
 every morning.
 
-34
-00:02:38,500 --> 00:02:42,500
-Sell more,
-with your AI sales analyst.
+35
+00:02:41,400 --> 00:02:44,600
+Never lose a sale again.

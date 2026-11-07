@@ -409,5 +409,11 @@
         "succeeded"
       ]
     }
-  ]
+  ],
+  "fanout": {
+    "store_count": 24,
+    "concurrency": 6,
+    "open_leads": 9000,
+    "source": "Original v2 recorded API state, same review id; metadata added for v3 explainer."
+  }
 }

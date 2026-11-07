@@ -1,111 +1,67 @@
-# SalesDesk demo video v2 (2:45)
+# SalesDesk video v3 — 2:45
 
-Approved direction (Nov 7):
+The v2-named plan, narration and subtitle files are the maintained source for v3.
 
-- **Open on Maria's story**, then scale it up to the whole group.
-- **Length about 2:45.**
-- **Disclaimers off the voiceover and captions.** "Sample dealer group" stays visible on screen, plus one small line on the end card.
-- **The middle is an agent trace walkthrough.** The agent's work is followed step by step for one store (Sandy), and Maria comes back as the payoff.
+## Recording and visual rules
 
-Thesis (everything serves this line): **Dealers don't lose sales for lack of cars. They lose them because nobody connects the lead to the car in time.**
+Record the deployed public platform at **1280×720, deviceScaleFactor 1.5**,
+output **1920×1080, 30 fps**. Show the whole platform screen most of the time.
+No hard crops, transplanted badges or fabricated product values. Slow push-ins,
+if used in the final edit, stay at or below **1.3×**, hold, then pull back to full.
+The assembled cut uses whole-screen shots throughout.
 
-Subtitles: `subtitles-v2.srt`, timed to this plan. Pace is about 150 words per minute.
+App text is at least **13 px**; desktop Agent trace text is **15 px**. During a run
+the map collapses, keeping the headline, counters, progress and at least eight tiles
+above the fold. Tiles pulse while analysing and pop a check when ready. Maria's
+wanted car, timeline, best match with score and SMS fit in one drawer view; match
+breakdown and alternative matches expand on demand.
 
-## Visual rules (apply to every scene)
+Keep the slide-style Maria story, scale-up count, thesis, time skip, number cards
+and Vultr diagram. Match the explainer to their dark green, Inter and mint palette.
+No separate “Sample dealer group” video-frame overlay. Native app labels remain;
+the end-card footer reads “Sample dealer group · SalesDesk drafts; people send.”
 
-- **One idea per shot.** Each UI shot is zoomed to at least 1.4× on one element: a number, a card or a sentence. Full-UI wide shots last no more than 2 s, except the map in scene 2.
-- **No text walls.** No raw CSV, no lists of more than 3 items, no paragraphs on screen. If the viewer has to read it, it must be large and on screen long enough to read (about 3 words per second).
-- **Kinetic text cards.** Use these for the story beats: Inter Bold, 1–7 words, centered, on the dark green brand background. Animate with fade + 8 px rise, 250 ms. Numbers count up.
-- **Chapter lower-thirds** in Act 2: "Step 1 · Fan out", "Step 2 · Find who's slipping", "Step 3 · Find the right car", "Step 4 · Write the brief". Bottom-left, slide in, hold for the whole chapter.
-- **Audio.** A quiet modern instrumental bed at −26 dB, ducked under the voiceover. A soft whoosh on card transitions. One subtle "ding" when Maria's 98 match appears.
-- **Cursor.** Smooth and purposeful, and only moving when something is about to be clicked or pointed at.
-- **Captions.** Burn in `subtitles-v2.srt`: white semi-bold text, 60% dark box, bottom center, 42 px. Move them up to avoid lower-thirds in Act 2.
+Chapter labels: small caps, brand green pill, top left, slide in from the left and
+hold for the whole chapter. Captions: bottom centre, Inter SemiBold 42 px, white on
+60% dark. Keep **1:49–2:01** caption-free for Maria's SMS. Source exports are silent;
+VO, optional documented licensed music and effects belong to the owner's final edit.
 
 ## Timeline
 
-| # | Time | Len | Beat | Visual | Transition in |
-|---|---|---|---|---|---|
-| **ACT 1: THE PROBLEM** |||||
-| 1 | 0:00–0:15 | 15 s | Maria's story | Kinetic text + tight stills from her drawer | Fade from black |
-| 2 | 0:15–0:23 | 8 s | Scale it up | Map pull-back, big count-up "1,050 leads at risk" | Zoom-out |
-| 3 | 0:23–0:31 | 8 s | Thesis | Two-line kinetic card | Crossfade |
-| 4 | 0:31–0:38 | 7 s | Title | Logo + "Your AI sales analyst" over the blurred map | Blur in |
-| **ACT 2: THE AGENT AT WORK** |||||
-| 5 | 0:38–0:50 | 12 s | Step 1 · Fan out | Click Run; 24 tiles go queued → analysing on Vultr | Hard cut |
-| 6 | 0:50–1:02 | 12 s | Step 2 · Find who's slipping | Sandy's trace: leads read → slipping count | Zoom into Sandy |
-| 7 | 1:02–1:17 | 15 s | Step 3 · Find the right car | Sandy's trace: cars searched here + sister stores → match score bars | Hard cut |
-| 8 | 1:17–1:28 | 11 s | Step 4 · Write the brief | Sandy's trace: Qwen step → brief headline → message count | Hard cut |
-| 9 | 1:28–1:32 | 4 s | Time skip | Card: "2 min 5 sec later · all 24 stores done" (real run, shortened) | Quick fade |
-| 10 | 1:32–1:58 | 26 s | **Payoff: Maria** | Her drawer: best match 98 → trade-in → full SMS held readable for 6 s | Push-in |
-| **ACT 3: THE OUTCOME** |||||
-| 11 | 1:58–2:10 | 12 s | Approve | Sandy queue → Approve all → Ready | Hard cut |
-| 12 | 2:10–2:22 | 12 s | Group impact | Two big count-up cards: 1,007 matched · $3.4M recoverable gross | Crossfade |
-| 13 | 2:22–2:34 | 12 s | Built on Vultr | 4-box animated diagram | Crossfade |
-| 14 | 2:34–2:45 | 11 s | Close | End card | Fade to black |
+| Scene | Time | Visual |
+|---|---|---|
+| 1 · Maria | 0:00–0:15 | “Nine days ago…” slide, then whole Maria drawer: wanted car, sold timeline, silver car aged 74 days |
+| 2 · Scale | 0:15–0:23 | Stylised map and count-up to 1,050 leads at risk |
+| 3 · Thesis | 0:23–0:35 | Two thesis beats, then separate promise card at 0:31 |
+| 4 · Title | 0:35–0:38 | SalesDesk · Your AI sales analyst |
+| 5 · Fan out | 0:38–0:50 | Group logo at 2 AM splits into 24 map nodes; six at once light “Analysing on Vultr”, then checks; lead/car/brief icons; stores 0→24, leads 0→9,000; Vultr compute label |
+| 6 · Find who's slipping | 0:50–1:05 | Whole real Group mid-run 0:50–0:53, then whole Sandy Agent trace |
+| 7 · Find the right car | 1:05–1:20 | Whole Sandy trace, then whole Maria drawer with match breakdown expanded |
+| 8 · Write the brief | 1:20–1:31 | Whole Sandy trace, actual brief and three Qwen follow-ups / 40 drafts |
+| 9 · Time skip | 1:31–1:35 | Measured v3 public-run time, rounded; all 24 stores reviewed |
+| 10 · Maria payoff | 1:35–2:01 | Whole drawer, real score 98, trade and full SMS; quiet final 12 seconds |
+| 11 · Approval | 2:01–2:13 | Whole ranked queue, actual Approve all click, Ready downloads |
+| 12 · Group impact | 2:13–2:25 | Headline “Increase your sales without adding headcount.” above 1,007 matched and $3,434,800 estimated gross cards |
+| 13 · Vultr | 2:25–2:37 | Nightly scheduler (Vultr VM) → 24 sandboxed jobs (six parallel) → Qwen (Vultr Serverless Inference) → manager approval |
+| 14 · Close | 2:37–2:45 | Large “Never lose a sale again.”; “SalesDesk · Sell more with your AI sales analyst”; URL, GitHub and footer |
 
-Time split: problem 38 s · agent at work 80 s · outcome and close 47 s.
+Step 1 pill spans the explainer and real Group insert (0:38–0:53). Steps 2–4 span
+0:53–1:05, 1:05–1:20 and 1:20–1:31 respectively.
 
-## Scene detail and voiceover
+## Changed voiceover
 
-### 1. Maria's story (0:00–0:15)
-- **Visual:** black, then card "Nine days ago…". Next comes a tight still of "Wanted a blue 2024 Toyota RAV4 Hybrid XLE" (2×), then the timeline with the orange "Original vehicle sold · 6 days ago" dot pulsing. Last is the silver RAV4 card with **74 days on lot** highlighted.
-- **VO:** "Nine days ago, Maria asked a dealership about a blue RAV4 Hybrid. Her last contact was seven days ago. Six days ago, that car sold. Meanwhile, a silver one sat on the same lot for 74 days."
+Scene 3: “Dealers don't lose these sales for lack of cars. They lose them because
+nobody connects the lead to the car in time. SalesDesk makes sure you never lose a
+sale to a missed follow-up again.” The separate third card reads **Never lose a
+sale to a missed follow-up again.**
 
-### 2. Scale it up (0:15–0:23)
-- **Visual:** pull back from a single dot on the map to all 24 store markers. A big centered count-up to **1,050** with the label "leads at risk this morning".
-- **VO:** "Now multiply that by 24 stores. Every morning, over a thousand leads like Maria are slipping away."
+Scene 4: “SalesDesk. Your AI sales analyst.”
 
-### 3. Thesis (0:23–0:31)
-- **Card, line by line:** "Dealers don't lose sales for lack of cars." / "They lose them because nobody connects the lead to the car in time."
-- **VO:** "Dealers don't lose these sales for lack of cars. They lose them because nobody connects the lead to the car in time."
+Scene 14: “SalesDesk. Every lead, every store, every morning. Never lose a sale again.”
 
-### 4. Title (0:31–0:38)
-- **Visual:** SalesDesk logo, then "Your AI sales analyst", then the small line "Connects every lead to the right car. Every night."
-- **VO:** "SalesDesk is an AI sales analyst that makes that connection, every night."
-
-### 5. Step 1 · Fan out (0:38–0:50)
-- **Visual:** Group view. The cursor clicks **Run tonight's review now**, then a punch-in on the tile grid as tiles flip to "Analysing on Vultr", six at a time. The counter shows "6 parallel workers on Vultr".
-- **VO:** "At 2 AM, SalesDesk starts its review. It splits the group into 24 jobs, one per store, running in parallel in isolated sandboxes on Vultr."
-
-### 6. Step 2 · Find who's slipping (0:50–1:02)
-- **Visual:** zoom into the Sandy tile, then Sandy's agent trace (see the session prompt, step 1). The step "Read N open leads" fills, then "Flagged 40 at risk · 25 gone cold" with the count-up.
-- **VO:** "Let's follow one store: Sandy. First, the agent reads every open lead and flags the ones going cold: no contact in three days, or the car they wanted is gone."
-
-### 7. Step 3 · Find the right car (1:02–1:17)
-- **Visual:** the trace step "Searched N cars here + N at sister stores" fills. Cut to a match breakdown (score bars animating: model, trim, budget, mileage, aged-inventory boost).
-- **VO:** "Next, it searches every car on this lot and at nearby sister stores, and scores each one against the request: model, trim, budget, mileage. Cars that have sat the longest get priority."
-
-### 8. Step 4 · Write the brief (1:17–1:28)
-- **Visual:** the trace step "Qwen on Vultr Inference" fills. Then the store brief headline in large type, then "3 Qwen follow-ups" and the real 40-draft queue.
-- **VO:** "Then Qwen, on Vultr Serverless Inference, writes the store's morning brief and three personal follow-ups, using only recorded vehicle facts."
-
-### 9. Time skip (1:28–1:32)
-- **Card:** "2 min 5 sec later" (large), with "All 24 stores reviewed on Vultr" under it. The footage is real and the shortening is visible.
-- **VO:** "Two minutes, five seconds later, all 24 stores are done."
-
-### 10. Payoff: Maria (1:32–1:58)
-- **Visual:** a push-in on Maria's card in the Sandy queue, then the drawer opens.
-  - 1:34: zoom on the best match, with **98** counting up and the ding.
-  - 1:42: highlight "Trade-in · 2017 Honda CR-V".
-  - 1:46: zoom to the SMS, large and fully readable.
-  - 1:46–1:58: hold on the SMS with no captions or voiceover so the viewer reads it.
-- **VO:** "Remember Maria? Here's what the agent found: the silver RAV4 Hybrid on her own lot, a 98 out of 100 match. It knows about her CR-V trade-in. Her message is already written."
-
-### 11. Approve (1:58–2:10)
-- **Visual:** close the drawer, then a quick scroll of the ranked queue (3 cards). Click **Approve all for Sandy**. Zoom on the green **Ready** pill with its Follow-ups / CRM tasks / Transfers buttons. No CSV.
-- **VO:** "At 7 AM, Sandy's manager opens a ranked queue of 40 follow-ups and approves them in one click. Each salesperson gets their tasks and drafts."
-
-### 12. Group impact (2:10–2:22)
-- **Visual:** two kinetic number cards, back to back. **1,007** "customers matched to a car in stock", then **$3.4M** "estimated gross back in play".
-- **VO:** "Across the group, that's over a thousand customers matched to a car in stock, and an estimated $3.4 million in gross back in play."
-
-### 13. Built on Vultr (2:22–2:34)
-- **Diagram (4 boxes, building left to right):** Nightly scheduler (Vultr VM) → 24 sandboxed store jobs (Docker, 6 parallel) → Qwen (Vultr Serverless Inference) → Manager approval.
-- **VO:** "It all runs on Vultr: the scheduler and sandboxes on a Vultr VM, and Qwen on Vultr Serverless Inference, with validated drafts for manager review."
-
-### 14. Close (2:34–2:45)
-- **End card:** logo, "Every lead. Every store. Every morning.", URL, GitHub. Small grey footer: "Sample dealer group · SalesDesk drafts; people send."
-- **VO:** "SalesDesk. Every lead, every store, every morning. Sell more, with your AI sales analyst."
+The remaining VO is unchanged except the time skip, which must match the newly
+recorded measured runtime. Complete read: [narration-v2.txt](narration-v2.txt).
+Captions: [subtitles-v2.srt](subtitles-v2.srt). Hand-off: [RECORDING.md](RECORDING.md).
 
 ## Facts to verify against the recording before export
 
@@ -124,3 +80,4 @@ Analysis steps share one sandbox pass and complete together after validation.
 The public take preserves the saved-response provenance badge. The narrator does
 not claim every draft is Qwen-authored or that compute is included in inference cost.
 The source has a last-contact timestamp, not a complete call history.
+
