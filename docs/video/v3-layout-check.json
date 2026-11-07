@@ -1,0 +1,40 @@
+{
+  "url": "https://salesdesk.149.28.51.139.sslip.io",
+  "viewport": [
+    1280,
+    720
+  ],
+  "layout": {
+    "trace": {
+      "top": 65.296875,
+      "bottom": 306.296875,
+      "width": 960
+    },
+    "first_followup": {
+      "top": 474.890625,
+      "bottom": 687.390625,
+      "width": 1016
+    },
+    "trace_font": 15,
+    "horizontal_overflow": false
+  },
+  "drawer": {
+    ".lead-context": {
+      "top": 124,
+      "bottom": 188.796875
+    },
+    ".lead-timeline": {
+      "top": 197.796875,
+      "bottom": 289.796875
+    },
+    ".candidate.chosen": {
+      "top": 326.796875,
+      "bottom": 480.09375
+    },
+    ".drawer-message": {
+      "top": 492.09375,
+      "bottom": 594.09375
+    }
+  },
+  "page_errors": []
+}

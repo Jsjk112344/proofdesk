@@ -1,0 +1,189 @@
+{
+  "base_url": "https://salesdesk.149.28.51.139.sslip.io",
+  "viewport": [
+    1280,
+    720
+  ],
+  "device_scale_factor": 1.5,
+  "video_resolution": [
+    1920,
+    1080
+  ],
+  "scenes": [
+    {
+      "scene": "v3-run",
+      "file": "docs/video/scenes/v3-run.mp4",
+      "seconds": 130.407,
+      "captured_seconds": 130.407,
+      "trim_start_seconds": 12.575,
+      "raw": ".local/video-prep/raw-v3/page@fd6b0f057ee271d284f88a358245c35b.webm"
+    },
+    {
+      "scene": "v3-approve",
+      "file": "docs/video/scenes/v3-approve.mp4",
+      "seconds": 12,
+      "captured_seconds": 12.001,
+      "trim_start_seconds": 2.647,
+      "raw": ".local/video-prep/raw-v3/page@66174a8ca666825ed87ee1177ef089e7.webm"
+    },
+    {
+      "scene": "v3-group",
+      "file": "docs/video/scenes/v3-group.mp4",
+      "seconds": 3,
+      "captured_seconds": 3.001,
+      "trim_start_seconds": 2.54,
+      "raw": ".local/video-prep/raw-v3/page@ad2961daa325ec065da02b8313b32eb8.webm"
+    },
+    {
+      "scene": "v3-ready",
+      "file": "docs/video/scenes/v3-ready.mp4",
+      "seconds": 7,
+      "captured_seconds": 7.005,
+      "trim_start_seconds": 2.92,
+      "raw": ".local/video-prep/raw-v3/page@07ab945f7b7ca763aef1d723ab20b035.webm"
+    },
+    {
+      "scene": "v3-maria",
+      "file": "docs/video/scenes/v3-maria.mp4",
+      "seconds": 26,
+      "captured_seconds": 26.003,
+      "trim_start_seconds": 2.476,
+      "raw": ".local/video-prep/raw-v3/page@590b1b5e927911e631baabe72998cc8a.webm"
+    }
+  ],
+  "beats": [
+    {
+      "scene": "v3-run",
+      "beat": "start",
+      "seconds": 0.169,
+      "screenshot": "docs/video/stills/v3-run-start.png"
+    },
+    {
+      "scene": "v3-run",
+      "beat": "map",
+      "seconds": 0.258,
+      "screenshot": "docs/video/stills/v3-run-map.png"
+    },
+    {
+      "scene": "v3-run",
+      "beat": "tiles",
+      "seconds": 6.765,
+      "screenshot": "docs/video/stills/v3-run-tiles.png"
+    },
+    {
+      "scene": "v3-run",
+      "beat": "trace-live",
+      "seconds": 14.234,
+      "screenshot": "docs/video/stills/v3-run-trace-live.png"
+    },
+    {
+      "scene": "v3-run",
+      "beat": "trace-analysing_on_vultr",
+      "seconds": 22.687,
+      "screenshot": "docs/video/stills/v3-run-trace-analysing_on_vultr.png"
+    },
+    {
+      "scene": "v3-run",
+      "beat": "trace-comparing_previous_night",
+      "seconds": 29.987,
+      "screenshot": "docs/video/stills/v3-run-trace-comparing_previous_night.png"
+    },
+    {
+      "scene": "v3-run",
+      "beat": "trace-succeeded",
+      "seconds": 39.237,
+      "screenshot": "docs/video/stills/v3-run-trace-succeeded.png"
+    },
+    {
+      "scene": "v3-run",
+      "beat": "trace-done",
+      "seconds": 130.407,
+      "screenshot": "docs/video/stills/v3-run-trace-done.png"
+    },
+    {
+      "scene": "v3-approve",
+      "beat": "start",
+      "seconds": 0.155,
+      "screenshot": "docs/video/stills/v3-approve-start.png"
+    },
+    {
+      "scene": "v3-approve",
+      "beat": "queue",
+      "seconds": 0.909,
+      "screenshot": "docs/video/stills/v3-approve-queue.png"
+    },
+    {
+      "scene": "v3-approve",
+      "beat": "ready",
+      "seconds": 6.791,
+      "screenshot": "docs/video/stills/v3-approve-ready.png"
+    },
+    {
+      "scene": "v3-group",
+      "beat": "start",
+      "seconds": 0.163,
+      "screenshot": "docs/video/stills/v3-group-start.png"
+    },
+    {
+      "scene": "v3-group",
+      "beat": "totals",
+      "seconds": 0.244,
+      "screenshot": "docs/video/stills/v3-group-totals.png"
+    },
+    {
+      "scene": "v3-ready",
+      "beat": "start",
+      "seconds": 0.147,
+      "screenshot": "docs/video/stills/v3-ready-start.png"
+    },
+    {
+      "scene": "v3-ready",
+      "beat": "collapsed",
+      "seconds": 1.028,
+      "screenshot": "docs/video/stills/v3-ready-collapsed.png"
+    },
+    {
+      "scene": "v3-maria",
+      "beat": "start",
+      "seconds": 0.163,
+      "screenshot": "docs/video/stills/v3-maria-start.png"
+    },
+    {
+      "scene": "v3-maria",
+      "beat": "wanted",
+      "seconds": 3.842,
+      "screenshot": "docs/video/stills/v3-maria-wanted.png"
+    },
+    {
+      "scene": "v3-maria",
+      "beat": "sold",
+      "seconds": 6.828,
+      "screenshot": "docs/video/stills/v3-maria-sold.png"
+    },
+    {
+      "scene": "v3-maria",
+      "beat": "match",
+      "seconds": 9.903,
+      "screenshot": "docs/video/stills/v3-maria-match.png"
+    },
+    {
+      "scene": "v3-maria",
+      "beat": "score",
+      "seconds": 14.245,
+      "screenshot": "docs/video/stills/v3-maria-score.png"
+    },
+    {
+      "scene": "v3-maria",
+      "beat": "trade",
+      "seconds": 16.896,
+      "screenshot": "docs/video/stills/v3-maria-trade.png"
+    },
+    {
+      "scene": "v3-maria",
+      "beat": "sms",
+      "seconds": 19.838,
+      "screenshot": "docs/video/stills/v3-maria-sms.png"
+    }
+  ],
+  "retake_note": "Same completed session; detail retakes after approval, no new inference or message edits."
+}
