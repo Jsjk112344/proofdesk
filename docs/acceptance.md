@@ -182,5 +182,11 @@ history for the full table.
 ## Video v2 trace
 
 The real-Docker Sandy test verifies trace counts against reconciled metrics and the
-leased child event. Offline suite: 114 passed with seven optional Docker skips.
+leased child event. Offline suite: 114 tests, seven optional Docker skips; all executed tests passed.
 Public verification is recorded in the v2 video facts and manifest after deployment.
+
+V2 public verification: deployed trace opened from Sandy's live Group tile; captured
+pending and completed steps, 375 open / 40 risk / 25 cold, 117 local + 1,638 sister
+cars, 70,200 scored pairs, top score 100, three Qwen drafts and 40 total drafts.
+The final group succeeded without failures in 124.758 seconds. Approval reached Ready
+without sends. All 85 deployed file hashes match release 1c2cf6b.

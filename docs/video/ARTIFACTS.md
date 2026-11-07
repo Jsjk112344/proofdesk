@@ -1,3 +1,17 @@
+# SalesDesk video artifacts
+
+## Current: v2
+
+- [Captioned 2:45 cut](salesdesk-v2.mp4) and [clean cut](salesdesk-v2-nosubs.mp4).
+- [Fourteen-scene contact sheet](_review/v2-contact.png).
+- [Recording hand-off](RECORDING.md), [clean VO](narration-v2.txt), [captions](subtitles-v2.srt).
+- [Verified facts](recording-facts-v2.json), [source take manifest](scene-manifest-v2.json), [export checks](v2-export-check.json).
+- Animated HTML cards in `card-v2-*.html`; rendered MP4s in `cards-v2/`.
+- Public scene takes in `scenes/v2-*.mp4`, 2× stills in `stills/v2-*.png`.
+- Both exports are silent; owner records VO, finishes the edit and submits.
+
+## Previous 3:00 kit
+
 # SalesDesk video files
 
 This package follows the three-minute [video plan](video-plan.md).

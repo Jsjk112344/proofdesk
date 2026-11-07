@@ -3,16 +3,12 @@
 Product name: **SalesDesk** (renamed from ProofDesk on 2026-11-05). Existing operational
 identifiers and dated historical entries retain their original names.
 
-Current checkpoint: **Public camera fixes and the three-minute video kit are verified.**
-Store risks vary 12–85; Sandy/Maria are preserved. The brief and dashboard agree on
-1,007 in-stock matches. Both silent rough cuts are **180.000 s**, 1080p/30fps; 13 cards,
-eight scene clips, 33 crisp stills and an eight-page slide PDF are ready.
-Recorded take: **124.177 s** from click through visible finished Group. Separate full-live
-measurement: **140.131 s / 25 responses / $0.0077789 token-based inference cost**, excluding
-compute. Video reservations: **25 / $0.0502400**, distinct from usage and older ledgers.
-Offline suite passed (114 tests, seven skips); the broader local Docker filesystem probe
-exceeded its unchanged deadline and is recorded below. Owner: record voice, finish edit,
-confirm the signed-in form limits, upload video/PDF and submit. No receipt exists.
+Current checkpoint: **Maria-first video v2 is prepared; Agent trace is public and verified.**
+Both silent exports are **165.000 s**, 1080p/30fps. Final public run: **124.758 s**,
+25 accepted Qwen replays and **$0 new inference usage**. Sandy's trace and Maria's facts
+match the recorded app. See `docs/video/RECORDING.md`, `recording-facts-v2.json` and
+`_review/v2-contact.png`. Owner records VO, finishes the edit, confirms the signed-in
+video limit, uploads and submits. No receipt exists.
 
 Public URL: https://salesdesk.149.28.51.139.sslip.io
 
@@ -1262,3 +1258,37 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   event form prevails. Its signed-in limit remains **unconfirmed**, explicitly left on
   the pre-export checklist. No submission was made and no receipt is claimed.
 - The separate pre-existing recording-plan work and session notes remain untouched.
+
+## SalesDesk video v2 and per-store trace: 2026-11-06 ET
+
+- Shipped the compact seven-step Agent trace. Group tiles open stores during running
+  child jobs; rows read only the corresponding leased child's events and reconciled
+  outputs. No staged delays, relaxed validators, changed sandbox bounds, approval
+  binding changes or replay-label changes. Final runtime release: 1c2cf6b; all 85
+  deployed file hashes verified after deployment.
+- Offline suite: 114 tests, seven optional Docker skips, all executed tests passed.
+  Three dealer job tests passed with Docker enabled, including real Sandy execution,
+  cleanup, trace/event agreement and rejection of tampered counts/scores. Frontend
+  build, Ruff, formatting and repository checks passed. Public 390px viewport had
+  seven completed trace rows and no horizontal overflow.
+- Two public runs completed successfully: initial trace verification 138.317 seconds;
+  final recorded run 124.758 seconds. Each reused 25 accepted Qwen responses, with
+  zero new inference calls / $0 new inference usage. No ledgers reset, no new compute
+  provisioned; VM accrual remains distinct and unverified against billing.
+- Final facts: 1,050 risk leads, 1,007 in-stock best matches, 792 distinct aged units,
+  $3,434,800 estimated gross. Sandy: 375 open, 40 risk, 25 cold; 117 local and 1,638
+  nearby sister-store cars; 70,200 scored pairs, top store score 100, 40 drafts with
+  three Qwen-authored follow-ups. Maria remains 98 / 74 days / 2017 CR-V trade.
+- Narration removes the unsupported call-count claim, replaces “two minutes” with
+  “two minutes, five seconds”, states three Qwen follow-ups and drops the night-cost
+  claim. The 34 SRT cues match the clean VO script; no disclaimers in either.
+- Both exports are exactly 165.000 seconds, 1920x1080, 30fps, H.264 and silent.
+  Animated HTML/Playwright cards, four chapter titles, real public scene takes, 2x
+  stills, 14 review frames and v2-contact.png are committed. Maria's SMS has a
+  12-second caption-free hold. Actual UI score 98 is preserved rather than fabricated
+  count-up animation. Tight crops retain the app's actual sample badge in the border.
+- RECORDING.md supplies the clean VO, retiming, optional Screen Studio retakes and
+  pre-export checklist. V1 hand-off is archived. Owner still records voice, finishes
+  the edit, confirms the signed-in LabLab length limit, uploads and submits by the
+  Nov 8 16:00 ET target. Public event content gives no length limit; general guide
+  pages failed to load. No submission or receipt is claimed.

@@ -51,7 +51,7 @@ The camera-readiness measurement took **140.131 seconds** from Run click through
 public result capture, including final render/screenshot overhead, with six concurrent
 rooftop jobs and 25 fresh live Qwen responses. Recorded sample takes reuse accepted Qwen
 briefs while executing the Docker analysis live; their own measured runtime is in
-[the recording evidence](docs/video/scene-manifest.json). Current and prior-night inputs executed in
+[the recording evidence](docs/video/scene-manifest-v2.json). Current and prior-night inputs executed in
 48 disposable containers. On the earlier release, observed application memory peaked at **641.59 MiB**; host
 available memory stayed above **2,682 MiB**. These are observed checks on this sample,
 not capacity or performance promises. [STATUS.md](STATUS.md) records release-specific evidence.
@@ -198,7 +198,7 @@ and a one-day anonymous schedule lifetime. This is a hackathon demo, not product
 
 Earlier campaign/prospect code and routes remain unlinked. The proprietary/raw historical
 campaign dataset remains ignored and unserved; its separate rights boundary is in
-[THIRD_PARTY.md](THIRD_PARTY.md). The [video hand-off](docs/video/RECORDING.md) includes the silent rough cut, caption files,
+[THIRD_PARTY.md](THIRD_PARTY.md). The [video hand-off](docs/video/RECORDING.md) includes the 165-second Maria-first v2 cut, caption files,
 scene takes, cards and submission PDF. Record the voiceover, finish the edit and upload
 the video and PDF. Official submission remains an owner action; no receipt exists.
 
@@ -206,3 +206,10 @@ the video and PDF. Official submission remains an owner action; no receipt exist
 
 Original code and fictional dealer fixtures are [MIT](LICENSE). Dependencies and external
 research are attributed in [THIRD_PARTY.md](THIRD_PARTY.md).
+
+The store **Agent trace** opens during a run and reads only that store's real child
+events and reconciled outputs. The v2 public recording completed in **124.758 s**,
+with 25 accepted Qwen replays and $0 new inference usage. Sandy's 40-draft queue has
+three Qwen-authored drafts; the remaining template provenance remains visible.
+[Final recording facts](docs/video/recording-facts-v2.json) distinguish this take from
+the earlier fresh-inference measurement.

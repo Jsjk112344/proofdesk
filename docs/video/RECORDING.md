@@ -1,143 +1,148 @@
-# SalesDesk recording hand-off
+# SalesDesk v2 recording hand-off
 
-The silent edit follows `video-plan.md` and `subtitles.srt`: **3:00**, 1920×1080,
-30 fps. Open [rough-cut.mp4](rough-cut.mp4) for the captioned version or
-[rough-cut-nosubs.mp4](rough-cut-nosubs.mp4) to edit captions yourself.
-Submission slides: [SalesDesk-slides.pdf](SalesDesk-slides.pdf).
+The Maria-first cut is **2:45 (165 seconds)**, silent, H.264, 1920×1080, 30 fps.
+Use [salesdesk-v2.mp4](salesdesk-v2.mp4) for the captioned review and
+[salesdesk-v2-nosubs.mp4](salesdesk-v2-nosubs.mp4) for the voiceover edit.
+[Contact sheet](_review/v2-contact.png) · [Plan](video-plan-v2.md) ·
+[Measured facts](recording-facts-v2.json) · [Scene takes](scene-manifest-v2.json).
+The previous three-minute hand-off is preserved in [RECORDING-v1.md](RECORDING-v1.md).
 
-Plain-text read-through: [narration.txt](narration.txt).
+## Clean voiceover script
 
-## Narration, clean read-through
+Nine days ago, Maria asked a dealership about a blue RAV4 Hybrid. Her last contact was seven days ago. Six days ago, that car sold. Meanwhile, a silver one sat on the same lot for 74 days.
 
-It's 6 AM. Summit Auto Group runs 24 dealerships, with 3,000 vehicles and 9,000 open leads. In this sample, 652 leads are cold. Which customer should each store call first?
+Now multiply that by 24 stores. Every morning, over a thousand leads like Maria are slipping away.
 
-SalesDesk. Sell more: your AI sales analyst. It works every lead, at every rooftop, every night.
+Dealers don't lose these sales for lack of cars. They lose them because nobody connects the lead to the car in time.
 
-Here's tonight's review. SalesDesk fans the work out across all 24 rooftops: six isolated workers running in parallel on Vultr. Each one checks every lead's risk and searches the inventory at its own store and nearby sister stores. This sample reuses accepted Qwen briefs.
+SalesDesk is an AI sales analyst that makes that connection, every night.
 
-By morning: 1,050 leads at risk, 1,007 matched to a car in stock, and 792 distinct aged units matched. That's an estimated $3.4 million in recoverable gross. Leadership sees the group. Every store manager gets a queue.
+At 2 AM, SalesDesk starts its review. It splits the group into 24 jobs, one per store, running in parallel in isolated sandboxes on Vultr.
 
-Let's open Sandy. Forty follow-ups, ranked by risk and by what's on the lot.
+Let's follow one store: Sandy. First, the agent reads every open lead and flags the ones going cold: no contact in three days, or the car they wanted is gone.
 
-Maria asked about a blue 2024 RAV4 Hybrid nine days ago. Her last contact was a week ago, and the car she wanted sold. Without a fresh match, she needs another search. SalesDesk found a silver one on this lot: same model, same trim, in budget. It has sat for 74 days, with an entered daily carrying-cost assumption. It knows she has a 2017 CR-V to trade in. And Qwen drafts the text using only this car's recorded facts.
+Next, it searches every car on this lot and at nearby sister stores, and scores each one against the request: model, trim, budget, mileage. Cars that have sat the longest get priority.
 
-The manager reads, edits if needed, and approves Sandy in one click. Vultr prepares the drafts, CRM tasks and sister-store transfer requests. These are drafts and tasks. SalesDesk never sends customer messages.
+Then Qwen, on Vultr Serverless Inference, writes the store's morning brief and three personal follow-ups, using only recorded vehicle facts.
 
-Then close the laptop. The next review runs at 2 AM, every night, for every store, on Vultr. Tomorrow, the queue is waiting again.
+Two minutes, five seconds later, all 24 stores are done.
 
-Before: managers dig through leads, sold units and other stores' stock. After: they approve a ranked list. The full 24-store review ran in about two minutes.
+Remember Maria? Here's what the agent found: the silver RAV4 Hybrid on her own lot, a 98 out of 100 match. It knows about her CR-V trade-in. Her message is already written.
 
-Under the hood: a durable scheduler on a Vultr VM, a disposable Docker sandbox for every rooftop, and Qwen on Vultr Serverless Inference for under one cent a run.
+At 7 AM, Sandy's manager opens a ranked queue of 40 follow-ups and approves them in one click. Each salesperson gets their tasks and drafts.
 
-Automotive is our first vertical. SalesDesk: sell more, with your AI sales analyst.
+Across the group, that's over a thousand customers matched to a car in stock, and an estimated $3.4 million in gross back in play.
 
-## Record and add your voice
+It all runs on Vultr: the scheduler and sandboxes on a Vultr VM, and Qwen on Vultr Serverless Inference, with validated drafts for manager review.
 
-Record this script as one clean read, with a phone or USB microphone in a quiet room.
-Speak vehicle names and numbers naturally. Keep pauses between the scenes; use the
-plan's scene times as a guide. Record a second take of any sentence you stumble over.
-The rough cut intentionally has no audio. No voice has been synthesized.
+SalesDesk. Every lead, every store, every morning. Sell more, with your AI sales analyst.
 
-In CapCut, DaVinci Resolve, iMovie or any editor, import `rough-cut-nosubs.mp4`, your
-voiceover and `subtitles.srt`. Put the voice at **0:00**. Nudge scene boundaries, hold
-frames or shorten pauses to fit your read while keeping the export at 3:00 or less.
-Keep the real review footage at normal speed and retain the labelled jump cut. Align
-each subtitle to the final voice, then burn captions once. The supplied captioned
-rough cut is a reference; do not place a second set of subtitles over it.
+## Lay in the voice and re-time captions
 
-For the supplied treatment use Inter SemiBold, approximately 42 px at 1080p, white,
-bottom center, with a 60% dark box. `subtitles.ass` is a styling derivative of the SRT
-with a 1920×1080 canvas. It avoids FFmpeg's default small-canvas font scaling.
+Record [narration-v2.txt](narration-v2.txt) as one clean read, with pauses at the scene
+boundaries in the plan. Speak the measured time skip naturally. Leave **1:46–1:58**
+quiet for Maria's full SMS; its last six seconds must remain readable without captions.
 
-Optional command to attach an already aligned voice track without moving the edit:
+Import `salesdesk-v2-nosubs.mp4`, your recording and `subtitles-v2.srt` into your editor.
+Start VO at 0:00, align each caption to the actual spoken words, then adjust holds or
+scene boundaries to fit the read. Keep the result within **2:40–2:50**, targeting 2:45.
+Use Inter SemiBold at 42 px, white on a 60% dark box. Raise captions during Act 2 so
+they clear the chapter labels. Never burn a second caption track over the captioned cut.
+
+If the voice already matches the edit:
 
 ```bash
-ffmpeg -i docs/video/rough-cut.mp4 -i voiceover.wav \
+ffmpeg -i docs/video/salesdesk-v2.mp4 -i voiceover.wav \
   -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k \
-  -af apad -t 180 -movflags +faststart SalesDesk-final.mp4
+  -af apad -t 165 -movflags +faststart SalesDesk-final.mp4
 ```
 
-## Optional Screen Studio re-takes
+No music, sound effects or synthesized voice are included. No clearly licensed audio
+was selected. Add a documented royalty-free bed at −26 dB only if desired, duck it
+under VO, and retain the licence with the final project.
 
-Use the public URL, a 1440×900 browser window and a 2× display. Keep **Sample dealer
-group** visible, including inside Maria's drawer. Every screen take comes from the
-actual deployed app. The script's only added DOM is its cursor; UI values are untouched. The final Group
-number sweep was re-taken against the same completed review to align the cursor with
-the narration; it triggered no new analysis or inference.
+## Recorded facts and narration corrections
 
-| Scene | Exact start state | Re-take focus |
+- Final public run: **124.758 seconds**, rounded to **2 min 5 sec** on the visible skip.
+- Group: **1,050 at risk**, **1,007 matched in stock**, **792 distinct aged units matched**,
+  **$3,434,800 estimated recoverable gross**. The spoken $3.4 million is rounded.
+- Sandy: **375 open leads**, **40 at risk / 25 cold**, **117 local / 1,638 sister-store cars**,
+  **70,200 scored lead/car pairs**, top store score **100**, **40 total follow-ups**.
+- Qwen supplied **three** Sandy follow-ups, including Maria's. Remaining drafts keep
+  their existing Template labels. The VO no longer says Qwen wrote every follow-up.
+- Maria: enquiry nine days earlier, last contact seven days earlier, original car sold
+  six days earlier; silver 2024 Toyota RAV4 Hybrid XLE, **74 days**, **98** match,
+  **2017 Honda CR-V** trade. “After one call” was removed because call count is unknown.
+- Recorded run: **25 accepted Qwen replays**, **zero fresh inference responses**, **$0 new
+  inference usage**. Docker analysis executed live. The previous separate fresh-inference
+  measurement remains in `measured-run.json`; it does not describe this take.
+  The “under a cent a night” claim was removed, since compute is separate.
+- Gross is an estimate from listed vehicle figures, can reuse one unit for multiple
+  leads and is not a sales forecast. These notes stay out of VO and captions.
+
+## Footage and visual integrity
+
+All product pixels come from the deployed public URL. Source viewport: 1440×900,
+2× stills, smooth injected cursor only. No product text, counters, numbers or progress
+were injected. Trace counts come from Sandy's leased child and reconciled sandbox
+output. Analysis rows complete together because they share one sandbox pass.
+The final release keeps pending inference labelled Pending and preserves replay badges.
+
+Detail edits crop the real app and retain its actual sample badge in the edit border.
+No generated number is placed onto the UI. Maria's real score stays 98; it is not
+artificially counted up. Kinetic number cards count up separately from UI footage.
+Crisp 2× stills supply the tight wanted-car, timeline, match, score and SMS holds.
+Ready and Maria detail retakes use the same completed session after approval, with
+unchanged message content and no further inference. The approval click itself is real.
+
+## Optional Screen Studio retakes
+
+| Scene | Start state | Useful improvement |
 | --- | --- | --- |
-| 1, 14 s | Fresh incognito session, Group view, all 24 saved tiles ready and Run available | Keep the pointer still; gentle zoom toward the map. |
-| 3, 22 s raw | Same Group view before any review in that session | Click Run at 2 s. Show real reset and six analysing tiles. Record the full run; use the honest jump cut at 0:42. Never accelerate job counters. |
-| 4, 20 s | Finished Group result from that same Run click | Smooth stat-strip sweep, gross hold, then brief and tiles. Hover Qwen to disclose cached output. |
-| 5, 8 s | Finished Group view with Sandy tile visible | Click Sandy, pause on its 40-item ranked queue. |
-| 6, 38 s | Sandy; Maria first; no approval yet | Most valuable re-take: wanted blue car and CR-V trade, sold timeline, silver match, score breakdown, SMS then Email then SMS. Pull back for the message so the sample label and full draft stay visible. |
-| 7, 17 s + 3 s export | Sandy; drawer closed; Approve all enabled | Approve once. Wait for real Ready status. Download CRM tasks, then open the actual CSV in Numbers or Excel for 3 s. |
-| 8, 12 s | Schedule screen in the same session, toggle initially off | Enable, pause on 2:00 AM MT, and close the tab at 8 s. Record browser chrome if you want the close gesture visible. |
+| 5 | Fresh public Group session, Run available | Smooth button-to-six-tiles camera move. Record the entire real run; measure it again. |
+| 6–8 | Click Sandy while its child job runs | Follow the actual trace transitions and focus each pair of rows. Never slow the job or manufacture progress. |
+| 10 | Completed Sandy review, Maria's drawer open | Smooth push-in from 98 to trade-in to the full SMS. Keep the cursor off the text and preserve the sample badge. |
+| 11 | Same review, unapproved queue | Collapse Agent trace, approve once, then pan from real Ready status to downloads. No CSV shot. |
 
-The backup CSV take shows the **byte-identical downloaded CSV in Chromium's plain-text
-file viewer**, rather than a native spreadsheet. `scenes/crm-tasks.csv` is the real
-40-row approved export. A Numbers/Excel re-take is optional. Headless app capture does
-not show browser chrome; the schedule shot closes its page and holds the final frame
-to fill the slot. Server persistence was verified by reopening, then the test schedule
-was disabled. The submitted edit should show the enabled state, as captured.
-
-## Facts pinned to the footage
-
-- 9,000 leads reviewed; **1,050 at risk**, **1,007 best matches in stock**, **792 distinct
-  aged units matched**, **$3,434,800 estimated recoverable gross** (screen: $3,434,800; narration rounds to $3.4 million).
-  Gross uses listed price minus cost and can count the same unit for multiple leads.
-  It is not a sales forecast. Aged-unit matching does not establish customer intent.
-- Store risk counts genuinely range **12–85**; Sandy has **40**, with no queue cap.
-- Recorded take: completion observed **121.290 s**;
-  finished Group visible **124.177 s**. This is live sandbox analysis with
-  **accepted Qwen replay**, not 25 fresh inference requests. `recorded-run.json` and
-  `scene-manifest.json` identify the take and each choreography still.
-- Separate full-live measurement: **25 provider responses, $0.0077789 token cost**,
-  140.131 s through final result capture. Say **under one cent a run**. Compute is
-  separate, and token-cost estimates are not billing receipts. The durable video
-  envelope reserves $0.0502400 for those 25 calls; reservation is not actual usage.
-- Maria: blue 2024 RAV4 Hybrid XLE enquiry nine days earlier, contact seven days earlier,
-  original car sold six days earlier; silver S00138 at Sandy, **74 days**, **$32,900**,
-  score **98**, 2017 Honda CR-V trade. The $8/day carrying cost is an entered assumption.
-- Summit Auto Group, rooftops and people are fictional. Nothing is sent to customers;
-  approvals create tasks, drafts and review requests.
+Retakes are optional. Any new run requires rechecking figures, wall time, provenance
+and the time-skip card. Source clips and 2× stills are committed under `scenes/v2-*`
+and `stills/v2-*`; raw browser recordings and session cookies remain ignored.
 
 ## Rebuild
 
 ```bash
 uv sync --locked
 uv run playwright install chromium
-uv run python -m scripts.record_demo_scenes
-uv run python -m scripts.render_demo_assets
-uv run python -m scripts.assemble_demo_video
+uv run python -m scripts.record_demo_v2
+uv run python -m scripts.record_demo_v2 --ready-only
+# Reconcile the measured time and all facts with video-plan-v2.md / subtitles-v2.srt.
+uv run python -m scripts.render_video_v2
+uv run python -m scripts.assemble_video_v2
 ```
 
-FFmpeg must support libx264 and libass. On this workstation the assembler defaults to
-`/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg`; elsewhere pass `--ffmpeg /path/to/ffmpeg`.
-The recorder creates a new public session and executes real work within existing
-quotas. New source inputs may use bounded paid inference; never reset ledgers.
-If you re-record a run, review its measured runtime and update the narration, jump-cut
-card and SRT before rebuilding the cut. Raw WebM and session cookies stay ignored in
-`.local/video-prep/`; the published artifacts contain neither cookies nor credentials.
+These commands reuse the existing recorder, asset style and assembler helpers.
+FFmpeg needs libx264, libass and drawtext. This workstation uses
+`/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg`. Recording executes actual session work under
+existing quotas; never reset ledgers. The detail-only pass uses the session saved by
+the preceding recorder and makes no new inference calls.
 
-## Before final export and submission
+## Pre-export and submission checklist
 
-- [ ] Every spoken number matches the frame and the final run; Maria's facts still match.
-- [ ] Captions match the recorded voice and have been re-timed where needed.
-- [ ] Watch with sound off. The story, sample label and replay disclosure remain clear.
-- [ ] Keep the honest jump-cut label; do not speed up counters or composite UI numbers.
-- [ ] Export H.264 MP4 at 1920×1080, 30 fps, **3:00 or less**, with audible voice and no clipped words.
-- [ ] Confirm the actual signed-in LabLab form's video length and upload constraints.
-- [ ] Open the public URL and repository signed out; inspect the uploaded PDF and video.
-- [ ] Upload the narrated video and `SalesDesk-slides.pdf`; complete submission by the
-  owner's **Sunday November 8, 16:00 ET target**, ahead of the owner-supplied 18:00 ET deadline.
-- [ ] Save the submission receipt. No submission has been made by this preparation.
+- [ ] Figures match the final recorded screen, including the measured time skip.
+- [ ] No disclaimers in voiceover or captions; app sample badge remains visible.
+- [ ] End footer reads “Sample dealer group · SalesDesk drafts; people send.”
+- [ ] Watch with sound off: Maria, scale, agent work, approval and payoff make sense.
+- [ ] Full SMS is readable for at least six seconds without overlapping captions.
+- [ ] Voice and captions align; Act 2 captions clear chapter labels.
+- [ ] Export is 1920×1080 / 30 fps, **2:45 ±5 seconds**; audio is clear and unclipped.
+- [ ] **Confirm the actual signed-in LabLab form's video length and upload limit.**
+- [ ] Verify public app and GitHub access signed out, then upload video and slides.
+- [ ] Submit by the owner's **Sunday Nov 8, 2026, 16:00 ET target**, ahead of the
+  owner-supplied 18:00 ET deadline. Save the receipt.
 
-The [official event page](https://lablab.ai/ai-hackathons/vultr-hackathon) requires a
-recorded demo but did not publish a video-length limit in the checked page. LabLab's
-[general submission guide](https://lablab.ai/delivering-your-hackathon-solution)
-recommends under five minutes and allows MP4/MOV up to 300 MB; event-specific forms
-prevail. The [general rubric](https://lablab.ai/hackathon-rules) also discourages videos
-under three minutes. This package follows the owner's exact three-minute target.
-**The signed-in event form's length limit remains unconfirmed**; check it before upload.
+The [official event page](https://lablab.ai/ai-hackathons/vultr-hackathon), rechecked
+Nov 6 ET, requires a recorded demo but does not publish a video length limit.
+The general rule/guide pages failed to load in this check. The previous hand-off
+records a general under-five-minute recommendation and a rubric discouraging videos
+under three minutes. **The signed-in event form limit remains unconfirmed.** This
+cut follows the owner's approved 2:45 direction. No submission has been made.
