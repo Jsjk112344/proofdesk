@@ -1,0 +1,183 @@
+{
+  "base_url": "https://salesdesk.149.28.51.139.sslip.io",
+  "viewport": [
+    1440,
+    900
+  ],
+  "device_scale_factor": 2,
+  "video_resolution": [
+    1440,
+    900
+  ],
+  "scenes": [
+    {
+      "scene": "v2-run",
+      "file": "docs/video/scenes/v2-run.mp4",
+      "seconds": 127.732,
+      "captured_seconds": 127.732,
+      "trim_start_seconds": 8.183,
+      "raw": ".local/video-prep/raw-v2/page@0c318562fc69a5d0f33bb49fd3c409db.webm"
+    },
+    {
+      "scene": "v2-maria",
+      "file": "docs/video/scenes/v2-maria.mp4",
+      "seconds": 26,
+      "captured_seconds": 26.001,
+      "trim_start_seconds": 2.487,
+      "raw": ".local/video-prep/raw-v2/page@29ff5da43a8171fd09974d200362b97b.webm"
+    },
+    {
+      "scene": "v2-approve",
+      "file": "docs/video/scenes/v2-approve.mp4",
+      "seconds": 12,
+      "captured_seconds": 12.001,
+      "trim_start_seconds": 2.705,
+      "raw": ".local/video-prep/raw-v2/page@de5f928b8638189dac1a59c942408c07.webm"
+    },
+    {
+      "scene": "v2-group",
+      "file": "docs/video/scenes/v2-group.mp4",
+      "seconds": 3,
+      "captured_seconds": 3.001,
+      "trim_start_seconds": 2.655,
+      "raw": ".local/video-prep/raw-v2/page@189b73fb0bf3205eabe62d60e018822a.webm"
+    },
+    {
+      "scene": "v2-ready",
+      "file": "docs/video/scenes/v2-ready.mp4",
+      "seconds": 7,
+      "captured_seconds": 7.001,
+      "trim_start_seconds": 2.692,
+      "raw": ".local/video-prep/raw-v2/page@aa35fde856fc85c3ff40f1b3b4bc580e.webm"
+    }
+  ],
+  "beats": [
+    {
+      "scene": "v2-run",
+      "beat": "start",
+      "seconds": 0.209,
+      "screenshot": "docs/video/stills/v2-run-start.png"
+    },
+    {
+      "scene": "v2-run",
+      "beat": "map",
+      "seconds": 0.373,
+      "screenshot": "docs/video/stills/v2-run-map.png"
+    },
+    {
+      "scene": "v2-run",
+      "beat": "tiles",
+      "seconds": 7.461,
+      "screenshot": "docs/video/stills/v2-run-tiles.png"
+    },
+    {
+      "scene": "v2-run",
+      "beat": "trace-live",
+      "seconds": 10.845,
+      "screenshot": "docs/video/stills/v2-run-trace-live.png"
+    },
+    {
+      "scene": "v2-run",
+      "beat": "trace-comparing_previous_night",
+      "seconds": 22.705,
+      "screenshot": "docs/video/stills/v2-run-trace-comparing_previous_night.png"
+    },
+    {
+      "scene": "v2-run",
+      "beat": "trace-succeeded",
+      "seconds": 33.965,
+      "screenshot": "docs/video/stills/v2-run-trace-succeeded.png"
+    },
+    {
+      "scene": "v2-run",
+      "beat": "trace-done",
+      "seconds": 127.732,
+      "screenshot": "docs/video/stills/v2-run-trace-done.png"
+    },
+    {
+      "scene": "v2-maria",
+      "beat": "start",
+      "seconds": 0.205,
+      "screenshot": "docs/video/stills/v2-maria-start.png"
+    },
+    {
+      "scene": "v2-maria",
+      "beat": "wanted",
+      "seconds": 4.733,
+      "screenshot": "docs/video/stills/v2-maria-wanted.png"
+    },
+    {
+      "scene": "v2-maria",
+      "beat": "sold",
+      "seconds": 7.576,
+      "screenshot": "docs/video/stills/v2-maria-sold.png"
+    },
+    {
+      "scene": "v2-maria",
+      "beat": "match",
+      "seconds": 10.61,
+      "screenshot": "docs/video/stills/v2-maria-match.png"
+    },
+    {
+      "scene": "v2-maria",
+      "beat": "score",
+      "seconds": 15.319,
+      "screenshot": "docs/video/stills/v2-maria-score.png"
+    },
+    {
+      "scene": "v2-maria",
+      "beat": "trade",
+      "seconds": 17.876,
+      "screenshot": "docs/video/stills/v2-maria-trade.png"
+    },
+    {
+      "scene": "v2-maria",
+      "beat": "sms",
+      "seconds": 20.509,
+      "screenshot": "docs/video/stills/v2-maria-sms.png"
+    },
+    {
+      "scene": "v2-approve",
+      "beat": "start",
+      "seconds": 0.202,
+      "screenshot": "docs/video/stills/v2-approve-start.png"
+    },
+    {
+      "scene": "v2-approve",
+      "beat": "queue",
+      "seconds": 1.07,
+      "screenshot": "docs/video/stills/v2-approve-queue.png"
+    },
+    {
+      "scene": "v2-approve",
+      "beat": "ready",
+      "seconds": 6.47,
+      "screenshot": "docs/video/stills/v2-approve-ready.png"
+    },
+    {
+      "scene": "v2-group",
+      "beat": "start",
+      "seconds": 0.21,
+      "screenshot": "docs/video/stills/v2-group-start.png"
+    },
+    {
+      "scene": "v2-group",
+      "beat": "totals",
+      "seconds": 0.415,
+      "screenshot": "docs/video/stills/v2-group-totals.png"
+    },
+    {
+      "scene": "v2-ready",
+      "beat": "start",
+      "seconds": 0.211,
+      "screenshot": "docs/video/stills/v2-ready-start.png"
+    },
+    {
+      "scene": "v2-ready",
+      "beat": "collapsed",
+      "seconds": 1.002,
+      "screenshot": "docs/video/stills/v2-ready-collapsed.png"
+    }
+  ],
+  "retake_note": "Ready and Maria detail takes use the same completed public session after approval. No new review or inference; message content is unchanged. Cursor moved into the gutter for readability."
+}

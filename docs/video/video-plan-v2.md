@@ -35,7 +35,7 @@ Subtitles: `subtitles-v2.srt`, timed to this plan. Pace is about 150 words per m
 | 6 | 0:50–1:02 | 12 s | Step 2 · Find who's slipping | Sandy's trace: leads read → slipping count | Zoom into Sandy |
 | 7 | 1:02–1:17 | 15 s | Step 3 · Find the right car | Sandy's trace: cars searched here + sister stores → match score bars | Hard cut |
 | 8 | 1:17–1:28 | 11 s | Step 4 · Write the brief | Sandy's trace: Qwen step → brief headline → message count | Hard cut |
-| 9 | 1:28–1:32 | 4 s | Time skip | Card: "2 min 18 sec later · all 24 stores done" (real run, shortened) | Quick fade |
+| 9 | 1:28–1:32 | 4 s | Time skip | Card: "2 min 5 sec later · all 24 stores done" (real run, shortened) | Quick fade |
 | 10 | 1:32–1:58 | 26 s | **Payoff: Maria** | Her drawer: best match 98 → trade-in → full SMS held readable for 6 s | Push-in |
 | **ACT 3: THE OUTCOME** |||||
 | 11 | 1:58–2:10 | 12 s | Approve | Sandy queue → Approve all → Ready | Hard cut |
@@ -57,7 +57,7 @@ Time split: problem 38 s · agent at work 80 s · outcome and close 47 s.
 
 ### 3. Thesis (0:23–0:31)
 - **Card, line by line:** "Dealers don't lose sales for lack of cars." / "They lose them because nobody connects the lead to the car in time."
-- **VO:** the same two sentences.
+- **VO:** "Dealers don't lose these sales for lack of cars. They lose them because nobody connects the lead to the car in time."
 
 ### 4. Title (0:31–0:38)
 - **Visual:** SalesDesk logo, then "Your AI sales analyst", then the small line "Connects every lead to the right car. Every night."
@@ -76,12 +76,12 @@ Time split: problem 38 s · agent at work 80 s · outcome and close 47 s.
 - **VO:** "Next, it searches every car on this lot and at nearby sister stores, and scores each one against the request: model, trim, budget, mileage. Cars that have sat the longest get priority."
 
 ### 8. Step 4 · Write the brief (1:17–1:28)
-- **Visual:** the trace step "Qwen on Vultr Inference" fills. Then the store brief headline in large type, then "40 follow-ups drafted".
+- **Visual:** the trace step "Qwen on Vultr Inference" fills. Then the store brief headline in large type, then "3 Qwen follow-ups" and the real 40-draft queue.
 - **VO:** "Then Qwen, on Vultr Serverless Inference, writes the store's morning brief and three personal follow-ups, using only recorded vehicle facts."
 
 ### 9. Time skip (1:28–1:32)
-- **Card:** "2 min 18 sec later" (large), with "All 24 stores reviewed on Vultr" under it. The footage is real and the shortening is visible.
-- **VO:** "Two minutes, eighteen seconds later, all 24 stores are done."
+- **Card:** "2 min 5 sec later" (large), with "All 24 stores reviewed on Vultr" under it. The footage is real and the shortening is visible.
+- **VO:** "Two minutes, five seconds later, all 24 stores are done."
 
 ### 10. Payoff: Maria (1:32–1:58)
 - **Visual:** a push-in on Maria's card in the Sandy queue, then the drawer opens.
@@ -89,7 +89,7 @@ Time split: problem 38 s · agent at work 80 s · outcome and close 47 s.
   - 1:42: highlight "Trade-in · 2017 Honda CR-V".
   - 1:46: zoom to the SMS, large and fully readable.
   - 1:46–1:58: hold on the SMS with no captions or voiceover so the viewer reads it.
-- **VO:** "Remember Maria? Here's what the agent found: the silver RAV4 Hybrid on her own lot, a 98 out of 100 match. It knows about her CR-V trade-in, and her message is already written."
+- **VO:** "Remember Maria? Here's what the agent found: the silver RAV4 Hybrid on her own lot, a 98 out of 100 match. It knows about her CR-V trade-in. Her message is already written."
 
 ### 11. Approve (1:58–2:10)
 - **Visual:** close the drawer, then a quick scroll of the ranked queue (3 cards). Click **Approve all for Sandy**. Zoom on the green **Ready** pill with its Follow-ups / CRM tasks / Transfers buttons. No CSV.
@@ -112,7 +112,7 @@ Time split: problem 38 s · agent at work 80 s · outcome and close 47 s.
 - **Maria:** last salesperson contact 7 days ago (no call-count claim); original car sold 6 days ago; silver RAV4 Hybrid XLE, 74 days on lot, match 98; 2017 CR-V trade-in.
 - **Group:** 1,050 at risk ("over a thousand"); 1,007 matched; $3,434,800 recoverable gross ("$3.4M").
 - **Sandy:** 40 at risk, 25 cold, plus the trace counts (leads read, cars searched here and at sister stores).
-- **Run:** recorded public run: 138.317 seconds. 25 accepted Qwen replays, zero new inference calls and $0 new inference cost; compute is separate. Scene 13 makes no cost claim.
+- **Run:** recorded public run: 124.758 seconds. 25 accepted Qwen replays, zero new inference calls and $0 new inference cost; compute is separate. Scene 13 makes no cost claim.
 
 ## Verified v2 corrections
 

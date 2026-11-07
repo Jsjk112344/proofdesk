@@ -97,7 +97,7 @@ using only recorded vehicle facts.
 
 21
 00:01:28,300 --> 00:01:31,600
-Two minutes, eighteen seconds later,
+Two minutes, five seconds later,
 all 24 stores are done.
 
 22
@@ -118,46 +118,46 @@ a 98 out of 100 match.
 It knows about her CR-V trade-in.
 Her message is already written.
 
-27
+26
 00:01:58,300 --> 00:02:03,300
 At 7 AM, Sandy's manager opens
 a ranked queue of 40 follow-ups
 
-28
+27
 00:02:03,300 --> 00:02:06,800
 and approves them in one click.
 
-29
+28
 00:02:06,800 --> 00:02:09,800
 Each salesperson gets
 their tasks and drafts.
 
-30
+29
 00:02:10,300 --> 00:02:15,800
 Across the group, that's over a thousand
 customers matched to a car in stock,
 
-31
+30
 00:02:15,800 --> 00:02:21,600
 and an estimated $3.4 million
 in gross back in play.
 
-32
+31
 00:02:22,300 --> 00:02:27,300
 It all runs on Vultr: the scheduler
 and sandboxes on a Vultr VM,
 
-33
+32
 00:02:27,300 --> 00:02:33,600
 and Qwen on Vultr Serverless Inference,
 with validated drafts for manager review.
 
-34
+33
 00:02:34,300 --> 00:02:38,300
 SalesDesk. Every lead, every store,
 every morning.
 
-35
+34
 00:02:38,500 --> 00:02:42,500
 Sell more,
 with your AI sales analyst.

@@ -1,0 +1,27 @@
+Nine days ago, Maria asked a dealership about a blue RAV4 Hybrid. Her last contact was seven days ago. Six days ago, that car sold. Meanwhile, a silver one sat on the same lot for 74 days.
+
+Now multiply that by 24 stores. Every morning, over a thousand leads like Maria are slipping away.
+
+Dealers don't lose these sales for lack of cars. They lose them because nobody connects the lead to the car in time.
+
+SalesDesk is an AI sales analyst that makes that connection, every night.
+
+At 2 AM, SalesDesk starts its review. It splits the group into 24 jobs, one per store, running in parallel in isolated sandboxes on Vultr.
+
+Let's follow one store: Sandy. First, the agent reads every open lead and flags the ones going cold: no contact in three days, or the car they wanted is gone.
+
+Next, it searches every car on this lot and at nearby sister stores, and scores each one against the request: model, trim, budget, mileage. Cars that have sat the longest get priority.
+
+Then Qwen, on Vultr Serverless Inference, writes the store's morning brief and three personal follow-ups, using only recorded vehicle facts.
+
+Two minutes, five seconds later, all 24 stores are done.
+
+Remember Maria? Here's what the agent found: the silver RAV4 Hybrid on her own lot, a 98 out of 100 match. It knows about her CR-V trade-in. Her message is already written.
+
+At 7 AM, Sandy's manager opens a ranked queue of 40 follow-ups and approves them in one click. Each salesperson gets their tasks and drafts.
+
+Across the group, that's over a thousand customers matched to a car in stock, and an estimated $3.4 million in gross back in play.
+
+It all runs on Vultr: the scheduler and sandboxes on a Vultr VM, and Qwen on Vultr Serverless Inference, with validated drafts for manager review.
+
+SalesDesk. Every lead, every store, every morning. Sell more, with your AI sales analyst.
