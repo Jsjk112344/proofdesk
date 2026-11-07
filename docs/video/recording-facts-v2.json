@@ -1,0 +1,438 @@
+{
+  "url": "https://salesdesk.149.28.51.139.sslip.io",
+  "reference_time": "2026-11-07T03:18:09.608411+00:00",
+  "review": {
+    "id": "97a2ab16c9224069b982cb76a20b992d",
+    "status": "succeeded",
+    "events": [
+      {
+        "at": "2026-11-07T03:18:09.608411+00:00",
+        "due_at": "2026-11-07T03:18:09.607613+00:00",
+        "stage": "scheduled"
+      },
+      {
+        "at": "2026-11-07T03:20:21.222965+00:00",
+        "attempt": 1,
+        "lease_until": "2026-11-07T03:22:21.222439+00:00",
+        "stage": "claimed"
+      },
+      {
+        "at": "2026-11-07T03:20:21.838954+00:00",
+        "stage": "started"
+      },
+      {
+        "at": "2026-11-07T03:20:21.954849+00:00",
+        "stage": "writing_group_brief"
+      },
+      {
+        "at": "2026-11-07T03:20:22.000120+00:00",
+        "stage": "succeeded"
+      }
+    ],
+    "created_at": "2026-11-07T03:18:09.608411+00:00",
+    "started_at": "2026-11-07T03:20:21.222439+00:00",
+    "finished_at": "2026-11-07T03:20:21.999958+00:00",
+    "failure_reason": null
+  },
+  "wall_clock_seconds": 138.317,
+  "inference_cost_usd": "0",
+  "live_responses": 0,
+  "replayed_responses": 25,
+  "cost_basis": "Provider-reported token usage, $0.10 input / $0.20 output per million; excludes compute. Replayed responses incur no new inference.",
+  "group": {
+    "aged_60": 948,
+    "aged_90": 357,
+    "aged_matched": 792,
+    "at_risk": 1050,
+    "cold_leads": 652,
+    "floorplan_daily": 7584.0,
+    "floorplan_to_date": 703784.0,
+    "matched_in_stock": 1007,
+    "matched_leads": 1050,
+    "open_leads": 9000,
+    "recoverable_gross": 3434800.0
+  },
+  "sandy": {
+    "trace": {
+      "at_risk": 40,
+      "cars_here": 117,
+      "cars_sister": 1638,
+      "cold_leads": 25,
+      "open_leads": 375,
+      "scored_pairs": 70200,
+      "top_score": 100
+    },
+    "events": [
+      {
+        "at": "2026-11-07T03:18:09.608924+00:00",
+        "due_at": "2026-11-07T03:18:09.607613+00:00",
+        "stage": "scheduled"
+      },
+      {
+        "at": "2026-11-07T03:18:09.888884+00:00",
+        "attempt": 1,
+        "lease_until": "2026-11-07T03:20:09.888115+00:00",
+        "stage": "claimed"
+      },
+      {
+        "at": "2026-11-07T03:18:11.671834+00:00",
+        "stage": "started"
+      },
+      {
+        "at": "2026-11-07T03:18:15.585053+00:00",
+        "stage": "analysing_on_vultr"
+      },
+      {
+        "at": "2026-11-07T03:18:28.455378+00:00",
+        "counts": {
+          "at_risk": 40,
+          "cars_here": 117,
+          "cars_sister": 1638,
+          "cold_leads": 25,
+          "open_leads": 375,
+          "scored_pairs": 70200,
+          "top_score": 100
+        },
+        "stage": "analysis_validated"
+      },
+      {
+        "at": "2026-11-07T03:18:28.556943+00:00",
+        "stage": "comparing_previous_night"
+      },
+      {
+        "at": "2026-11-07T03:18:38.780626+00:00",
+        "stage": "metrics_validated"
+      },
+      {
+        "at": "2026-11-07T03:18:39.005054+00:00",
+        "stage": "brief_written"
+      },
+      {
+        "at": "2026-11-07T03:18:39.368068+00:00",
+        "stage": "succeeded"
+      }
+    ],
+    "metrics": {
+      "aged_60": 41,
+      "aged_90": 18,
+      "aged_matched": 40,
+      "appointment_rate": 0.0453,
+      "at_risk": 40,
+      "cold_leads": 25,
+      "floorplan_daily": 328.0,
+      "floorplan_to_date": 31784.0,
+      "matched_in_stock": 38,
+      "matched_leads": 40,
+      "median_response_minutes": 82.0,
+      "open_leads": 375,
+      "recoverable_gross": 119800.0
+    },
+    "followups": 40,
+    "qwen_followups": 3
+  },
+  "maria": {
+    "created_at": "2026-10-28T20:18:09.608126-07:00",
+    "customer": "Maria G.",
+    "first_name": "Maria",
+    "last_contact_at": "2026-10-30T20:18:09.608126-07:00",
+    "lead_id": "L000476",
+    "matches": [
+      {
+        "body": "SUV",
+        "color": "silver",
+        "components": {
+          "aged inventory": 6,
+          "body": 8,
+          "budget": 10,
+          "color": 0,
+          "make": 20,
+          "mileage": 3,
+          "model": 25,
+          "same store": 8,
+          "trim": 10,
+          "year": 8
+        },
+        "cost": 29500.0,
+        "days_on_lot": 74,
+        "eta": "",
+        "list_price": 32900.0,
+        "make": "Toyota",
+        "mileage": 18420,
+        "model": "RAV4 Hybrid",
+        "rooftop_id": "r02",
+        "score": 98,
+        "sold_date": "",
+        "status": "in_stock",
+        "stock_no": "S00138",
+        "store_name": "Summit Sandy",
+        "transfer": false,
+        "trim": "XLE",
+        "year": 2024
+      },
+      {
+        "body": "SUV",
+        "color": "silver",
+        "components": {
+          "aged inventory": 6,
+          "body": 8,
+          "budget": 10,
+          "color": 0,
+          "make": 20,
+          "mileage": 3,
+          "model": 25,
+          "same store": 8,
+          "trim": 10,
+          "year": 8
+        },
+        "cost": 31900.0,
+        "days_on_lot": 83,
+        "eta": "",
+        "list_price": 34400.0,
+        "make": "Toyota",
+        "mileage": 14344,
+        "model": "RAV4 Hybrid",
+        "rooftop_id": "r02",
+        "score": 98,
+        "sold_date": "",
+        "status": "in_stock",
+        "stock_no": "S00222",
+        "store_name": "Summit Sandy",
+        "transfer": false,
+        "trim": "XLE",
+        "year": 2024
+      },
+      {
+        "body": "SUV",
+        "color": "silver",
+        "components": {
+          "aged inventory": 6,
+          "body": 8,
+          "budget": 10,
+          "color": 0,
+          "make": 20,
+          "mileage": 0,
+          "model": 25,
+          "same store": 8,
+          "trim": 10,
+          "year": 8
+        },
+        "cost": 30100.0,
+        "days_on_lot": 92,
+        "eta": "",
+        "list_price": 33700.0,
+        "make": "Toyota",
+        "mileage": 55414,
+        "model": "RAV4 Hybrid",
+        "rooftop_id": "r02",
+        "score": 95,
+        "sold_date": "",
+        "status": "in_stock",
+        "stock_no": "S00198",
+        "store_name": "Summit Sandy",
+        "transfer": false,
+        "trim": "XLE",
+        "year": 2024
+      }
+    ],
+    "priority": 248,
+    "risks": [
+      "Cold lead",
+      "Vehicle sold"
+    ],
+    "salesperson": "Jordan Finch",
+    "trade_in": "2017|Honda|CR-V|85000",
+    "wanted": {
+      "body": "SUV",
+      "color": "blue",
+      "cost": 30600.0,
+      "days_on_lot": 32,
+      "eta": "",
+      "list_price": 33900.0,
+      "make": "Toyota",
+      "mileage": 39700,
+      "model": "RAV4 Hybrid",
+      "rooftop_id": "r02",
+      "sold_date": "2026-10-31T20:18:09.608126-07:00",
+      "status": "sold",
+      "stock_no": "S00126",
+      "trim": "XLE",
+      "year": 2024
+    }
+  },
+  "maria_sms": "Hi Maria, I found a silver 2024 Toyota RAV4 Hybrid XLE at Summit Sandy. Would you like to discuss your 2017 Honda CR-V trade? [Salesperson]",
+  "maria_provenance": "saved_replay",
+  "observations": [
+    {
+      "elapsed": 19.318,
+      "sandy_status": "running",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr"
+      ]
+    },
+    {
+      "elapsed": 31.158,
+      "sandy_status": "running",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr",
+        "analysis_validated",
+        "comparing_previous_night"
+      ]
+    },
+    {
+      "elapsed": 54.072,
+      "sandy_status": "succeeded",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr",
+        "analysis_validated",
+        "comparing_previous_night",
+        "metrics_validated",
+        "brief_written",
+        "succeeded"
+      ]
+    },
+    {
+      "elapsed": 61.418,
+      "sandy_status": "succeeded",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr",
+        "analysis_validated",
+        "comparing_previous_night",
+        "metrics_validated",
+        "brief_written",
+        "succeeded"
+      ]
+    },
+    {
+      "elapsed": 67.547,
+      "sandy_status": "succeeded",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr",
+        "analysis_validated",
+        "comparing_previous_night",
+        "metrics_validated",
+        "brief_written",
+        "succeeded"
+      ]
+    },
+    {
+      "elapsed": 72.795,
+      "sandy_status": "succeeded",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr",
+        "analysis_validated",
+        "comparing_previous_night",
+        "metrics_validated",
+        "brief_written",
+        "succeeded"
+      ]
+    },
+    {
+      "elapsed": 81.177,
+      "sandy_status": "succeeded",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr",
+        "analysis_validated",
+        "comparing_previous_night",
+        "metrics_validated",
+        "brief_written",
+        "succeeded"
+      ]
+    },
+    {
+      "elapsed": 99.588,
+      "sandy_status": "succeeded",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr",
+        "analysis_validated",
+        "comparing_previous_night",
+        "metrics_validated",
+        "brief_written",
+        "succeeded"
+      ]
+    },
+    {
+      "elapsed": 117.235,
+      "sandy_status": "succeeded",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr",
+        "analysis_validated",
+        "comparing_previous_night",
+        "metrics_validated",
+        "brief_written",
+        "succeeded"
+      ]
+    },
+    {
+      "elapsed": 128.81,
+      "sandy_status": "succeeded",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr",
+        "analysis_validated",
+        "comparing_previous_night",
+        "metrics_validated",
+        "brief_written",
+        "succeeded"
+      ]
+    },
+    {
+      "elapsed": 133.72,
+      "sandy_status": "succeeded",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr",
+        "analysis_validated",
+        "comparing_previous_night",
+        "metrics_validated",
+        "brief_written",
+        "succeeded"
+      ]
+    },
+    {
+      "elapsed": 138.317,
+      "sandy_status": "succeeded",
+      "stages": [
+        "scheduled",
+        "claimed",
+        "started",
+        "analysing_on_vultr",
+        "analysis_validated",
+        "comparing_previous_night",
+        "metrics_validated",
+        "brief_written",
+        "succeeded"
+      ]
+    }
+  ]
+}
