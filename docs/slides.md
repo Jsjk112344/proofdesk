@@ -3,164 +3,87 @@ marp: true
 theme: default
 paginate: true
 style: |
-  section { font-size: 26px; padding: 40px; }
-  h1 { font-size: 44px; margin-bottom: 16px; }
+  section { font-family: Inter, sans-serif; color: #162d32; background: #f5f7f6; padding: 60px; }
+  h1 { font-size: 48px; letter-spacing: -0.03em; }
+  p, li { font-size: 26px; }
   img { display: block; margin: auto; }
 ---
 
-# SalesDesk
+![bg](video/cards/01-title-composited.png)
 
-## Sell more: Your AI sales analyst.
-
-Every night, it works every lead across every rooftop.
-
-**Dealer-group GMs see the region. Store managers approve the morning queue.**
-
-[Live demo](https://salesdesk.149.28.51.139.sslip.io)
+<!-- SalesDesk. Sell more: your AI sales analyst. -->
 
 ---
 
-# The manager’s morning starts with a search
+![bg](video/cards/03-before-after.png)
 
-Which leads went cold? Did the car sell? Is there a replacement at a sister store?
-Which aged cars already match a buyer?
-
-Group leadership needs visibility. Each store manager needs an action they can approve.
+<!-- Actual recorded run time is printed on the card. No human time-saved ratio is claimed. -->
 
 ---
 
-# Evidence: response quality and inventory both matter
+# Leadership sees the whole group.
 
-- **19%** of dealers took over an hour to respond in DAS Technology’s 2025 study.
-- **89%** did not offer an alternative available vehicle in the initial response.
-- Study scope: **1,700** U.S. dealership website inquiries, Q3–Q4 2024; the sampled
-  dealerships were not clients of DAS lead-response solutions.
+![height:500px](assets/salesdesk-group.png)
 
-Source: [DAS Technology, January 24, 2025](https://digitalairstrike.com/das-technology-unveils-comprehensive-automotive-dealership-lead-response-study-at-nada-2025/).
-Vendor study; these figures are not SalesDesk outcomes or a universal conversion claim.
+9,000 reviewed · 1,050 at risk · 1,007 best matches in stock · 792 distinct aged units matched.
+**$3,434,800 estimated recoverable gross**, from listed price minus cost; a unit can match
+multiple leads. It is not a sales forecast. Sample dealer group; fictional people and data.
 
 ---
 
-# Inventory ties up real capital
+# Store managers get a ranked queue.
 
-Lithia & Driveway reported **$228.2 million** of floorplan interest expense in 2025,
-offset by **$168.5 million** of assistance, leaving **$59.7 million** of net vehicle
-carrying costs. This is one dealer group’s reported expense, not an industry average.
+![height:500px](assets/salesdesk-store.png)
 
-Source: [Lithia 2025 Form 10-K, floorplan expense and assistance](https://www.sec.gov/Archives/edgar/data/1023128/000102312826000015/lad-20251231.htm).
-
-Cox Automotive reported **43 days’ supply** of used inventory at the start of June 2025.
-Market days’ supply measures stock relative to sales pace; it is **not** individual-car age.
-
-Source: [Cox Automotive, June 13, 2025](https://www.coxautoinc.com/insights/used-vehicle-inventory-may-2025/).
+Sandy: **40 follow-ups**. Risk, available inventory and trade context together.
+Store risk counts genuinely range 12–85 from varied synthetic records, with no queue cap.
 
 ---
 
-# The cost of the problem, made inspectable
+# A fresh reason to follow up.
 
-Our fictional sample: **24 stores · 3,000 vehicles · 9,000 open leads**.
+![height:500px](assets/salesdesk-maria.png)
 
-The run found **652 cold leads**, **1,050 at-risk leads**, **1,007 best matches in stock**,
-and **792 distinct aged units matched**.
-
-**$3,434,800 estimated recoverable gross** = listed price minus cost over best risk-lead
-matches. A car can match multiple leads. This is not a sales forecast or realized revenue.
-
-Floorplan uses an **entered $8/unit/day assumption**, not a market interest-rate claim.
-For Maria’s 74-day match, that is **$592** of illustrative carrying cost to date.
+Maria G.: silver 2024 RAV4 Hybrid XLE, **74 days** on lot, **$32,900**, score **98**,
+2017 Honda CR-V trade. Her original blue unit sold. The carrying-cost figure uses an
+entered $8/unit/day assumption, not a measured lending expense.
 
 ---
 
-# One group. A clear next move at every store.
+![bg](video/cards/04-architecture.png)
 
-![height:460px](assets/salesdesk-group.png)
-
-All numbers come from accepted job output. The sample and people are fictional.
-
----
-
-# Watch the work happen on Vultr
-
-![height:460px](assets/salesdesk-live-run.png)
-
-24 leased rooftop jobs, six concurrent workers, separate disposable Docker sandboxes.
-Counters and state changes follow actual saved child results.
-
----
-
-# Maria’s original car sold. The opportunity remains.
-
-![height:460px](assets/salesdesk-maria.png)
-
-Blue RAV4 enquiry → sold car → silver RAV4 Hybrid XLE, 74 days on lot →
-SMS and email with her CR-V trade → manager approval.
-
----
-
-# Before / after
-
-| Before | After |
-| --- | --- |
-| Find cold leads, check stock, search sister stores, draft follow-ups | Review a ranked queue and approve exact drafts |
-| Group leaders ask each store for the picture | Regional map, store ranking and validated roll-up |
-| Preparation stops when the tab closes | Server-owned workers and recurring reviews |
-
-**Measured public full run: 140.131 seconds, through final public result capture.** Six concurrent child jobs; observed application
-peak 641.59 MiB on the earlier release of the same Vultr VM. [Release-specific observations](../STATUS.md).
-
-Human triage time and business uplift have not been measured; no time-saved ratio is claimed.
-
----
-
-# Vultr is the control plane
-
-Browser → Caddy → FastAPI on Vultr VM → scheduler fan-out → parallel Docker sandboxes →
-validated metrics → Vultr Serverless Inference → exact-version approvals → worker → downloads.
-
-**VM:** 2 CPUs, nominal 4 GiB RAM, EWR/New Jersey. **Concurrency:** 6.
-**Model:** qwen3.8-flash-next. JSON contracts; reasoning disabled.
-
-Original sandbox, lease, budget, replay and session boundaries remain intact.
+<!-- Browser → Caddy HTTPS → FastAPI + scheduler on Vultr EWR VM → 24 rooftop jobs,
+Docker sandboxes six at a time → Vultr Serverless Inference / Qwen → manager approval
+→ durable worker → drafts, CRM tasks and transfer requests. -->
 
 ---
 
 # AI drafts. People approve.
 
-- Two validated contracts: rooftop brief and group brief.
-- Model facts and quantities resolve through controller-rendered placeholders.
-- Top-lead Qwen drafts, additional labelled templates, human edits tracked separately.
-- Editing clears approval; preparation and downloads recheck the exact version.
-- Accepted exact-input replay is revalidated and labelled. Rejections never execute or persist.
+- CSV input today. Live CRM / DMS connections next.
+- Exact-version approval; editing clears approval. Nothing is sent to customers.
+- Accepted replay is revalidated and labelled; new inputs use bounded live inference.
+- Complete live measurement: **25 responses / $0.0077789 token cost**, under one cent.
+  Compute is separate; token-cost estimates are not billing receipts.
+- The separate live run took **140.131 seconds** through final capture. The recorded
+  take's own runtime appears on the jump-cut card and in `video/recorded-run.json`.
 
-Nothing is sent to customers. Transfers are review requests, not executed moves.
-
----
-
-# Cost, next, and the platform
-
-A complete live run used **25 responses / $0.0077789** in token-based inference cost, under one cent. Compute is separate; these are provider usage estimates, not billing receipts.
-
-The separate video inference envelope is **$0.15 / 64 requests**, inside the owner’s existing
-$150 compute/inference authorization. Actual requests, usage estimates, uncertain rejected
-calls and pessimistic reservations are itemized in [STATUS.md](../STATUS.md).
-
-Current catalog rates checked November 6: **$0.10 input / $0.20 output per million tokens**.
-[Official Vultr model catalog](https://api.vultrinference.com/v1/models/qwen3.8-flash-next).
-Sample replays make no new inference request. VM billing is accounted separately.
-
-**Next:** live CRM/DMS connections, production tenancy, refreshed source feeds and other verticals.
-Current input is CSV; no named CRM/DMS integration is claimed.
+<!-- The original and video envelopes each remain bounded at $0.15 / 64 requests.
+All existing ledgers, sandbox limits, validator rules and approval bindings are preserved. -->
 
 ---
 
-# SalesDesk
+![bg](video/cards/05-end.png)
 
-**Every night, it works every lead across every rooftop.**
+<!-- SalesDesk. Public URL: https://salesdesk.149.28.51.139.sslip.io
+MIT source: https://github.com/Jsjk112344/salesdesk
+Built for Vultr Agent Rush, Powering the Future of Work. -->
 
-[Try the demo](https://salesdesk.149.28.51.139.sslip.io) ·
-[MIT source](https://github.com/Jsjk112344/salesdesk)
-
-Challenge 2: Powering the Future of Work · Vultr Agent Rush
-
-
-Submission PDF: [SalesDesk slides](video/SalesDesk-slides.pdf). Rebuild with `uv run python -m scripts.render_demo_assets`; pass `--capture` to refresh the public screenshots. The PDF uses the same video cards, Inter font, logo mark and current public captures.
+<!-- Render this eight-slide deck using:
+uv run python -m scripts.render_demo_assets
+Add --capture to refresh real public app screenshots.
+The renderer uses the same HTML geometry and PNG card visuals as the video.
+Submission PDF: video/SalesDesk-slides.pdf
+Exact visual source: video/SalesDesk-slides.html
+Sources: video/measured-run.json, video/recorded-run.json,
+video/inference-accounting.json, ../STATUS.md. -->

@@ -1,0 +1,17 @@
+{
+  "video_run_ledger": {
+    "ceiling_usd": "0.15",
+    "max_requests": 64,
+    "max_total_tokens": 1048576,
+    "reference": "owner-salesdesk-video-measured-run-2026-11-06",
+    "reserved_requests": 25,
+    "reserved_tokens": 451200,
+    "reserved_usd": "0.0502400"
+  },
+  "full_run_provider_responses": 25,
+  "token_cost_usd": "0.0077789",
+  "reservation_is_not_cost": true,
+  "source": "25 live provider usage receipts in measured-run.json; read-only durable envelope ledger on Vultr",
+  "old_ledgers_preserved": true,
+  "compute_billing": "separate and unverified against account billing"
+}

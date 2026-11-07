@@ -5,7 +5,7 @@ runs 24 dealerships,
 
 2
 00:00:03,600 --> 00:00:07,600
-with 3,000 cars on the lots
+with 3,000 vehicles
 and 9,000 open leads.
 
 3
@@ -54,8 +54,8 @@ and nearby sister stores.
 
 12
 00:00:39,300 --> 00:00:42,500
-Then Qwen on Vultr Inference
-writes that store's brief.
+This sample reuses
+accepted Qwen briefs.
 
 13
 00:00:46,300 --> 00:00:50,800
@@ -164,7 +164,7 @@ a ranked list.
 34
 00:02:33,500 --> 00:02:37,300
 The full 24-store review
-ran in about two minutes twenty seconds.
+ran in about two minutes.
 
 35
 00:02:38,300 --> 00:02:43,300

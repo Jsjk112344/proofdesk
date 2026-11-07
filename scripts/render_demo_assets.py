@@ -25,7 +25,7 @@ p{font-size:32px;line-height:1.55}small{font-size:24px;line-height:1.6}
 .mark svg{width:70px;height:70px;fill:none;stroke:#142e34;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .center{display:flex;align-items:center;justify-content:center;text-align:center;flex-direction:column}
 .title p{font-size:44px;margin-top:30px}.title h1{font-size:96px}.title.transparent{background:transparent;color:#fff}
-.kicker{font-size:26px;margin-bottom:40px;color:#83dfbd}.footer{position:absolute;bottom:65px;left:112px;right:112px;font-size:24px;color:#526a6e}
+.kicker{font-size:26px;margin-bottom:40px;color:#83dfbd}.footer{position:absolute;bottom:160px;left:112px;right:112px;font-size:24px;color:#526a6e}
 .dark .footer{color:#b2cdc9}.columns{display:grid;grid-template-columns:1fr 1fr;gap:120px;margin-top:80px}
 .col h2{font-size:48px;margin-bottom:35px}.col p{font-size:36px;line-height:1.9}.after{padding-left:80px;border-left:1px solid #cbdad4}
 .after p{font-size:45px;font-weight:540;line-height:1.8}.after h2{color:#087e67}.before h2{color:#647c7a}
@@ -104,6 +104,10 @@ async def main():
     args = parser.parse_args()
     report = json.loads((VIDEO / "measured-run.json").read_text())
     runtime = report["wall_clock_seconds"]
+    take = VIDEO / "scene-manifest.json"
+    if take.exists():
+        recorded = json.loads(take.read_text()).get("recorded_run", {})
+        runtime = recorded.get("visible_group_seconds", runtime)
     minutes = runtime / 60
     timing = f"{runtime:.1f} seconds ({minutes:.1f} minutes)"
     title = (
@@ -118,7 +122,7 @@ async def main():
         ),
         "02-jumpcut": section(
             '<p class="kicker">Same review · later</p><h2>Full 24-store review:<br>'
-            + f'{minutes:.1f} minutes on Vultr</h2><p class="mint" style="margin-top:45px">shortened for this video</p><div class="footer">Measured public run: {runtime:.3f} s · Actual app footage at normal speed</div>',
+            + f'{minutes:.1f} minutes on Vultr</h2><p class="mint" style="margin-top:45px">shortened for this video</p><div class="footer">Measured public run: {runtime:.3f} s · Actual app footage at normal speed<br>Sandbox analysis executed live · Accepted Qwen briefs replayed</div>',
             "dark center",
         ),
         "03-before-after": section(

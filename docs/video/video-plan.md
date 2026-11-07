@@ -12,7 +12,7 @@ Resolution: record at **1440×900 browser window, 2× (Retina)**, export **1920�
 | 1 | 0:00–0:14 | 14 s | Cold open: the problem | Group view (last night's results), slow zoom on map | Fade from black |
 | 2 | 0:14–0:22 | 8 s | Title | Title card over blurred Group view | Blur + fade |
 | 3 | 0:22–0:46 | 24 s | The swarm | Click **Run tonight's review now**, tiles + counters live | Hard cut |
-|: | 0:42–0:46 | 4 s | Honest jump cut | Card: "Full 24-store run: 2.3 min on Vultr · shortened" | Quick fade |
+|: | 0:42–0:46 | 4 s | Honest jump cut | Card: "Full 24-store run: 2.1 min on Vultr · shortened" | Quick fade |
 | 4 | 0:46–1:06 | 20 s | Morning numbers | Finished Group view: stat strip → group brief | Fade out of card |
 | 5 | 1:06–1:14 | 8 s | Open a store | Click **Sandy** tile → store queue | Hard cut (natural click) |
 | 6 | 1:14–1:52 | 38 s | **Maria G.** (hero) | Open Maria drawer: timeline → best match + breakdown → SMS | Drawer slide-in |
@@ -29,7 +29,7 @@ Time split: **problem 22 s · product working 2 min 2 s · proof/tech 36 s**. Th
 ### 1. Cold open (0:00–0:14)
 - **Screen:** Group view as it loads (previous night's results visible). Slow 1.15× zoom toward the map.
 - **Cursor:** still. Don't move it.
-- **VO:** "It's 6 AM. Summit Auto Group runs 24 dealerships, with 3,000 cars on the lots and 9,000 open leads. In this sample, 652 leads are cold. Which customer should each store call first?"
+- **VO:** "It's 6 AM. Summit Auto Group runs 24 dealerships, with 3,000 vehicles and 9,000 open leads. In this sample, 652 leads are cold. Which customer should each store call first?"
 - **Zoom:** no punch-ins; let the map breathe.
 
 ### 2. Title (0:14–0:22)
@@ -39,8 +39,8 @@ Time split: **problem 22 s · product working 2 min 2 s · proof/tech 36 s**. Th
 ### 3. The swarm (0:22–0:46)
 - **Screen:** back to the Group view, unblurred. Cursor moves to **Run tonight's review now**, click at 0:24.
 - **Zoom:** 0:25 punch to the counter row + progress bar (1.6×) for ~6 s; 0:32 pull back to show map markers and tiles turning "Analysing on Vultr" → "Ready".
-- **VO:** "Here's tonight's review. SalesDesk fans the work out across all 24 rooftops: six isolated workers running in parallel on Vultr. Each one checks every lead's risk and searches the inventory at its own store and nearby sister stores. Then Qwen on Vultr Inference writes that store's brief."
-- **Jump cut (0:42–0:46):** full-frame card, white text on dark green: "Full 24-store review: 2.3 minutes on Vultr · shortened for this video". Real footage only; never speed up counters.
+- **VO:** "Here's tonight's review. SalesDesk fans the work out across all 24 rooftops: six isolated workers running in parallel on Vultr. Each one checks every lead's risk and searches the inventory at its own store and nearby sister stores. This sample reuses accepted Qwen briefs."
+- **Jump cut (0:42–0:46):** full-frame card, white text on dark green: "Full 24-store review: 2.1 minutes on Vultr · shortened for this video". Real footage only; never speed up counters.
 
 ### 4. Morning numbers (0:46–1:06)
 - **Screen:** finished Group view (hero reads "Good morning…").
@@ -73,8 +73,8 @@ Time split: **problem 22 s · product working 2 min 2 s · proof/tech 36 s**. Th
 - **VO:** "Then close the laptop. The next review runs at 2 AM, every night, for every store, on Vultr. Tomorrow, the queue is waiting again."
 
 ### 9. Before / after (2:24–2:38): slide
-- **Layout:** two columns. *Before:* "Search the CRM for cold leads · Check if their car sold · Phone other stores for stock · Write every follow-up". *After:* "Open SalesDesk · Approve a ranked queue". Footer: "Full 24-store review: 2.3 min on Vultr (measured)".
-- **VO:** "Before: managers dig through leads, sold units and other stores' stock. After: they approve a ranked list. The full 24-store review ran in about two minutes twenty seconds."
+- **Layout:** two columns. *Before:* "Search the CRM for cold leads · Check if their car sold · Phone other stores for stock · Write every follow-up". *After:* "Open SalesDesk · Approve a ranked queue". Footer: "Full 24-store review: 2.1 min on Vultr (measured)".
+- **VO:** "Before: managers dig through leads, sold units and other stores' stock. After: they approve a ranked list. The full 24-store review ran in about two minutes."
 
 ### 10. Architecture (2:38–2:52): slide
 - **Diagram (builds left→right, ~1 box per second):** Browser → Caddy HTTPS → FastAPI + scheduler on **Vultr VM** → 24 rooftop jobs in disposable **Docker sandboxes**, **6 at a time** → **Vultr Serverless Inference (Qwen)** → Approval → Worker → Downloads.
@@ -85,9 +85,13 @@ Time split: **problem 22 s · product working 2 min 2 s · proof/tech 36 s**. Th
 - **End card:** SalesDesk logo, *Sell more: your AI sales analyst*, URL `salesdesk.149.28.51.139.sslip.io`, GitHub repo, "Built for Vultr Agent Rush".
 - **VO:** "Automotive is our first vertical. SalesDesk: sell more, with your AI sales analyst."
 
+## Recorded take
+
+The take used in this cut completed at **121.290 seconds**; the finished Group view was visible at **124.177 seconds**. It executed Docker analysis on Vultr and revalidated accepted Qwen replay. The jump-cut card uses this take's measured time. The separate fully live-inference measurement and its token cost remain below.
+
 ## Measured evidence
 
-The fresh public live-inference run took **140.131 seconds** through the final result capture, including final render/screenshot overhead. All 25 briefs used live Qwen responses. Token-based cost: **$0.0077789**, compute separate. The stat strip is **9,000 reviewed / 1,050 at risk / 1,007 in stock / 792 distinct aged units / $3,434,800 estimated gross** (display rounds gross to $3.4M). The group brief now uses the same in-stock denominator. Six real child jobs entered running state in the first 20 seconds. See `measured-run.json`.
+The fresh public live-inference run took **140.131 seconds** through the final result capture, including final render/screenshot overhead. All 25 briefs used live Qwen responses. Token-based cost: **$0.0077789**, compute separate. The stat strip is **9,000 reviewed / 1,050 at risk / 1,007 in stock / 792 distinct aged units / $3,434,800 estimated gross** (narration rounds gross to $3.4 million). The group brief now uses the same in-stock denominator. Six real child jobs entered running state in the first 20 seconds. See `measured-run.json`.
 
 Maria: enquiry 9 days earlier, last contact 7 days earlier, original blue unit sold 6 days earlier; silver 2024 Toyota RAV4 Hybrid XLE, stock S00138, 74 days, $32,900, score 98; 2017 Honda CR-V trade.
 

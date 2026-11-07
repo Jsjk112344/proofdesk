@@ -1178,3 +1178,35 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
 - Evidence: `docs/video/measured-run.json` has metrics, Maria and 25 inference receipts;
   private raw browser/job observations remain under `.local/video-prep/`. No credentials
   or session cookies enter published video artifacts.
+
+
+## Scripted public scene takes verified: 2026-11-06 ET
+
+- Camera label runtime `61efa5c` deployed, all 85 file hashes verified, archive SHA-256
+  `63efc9eba33c3fd41698340b029cf921a50f37faa0a8bf574dd41b59be7ca653`.
+  Main header stays visible while scrolling; the actual data label is also inside Maria's
+  drawer. No validators, model permissions, sandbox caps or approval bindings changed.
+- Recorded all requested app scenes at 1440×900, deviceScaleFactor 2, using a single fresh
+  public context; eight H.264/30fps MP4s include the genuine CSV export preview. All 33
+  choreography stills are 2880×1800. The injected pointer is visible, smoothly moved and
+  checked before each shot; no app text, API response, progress or value is overridden.
+- Final take: completion observed **121.290 s**, finished Group
+  visible **124.177 s**. All 24 stores succeeded with identical final
+  metrics; Qwen output is accepted exact-input replay. Narration and the labelled jump-cut
+  card disclose that fact and use the recorded take's measured time. Separate full-live
+  measurement remains 140.131 s / 25 fresh responses / $0.0077789 token cost.
+- Fresh saved Group, Run availability, real counter reset, six analysing tiles, Sandy/Maria,
+  40 approved task rows, byte-identical real download, cross-session refusal, and schedule
+  persistence after tab close passed. Test schedules were disabled using their own identity.
+  Final browser reported no page errors.
+- Earlier recorder attempts exposed a CSP-incompatible wait expression and an uninvoked
+  pointer initializer. Fixed the recorder without relaxing CSP, verified pointer dimensions,
+  and re-recorded the entire journey. Published takes are the corrected final pass.
+- CSV backup shows the unchanged downloaded bytes in a plain-text browser viewer. Native
+  spreadsheet and browser-chrome close-gesture re-takes remain optional. Schedule closes
+  its page at eight seconds and holds the real final frame to fill its 12-second slot.
+- Latest offline suite: **114 tests, seven opt-in skips**, passed. Lint/format passed.
+  The earlier local filesystem Docker probe timeout remains disclosed, not relabelled a pass.
+- `docs/video/scene-manifest.json`, `recorded-run.json` and `inference-accounting.json`
+  identify captures and the read-only 25-request / $0.0502400 durable reservation audit.
+  The stat strip displays full **$3,434,800**; narration rounds to **$3.4 million**.

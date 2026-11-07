@@ -1,0 +1,58 @@
+{
+  "terminal_observed_seconds": 121.29,
+  "review_id": "6205506832314764aa59621a1602d160",
+  "totals": {
+    "aged_60": 948,
+    "aged_90": 357,
+    "aged_matched": 792,
+    "at_risk": 1050,
+    "cold_leads": 652,
+    "floorplan_daily": 7584.0,
+    "floorplan_to_date": 703784.0,
+    "matched_in_stock": 1007,
+    "matched_leads": 1050,
+    "open_leads": 9000,
+    "recoverable_gross": 3434800.0
+  },
+  "brief_provenance": {
+    "r01": "saved_replay",
+    "r02": "saved_replay",
+    "r03": "saved_replay",
+    "r04": "saved_replay",
+    "r05": "saved_replay",
+    "r06": "saved_replay",
+    "r07": "saved_replay",
+    "r08": "saved_replay",
+    "r09": "saved_replay",
+    "r10": "saved_replay",
+    "r11": "saved_replay",
+    "r12": "saved_replay",
+    "r13": "saved_replay",
+    "r14": "saved_replay",
+    "r15": "saved_replay",
+    "r16": "saved_replay",
+    "r17": "saved_replay",
+    "r18": "saved_replay",
+    "r19": "saved_replay",
+    "r20": "saved_replay",
+    "r21": "saved_replay",
+    "r22": "saved_replay",
+    "r23": "saved_replay",
+    "r24": "saved_replay"
+  },
+  "group_brief": {
+    "findings": [
+      "652 cold leads need attention across the group.",
+      "1007 at-risk leads have a best match in stock.",
+      "792 aged units match at-risk leads.",
+      "Listed figures imply $3,434,800 estimated recoverable gross."
+    ],
+    "headline": "Summit Auto Group shows high at-risk volume with significant aged inventory and slow response outliers.",
+    "recommendations": [
+      "Review response times at Summit Ogden and Summit Reno for process gaps.",
+      "Analyze dealer website performance versus third-party marketplace to optimize channel strategy.",
+      "Audit aged inventory at Summit Ogden to reduce floorplan costs."
+    ]
+  },
+  "visible_group_seconds": 124.177
+}

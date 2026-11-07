@@ -1,0 +1,350 @@
+{
+  "base_url": "https://salesdesk.149.28.51.139.sslip.io",
+  "viewport": [
+    1440,
+    900
+  ],
+  "device_scale_factor": 2,
+  "video_resolution": [
+    1440,
+    900
+  ],
+  "scenes": [
+    {
+      "scene": "scene1",
+      "file": "docs/video/scenes/scene1.mp4",
+      "seconds": 14,
+      "captured_seconds": 14.007,
+      "trim_start_seconds": 8.894,
+      "raw": ".local/video-prep/raw-scenes/page@6249a2818cc39a9884af70c019665145.webm"
+    },
+    {
+      "scene": "scene3",
+      "file": "docs/video/scenes/scene3.mp4",
+      "seconds": 22,
+      "captured_seconds": 22.001,
+      "trim_start_seconds": 2.778,
+      "raw": ".local/video-prep/raw-scenes/page@83ce24ace9626c4696923910d4e5f7da.webm"
+    },
+    {
+      "scene": "scene4",
+      "file": "docs/video/scenes/scene4.mp4",
+      "seconds": 20,
+      "captured_seconds": 20.001,
+      "trim_start_seconds": 2.621,
+      "raw": ".local/video-prep/raw-scenes/page@e0182786f4163fb8a0cefc421d3e10b2.webm"
+    },
+    {
+      "scene": "scene5",
+      "file": "docs/video/scenes/scene5.mp4",
+      "seconds": 8,
+      "captured_seconds": 8.003,
+      "trim_start_seconds": 2.755,
+      "raw": ".local/video-prep/raw-scenes/page@65ff91100981c18042a84234ad9aca47.webm"
+    },
+    {
+      "scene": "scene6",
+      "file": "docs/video/scenes/scene6.mp4",
+      "seconds": 38,
+      "captured_seconds": 38.001,
+      "trim_start_seconds": 2.51,
+      "raw": ".local/video-prep/raw-scenes/page@387be24acda0c781a2409881f7c6e8d4.webm"
+    },
+    {
+      "scene": "scene7",
+      "file": "docs/video/scenes/scene7.mp4",
+      "seconds": 17,
+      "captured_seconds": 17.001,
+      "trim_start_seconds": 2.479,
+      "raw": ".local/video-prep/raw-scenes/page@0d4b44ee99f987d40fdffa289a50d4f9.webm"
+    },
+    {
+      "scene": "scene7-csv",
+      "file": "docs/video/scenes/scene7-csv.mp4",
+      "seconds": 3,
+      "captured_seconds": 3.001,
+      "trim_start_seconds": 0.075,
+      "raw": ".local/video-prep/raw-scenes/page@78ca3d9772ff436ff008f7e4594c929d.webm"
+    },
+    {
+      "scene": "scene8",
+      "file": "docs/video/scenes/scene8.mp4",
+      "seconds": 12,
+      "captured_seconds": 12.001,
+      "trim_start_seconds": 2.686,
+      "raw": ".local/video-prep/raw-scenes/page@94e45ffafef3aba000663dbc9d6018f2.webm"
+    }
+  ],
+  "beats": [
+    {
+      "scene": "scene1",
+      "beat": "start",
+      "seconds": 0.188,
+      "screenshot": "docs/video/stills/scene1-start.png"
+    },
+    {
+      "scene": "scene1",
+      "beat": "idle-group",
+      "seconds": 8.19,
+      "screenshot": "docs/video/stills/scene1-idle-group.png"
+    },
+    {
+      "scene": "scene3",
+      "beat": "start",
+      "seconds": 0.233,
+      "screenshot": "docs/video/stills/scene3-start.png"
+    },
+    {
+      "scene": "scene3",
+      "beat": "real-reset",
+      "seconds": 4.994,
+      "screenshot": "docs/video/stills/scene3-real-reset.png"
+    },
+    {
+      "scene": "scene3",
+      "beat": "counters",
+      "seconds": 11.495,
+      "screenshot": "docs/video/stills/scene3-counters.png"
+    },
+    {
+      "scene": "scene3",
+      "beat": "six-tiles",
+      "seconds": 14.768,
+      "screenshot": "docs/video/stills/scene3-six-tiles.png"
+    },
+    {
+      "scene": "scene3",
+      "beat": "real-progress",
+      "seconds": 19.154,
+      "screenshot": "docs/video/stills/scene3-real-progress.png"
+    },
+    {
+      "scene": "scene4",
+      "beat": "start",
+      "seconds": 0.266,
+      "screenshot": "docs/video/stills/scene4-start.png"
+    },
+    {
+      "scene": "scene4",
+      "beat": "stat-0",
+      "seconds": 1.049,
+      "screenshot": "docs/video/stills/scene4-stat-0.png"
+    },
+    {
+      "scene": "scene4",
+      "beat": "stat-1",
+      "seconds": 3.784,
+      "screenshot": "docs/video/stills/scene4-stat-1.png"
+    },
+    {
+      "scene": "scene4",
+      "beat": "stat-2",
+      "seconds": 6.764,
+      "screenshot": "docs/video/stills/scene4-stat-2.png"
+    },
+    {
+      "scene": "scene4",
+      "beat": "stat-3",
+      "seconds": 9.78,
+      "screenshot": "docs/video/stills/scene4-stat-3.png"
+    },
+    {
+      "scene": "scene4",
+      "beat": "stat-4",
+      "seconds": 12.746,
+      "screenshot": "docs/video/stills/scene4-stat-4.png"
+    },
+    {
+      "scene": "scene4",
+      "beat": "group-brief",
+      "seconds": 15.779,
+      "screenshot": "docs/video/stills/scene4-group-brief.png"
+    },
+    {
+      "scene": "scene4",
+      "beat": "sandy-tile",
+      "seconds": 18.872,
+      "screenshot": "docs/video/stills/scene4-sandy-tile.png"
+    },
+    {
+      "scene": "scene5",
+      "beat": "start",
+      "seconds": 0.365,
+      "screenshot": "docs/video/stills/scene5-start.png"
+    },
+    {
+      "scene": "scene5",
+      "beat": "sandy-queue",
+      "seconds": 1.26,
+      "screenshot": "docs/video/stills/scene5-sandy-queue.png"
+    },
+    {
+      "scene": "scene6",
+      "beat": "start",
+      "seconds": 0.223,
+      "screenshot": "docs/video/stills/scene6-start.png"
+    },
+    {
+      "scene": "scene6",
+      "beat": "wanted-trade",
+      "seconds": 2.879,
+      "screenshot": "docs/video/stills/scene6-wanted-trade.png"
+    },
+    {
+      "scene": "scene6",
+      "beat": "sold-six-days",
+      "seconds": 6.608,
+      "screenshot": "docs/video/stills/scene6-sold-six-days.png"
+    },
+    {
+      "scene": "scene6",
+      "beat": "best-match",
+      "seconds": 15.615,
+      "screenshot": "docs/video/stills/scene6-best-match.png"
+    },
+    {
+      "scene": "scene6",
+      "beat": "match-breakdown",
+      "seconds": 17.28,
+      "screenshot": "docs/video/stills/scene6-match-breakdown.png"
+    },
+    {
+      "scene": "scene6",
+      "beat": "crv-trade",
+      "seconds": 26.635,
+      "screenshot": "docs/video/stills/scene6-crv-trade.png"
+    },
+    {
+      "scene": "scene6",
+      "beat": "sms",
+      "seconds": 31.719,
+      "screenshot": "docs/video/stills/scene6-sms.png"
+    },
+    {
+      "scene": "scene6",
+      "beat": "email",
+      "seconds": 35.74,
+      "screenshot": "docs/video/stills/scene6-email.png"
+    },
+    {
+      "scene": "scene6",
+      "beat": "sms-return",
+      "seconds": 37.497,
+      "screenshot": "docs/video/stills/scene6-sms-return.png"
+    },
+    {
+      "scene": "scene7",
+      "beat": "start",
+      "seconds": 0.21,
+      "screenshot": "docs/video/stills/scene7-start.png"
+    },
+    {
+      "scene": "scene7",
+      "beat": "ready",
+      "seconds": 5.736,
+      "screenshot": "docs/video/stills/scene7-ready.png"
+    },
+    {
+      "scene": "scene7",
+      "beat": "crm-download",
+      "seconds": 14.25,
+      "screenshot": "docs/video/stills/scene7-crm-download.png"
+    },
+    {
+      "scene": "scene7-csv",
+      "beat": "actual-export",
+      "seconds": 0.203,
+      "screenshot": "docs/video/stills/scene7-csv-actual-export.png"
+    },
+    {
+      "scene": "scene8",
+      "beat": "start",
+      "seconds": 0.19,
+      "screenshot": "docs/video/stills/scene8-start.png"
+    },
+    {
+      "scene": "scene8",
+      "beat": "nightly-on",
+      "seconds": 3.594,
+      "screenshot": "docs/video/stills/scene8-nightly-on.png"
+    },
+    {
+      "scene": "scene8",
+      "beat": "server-schedule",
+      "seconds": 6.748,
+      "screenshot": "docs/video/stills/scene8-server-schedule.png"
+    }
+  ],
+  "recorded_run": {
+    "terminal_observed_seconds": 121.29,
+    "review_id": "6205506832314764aa59621a1602d160",
+    "totals": {
+      "aged_60": 948,
+      "aged_90": 357,
+      "aged_matched": 792,
+      "at_risk": 1050,
+      "cold_leads": 652,
+      "floorplan_daily": 7584.0,
+      "floorplan_to_date": 703784.0,
+      "matched_in_stock": 1007,
+      "matched_leads": 1050,
+      "open_leads": 9000,
+      "recoverable_gross": 3434800.0
+    },
+    "brief_provenance": {
+      "r01": "saved_replay",
+      "r02": "saved_replay",
+      "r03": "saved_replay",
+      "r04": "saved_replay",
+      "r05": "saved_replay",
+      "r06": "saved_replay",
+      "r07": "saved_replay",
+      "r08": "saved_replay",
+      "r09": "saved_replay",
+      "r10": "saved_replay",
+      "r11": "saved_replay",
+      "r12": "saved_replay",
+      "r13": "saved_replay",
+      "r14": "saved_replay",
+      "r15": "saved_replay",
+      "r16": "saved_replay",
+      "r17": "saved_replay",
+      "r18": "saved_replay",
+      "r19": "saved_replay",
+      "r20": "saved_replay",
+      "r21": "saved_replay",
+      "r22": "saved_replay",
+      "r23": "saved_replay",
+      "r24": "saved_replay"
+    },
+    "group_brief": {
+      "findings": [
+        "652 cold leads need attention across the group.",
+        "1007 at-risk leads have a best match in stock.",
+        "792 aged units match at-risk leads.",
+        "Listed figures imply $3,434,800 estimated recoverable gross."
+      ],
+      "headline": "Summit Auto Group shows high at-risk volume with significant aged inventory and slow response outliers.",
+      "recommendations": [
+        "Review response times at Summit Ogden and Summit Reno for process gaps.",
+        "Analyze dealer website performance versus third-party marketplace to optimize channel strategy.",
+        "Audit aged inventory at Summit Ogden to reduce floorplan costs."
+      ]
+    },
+    "visible_group_seconds": 124.177
+  },
+  "schedule_tab_closed_at_seconds": 8,
+  "checks": {
+    "fresh_saved_group": true,
+    "run_available": true,
+    "real_reset": true,
+    "full_run_succeeded": true,
+    "all_numbers_match": true,
+    "sandy_40_export_rows": true,
+    "byte_identical_download": true,
+    "cross_session_refused": true,
+    "schedule_survived_tab_close": true,
+    "test_schedule_disabled": true,
+    "page_errors": []
+  }
+}
