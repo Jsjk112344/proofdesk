@@ -47,7 +47,7 @@ async def main():
     for i, label in enumerate(
         ["Fan out", "Find who's slipping", "Find the right car", "Write the brief"], 1
     ):
-        cards[f"lower-{i}"] = (f"Step {i} · {label}", "", [12, 12, 15, 11][i - 1])
+        cards[f"lower-{i}"] = (f"Step {i} · {label}", "", [15, 12, 15, 11][i - 1])
     async with async_playwright() as p:
         browser = await p.chromium.launch()
         page = await browser.new_page(viewport={"width": 1920, "height": 1080})
@@ -76,7 +76,7 @@ async def main():
             style = (
                 CSS
                 + """
-section{padding:90px; background:#142e34;color:#f5f7f6}.brand{font-size:48px;margin-bottom:65px}.mark{width:64px;height:64px;border-radius:16px}.mark svg{width:46px;height:46px}h1{font-size:88px;line-height:1.18}p{font-size:40px;margin-top:38px;line-height:1.45}.motion{position:relative;opacity:var(--alpha,1);transform:translateY(var(--rise,0px))}.urls{font-size:29px;line-height:1.8;margin-top:45px}footer{position:absolute;bottom:48px;font-size:22px;color:#b2cdc9}
+section{padding:90px; background:#142e34;color:#f5f7f6}.brand{font-size:48px;margin-bottom:65px}.mark{width:64px;height:64px;border-radius:16px}.mark svg{width:46px;height:46px}h1{font-size:88px;line-height:1.18}p{font-size:40px;margin-top:38px;line-height:1.45}.motion{position:relative;opacity:var(--alpha,1);transform:translateY(var(--rise,0px))}.urls{font-size:29px;line-height:1.8;margin-top:45px}footer{position:absolute;bottom:160px;font-size:22px;color:#b2cdc9}
 """
             )
             if name.startswith("lower-"):

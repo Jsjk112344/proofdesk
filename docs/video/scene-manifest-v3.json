@@ -38,17 +38,17 @@
       "scene": "v3-ready",
       "file": "docs/video/scenes/v3-ready.mp4",
       "seconds": 7,
-      "captured_seconds": 7.005,
-      "trim_start_seconds": 2.92,
-      "raw": ".local/video-prep/raw-v3/page@07ab945f7b7ca763aef1d723ab20b035.webm"
+      "captured_seconds": 7.001,
+      "trim_start_seconds": 3.042,
+      "raw": ".local/video-prep/raw-v3/page@45acf64f67eb62a4fdae1cafc3b447ba.webm"
     },
     {
       "scene": "v3-maria",
       "file": "docs/video/scenes/v3-maria.mp4",
       "seconds": 26,
-      "captured_seconds": 26.003,
-      "trim_start_seconds": 2.476,
-      "raw": ".local/video-prep/raw-v3/page@590b1b5e927911e631baabe72998cc8a.webm"
+      "captured_seconds": 26.001,
+      "trim_start_seconds": 2.48,
+      "raw": ".local/video-prep/raw-v3/page@9e80e494d128dd43f66a3697dd032abf.webm"
     }
   ],
   "beats": [
@@ -133,57 +133,58 @@
     {
       "scene": "v3-ready",
       "beat": "start",
-      "seconds": 0.147,
+      "seconds": 0.177,
       "screenshot": "docs/video/stills/v3-ready-start.png"
     },
     {
       "scene": "v3-ready",
       "beat": "collapsed",
-      "seconds": 1.028,
+      "seconds": 1.022,
       "screenshot": "docs/video/stills/v3-ready-collapsed.png"
     },
     {
       "scene": "v3-maria",
       "beat": "start",
-      "seconds": 0.163,
+      "seconds": 0.139,
       "screenshot": "docs/video/stills/v3-maria-start.png"
     },
     {
       "scene": "v3-maria",
       "beat": "wanted",
-      "seconds": 3.842,
+      "seconds": 3.765,
       "screenshot": "docs/video/stills/v3-maria-wanted.png"
     },
     {
       "scene": "v3-maria",
       "beat": "sold",
-      "seconds": 6.828,
+      "seconds": 6.738,
       "screenshot": "docs/video/stills/v3-maria-sold.png"
     },
     {
       "scene": "v3-maria",
       "beat": "match",
-      "seconds": 9.903,
+      "seconds": 9.834,
       "screenshot": "docs/video/stills/v3-maria-match.png"
     },
     {
       "scene": "v3-maria",
       "beat": "score",
-      "seconds": 14.245,
+      "seconds": 13.755,
       "screenshot": "docs/video/stills/v3-maria-score.png"
     },
     {
       "scene": "v3-maria",
       "beat": "trade",
-      "seconds": 16.896,
+      "seconds": 16.736,
       "screenshot": "docs/video/stills/v3-maria-trade.png"
     },
     {
       "scene": "v3-maria",
       "beat": "sms",
-      "seconds": 19.838,
+      "seconds": 19.707,
       "screenshot": "docs/video/stills/v3-maria-sms.png"
     }
   ],
-  "retake_note": "Same completed session; detail retakes after approval, no new inference or message edits."
+  "retake_note": "Same completed session; detail retakes after approval, no new inference or message edits.",
+  "recording_normalization": "Playwright captured the complete 1280x720 CSS viewport in the top-left of a padded 1920x1080 recorder canvas. Only empty recorder padding was removed; the full platform viewport was scaled to 1920x1080. No app UI was cropped. Future recorder uses native 1280x720 video then whole-frame scaling; 1.5x stills remain native 1920x1080."
 }

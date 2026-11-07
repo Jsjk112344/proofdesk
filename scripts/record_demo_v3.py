@@ -4,8 +4,10 @@
 import argparse
 import asyncio
 import json
+import subprocess
 import time
 from decimal import Decimal
+from pathlib import Path
 
 from playwright.async_api import async_playwright
 
@@ -18,6 +20,62 @@ class V3Recorder(Recorder):
         self.position = [40, 680]
         self.manifest.update(
             viewport=[1280, 720], device_scale_factor=1.5, video_resolution=[1920, 1080]
+        )
+
+    async def finish(self, duration):
+        await self.at(duration)
+        video = self.page.video
+        elapsed = time.monotonic() - self.started
+        await self.page.close()
+        raw = await video.path()
+        target = VIDEO / "scenes" / (self.name + ".mp4")
+        # Playwright records CSS pixels, independent of screenshot device scale.
+        # Match the CSS viewport, then scale the entire frame without padding.
+        await asyncio.to_thread(
+            subprocess.run,
+            [
+                "ffmpeg",
+                "-v",
+                "error",
+                "-y",
+                "-ss",
+                str(self.offset),
+                "-i",
+                str(raw),
+                "-vf",
+                "fps=30,scale=1920:1080:flags=lanczos,tpad=stop_mode=clone:stop_duration=30",
+                "-t",
+                str(duration),
+                "-an",
+                "-c:v",
+                "libx264",
+                "-preset",
+                "fast",
+                "-crf",
+                "18",
+                "-threads",
+                "4",
+                "-pix_fmt",
+                "yuv420p",
+                str(target),
+            ],
+            check=True,
+        )
+        self.manifest["scenes"].append(
+            {
+                "scene": self.name,
+                "file": str(target.relative_to(ROOT)),
+                "seconds": duration,
+                "captured_seconds": round(elapsed, 3),
+                "trim_start_seconds": round(self.offset, 3),
+                "raw": str(Path(raw).relative_to(ROOT)),
+            }
+        )
+        self.save()
+        await self.ctx.storage_state(path=str(ROOT / ".local/video-prep/scene-storage.json"))
+        print(
+            json.dumps({"scene": self.name, "seconds": duration, "page_errors": self.errors}),
+            flush=True,
         )
 
     def save(self):
@@ -33,7 +91,7 @@ async def main():
             viewport={"width": 1280, "height": 720},
             device_scale_factor=1.5,
             record_video_dir=str(raw),
-            record_video_size={"width": 1920, "height": 1080},
+            record_video_size={"width": 1280, "height": 720},
         )
         await ctx.add_init_script(CURSOR)
         r = V3Recorder(ctx, BASE)
@@ -128,11 +186,11 @@ async def main():
         ]:
             await r.at(second)
             if name == "score":
-                await dialog.locator(selector).click()
+                await dialog.locator(selector).locator("summary").click()
             await r.point(dialog.locator(selector))
             await r.beat(name)
             if name == "score":
-                await dialog.locator(selector).click()
+                await dialog.locator(selector).locator("summary").click()
         await r.finish(26)
         await r.open("v3-approve", "#/store/r02", store_ready)
         await r.point(r.page.locator(".store-queue"))
@@ -178,7 +236,7 @@ async def ready_take():
             viewport={"width": 1280, "height": 720},
             device_scale_factor=1.5,
             record_video_dir=str(ROOT / ".local/video-prep/raw-v3"),
-            record_video_size={"width": 1920, "height": 1080},
+            record_video_size={"width": 1280, "height": 720},
         )
         await ctx.add_init_script(CURSOR)
         r = V3Recorder(ctx, BASE)
@@ -212,13 +270,13 @@ async def ready_take():
         ]:
             await r.at(second)
             if name == "score":
-                await dialog.locator(selector).click()
+                await dialog.locator(selector).locator("summary").click()
             await r.point(dialog.locator(selector))
             await r.page.mouse.move(500, 680, steps=30)
             r.position = [500, 680]
             await r.beat(name)
             if name == "score":
-                await dialog.locator(selector).click()
+                await dialog.locator(selector).locator("summary").click()
         await r.finish(26)
         await browser.close()
 

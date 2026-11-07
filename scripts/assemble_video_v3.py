@@ -15,12 +15,24 @@ def run(args):
     subprocess.run([FFMPEG, "-v", "error", "-y", *args], check=True)
 
 
-def encode(name, source, duration, offset=0, still=False, lower=None, fade=False):
+def encode(
+    name,
+    source,
+    duration,
+    offset=0,
+    still=False,
+    lower=None,
+    fade=False,
+    push=False,
+    lower_offset=0,
+):
     out = WORK / (name + ".mp4")
     inputs = ["-loop", "1", "-framerate", "30"] if still else ["-ss", str(offset)]
-    vf = "fps=30,"
+    vf = "setpts=PTS-STARTPTS,fps=30,"
     vf += "scale=1920:1080:flags=lanczos,"
     vf += f"tpad=stop_mode=clone:stop_duration={duration},setsar=1,format=yuv420p"
+    if push:
+        vf += f",zoompan=z='1+0.06*sin(PI*min(on/(30*{duration}),1))':x='(iw-iw/zoom)*0.8':y='(ih-ih/zoom)/2':d=1:s=1920x1080:fps=30"
     if fade:
         vf += ",fade=t=in:st=0:d=.25"
     filters = ["-vf", vf]
@@ -32,10 +44,12 @@ def encode(name, source, duration, offset=0, still=False, lower=None, fade=False
             "Step 4 · Write the brief": 4,
         }[lower]
         filters = [
+            "-ss",
+            str(lower_offset),
             "-i",
             str(VIDEO / "cards-v3" / f"lower-{index}.mp4"),
             "-filter_complex",
-            f"[0:v]{vf}[base];[1:v]chromakey=0xFF00FF:0.25:0.12[title];[base][title]overlay=0:0:shortest=1,format=yuv420p[out]",
+            f"[0:v]{vf}[base];[1:v]chromakey=0xFF00FF:0.25:0.12[title];[base][title]overlay=0:0:shortest=1,tpad=stop_mode=clone:stop_duration=1,format=yuv420p[out]",
             "-map",
             "[out]",
         ]
@@ -45,8 +59,8 @@ def encode(name, source, duration, offset=0, still=False, lower=None, fade=False
             "-i",
             str(source),
             *filters,
-            "-t",
-            str(duration),
+            "-frames:v",
+            str(round(duration * 30)),
             "-an",
             "-c:v",
             "libx264",
@@ -84,7 +98,7 @@ def main():
     add("03b", cards / "promise.mp4", 4)
     add("04", cards / "title.mp4", 3)
     add("05", cards / "fanout.mp4", 12, lower="Step 1 · Fan out")
-    add("06a", scenes / "v3-run.mp4", 3, offset=5, lower="Step 1 · Fan out")
+    add("06a", scenes / "v3-run.mp4", 3, offset=5, lower="Step 1 · Fan out", lower_offset=12)
     start = beats["v3-run-trace-live"]["seconds"]
     done = beats["v3-run-trace-succeeded"]["seconds"]
     add(
@@ -95,16 +109,23 @@ def main():
         lower="Step 2 · Find who's slipping",
     )
     add("07a", scenes / "v3-run.mp4", 7, offset=done + 1, lower="Step 3 · Find the right car")
-    add("07b", stills / "v3-maria-score.png", 8, still=True, lower="Step 3 · Find the right car")
+    add(
+        "07b",
+        stills / "v3-maria-score.png",
+        8,
+        still=True,
+        lower="Step 3 · Find the right car",
+        lower_offset=7,
+    )
     add(
         "08",
         scenes / "v3-run.mp4",
         11,
-        offset=max(start, done - 5),
+        offset=60,
         lower="Step 4 · Write the brief",
     )
     add("09", cards / "skip.mp4", 4)
-    add("10", scenes / "v3-maria.mp4", 26)
+    add("10", scenes / "v3-maria.mp4", 26, push=True)
     add("11a", scenes / "v3-approve.mp4", 5)
     add("11b", scenes / "v3-ready.mp4", 7)
     add("12a", cards / "matched.mp4", 6)
@@ -145,7 +166,7 @@ def finish():
         h, m, s, ms = map(int, re.split("[:,]", t))
         return f"{h}:{m:02}:{s:02}.{ms // 10:02}"
 
-    for cue in re.split(r"\n\s*\n", (VIDEO / "subtitles-v3.srt").read_text().strip()):
+    for cue in re.split(r"\n\s*\n", (VIDEO / "subtitles-v2.srt").read_text().strip()):
         lines = cue.splitlines()
         a, b = lines[1].split(" --> ")
         sec = sum(v * k for v, k in zip(map(int, re.split("[:,]", a)), [3600, 60, 1, 0.001]))
@@ -178,7 +199,33 @@ def finish():
             str(final),
         ]
     )
-    for i, moment in enumerate([13, 20, 27, 36, 46, 61, 70, 85, 93, 103, 128, 142, 154, 162]):
+    review()
+
+
+def review():
+    raw = VIDEO / "salesdesk-v3-nosubs.mp4"
+    final = VIDEO / "salesdesk-v3.mp4"
+    labels = [
+        "1 Maria",
+        "2 Scale",
+        "3 Thesis",
+        "3 Promise",
+        "4 Title",
+        "5 Fan out",
+        "6 Group",
+        "6 Trace",
+        "7 Match",
+        "8 Brief",
+        "9 Time skip",
+        "10 SMS",
+        "11 Approve",
+        "12 Impact",
+        "13 Vultr",
+        "14 Close",
+    ]
+    for i, moment in enumerate(
+        [13, 20, 27, 33, 36, 46, 51, 61, 77, 85, 93, 115, 128, 142, 154, 162]
+    ):
         frame = WORK / f"review-{i + 1:02}.png"
         font = VIDEO / "fonts/Inter-SemiBold.ttf"
         (VIDEO / "_review").mkdir(exist_ok=True)
@@ -200,7 +247,7 @@ def finish():
                 "-i",
                 str(final),
                 "-vf",
-                f"scale=480:270,drawtext=fontfile='{font}':text='Scene {i + 1}':fontcolor=white:fontsize=18:box=1:boxcolor=0x142e34:x=w-tw-8:y=h-th-8",
+                f"scale=480:270,drawtext=fontfile='{font}':text='{labels[i]}':fontcolor=white:fontsize=18:box=1:boxcolor=0x142e34:x=w-tw-8:y=h-th-8",
                 "-frames:v",
                 "1",
                 str(frame),
@@ -216,7 +263,7 @@ def finish():
             "-i",
             str(WORK / "review-%02d.png"),
             "-vf",
-            "tile=4x4:nb_frames=14:padding=8:margin=8:color=0x142e34",
+            "tile=4x4:nb_frames=16:padding=8:margin=8:color=0x142e34",
             "-frames:v",
             "1",
             str(VIDEO / "_review/v3-contact.png"),
@@ -226,8 +273,10 @@ def finish():
     for path in (raw, final):
         info = probe(path)
         v = info["streams"][0]
+        assert v["codec_name"] == "h264"
+        assert int(v["nb_frames"]) == 4950
         assert v["width"] == 1920 and v["height"] == 1080 and v["r_frame_rate"] == "30/1"
-        assert abs(float(info["format"]["duration"]) - 165) < 0.1
+        assert abs(float(info["format"]["duration"]) - 165) < 0.01
         assert len(info["streams"]) == 1
         checks[path.name] = {
             "duration": info["format"]["duration"],
@@ -242,5 +291,11 @@ def finish():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--finish-only", action="store_true")
+    parser.add_argument("--review-only", action="store_true")
     args = parser.parse_args()
-    finish() if args.finish_only else main()
+    if args.review_only:
+        review()
+    elif args.finish_only:
+        finish()
+    else:
+        main()
