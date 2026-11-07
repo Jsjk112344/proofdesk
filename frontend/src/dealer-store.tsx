@@ -651,6 +651,9 @@ export function StoreView({
   const edited = rows.find((row) => row.id === editing);
   const pending = rows.filter((row) => row.status === "pending");
   const handoff = data.handoffs.find((h) => h.rooftop_id === roof.id);
+  const availableRows = rows.filter((row) => row.status !== "skipped");
+  const needsHandoff =
+    pending.length > 0 || !handoff || handoff.status === "failed";
   const approve = (items: Followup[]) =>
     void action(() =>
       post(`/api/dealer/stores/${roof.id}/approve`, {
@@ -687,8 +690,8 @@ export function StoreView({
           <button
             className="d-primary"
             style={modal ? { visibility: "hidden" } : undefined}
-            disabled={busy || !pending.length}
-            onClick={() => approve(pending)}
+            disabled={busy || !availableRows.length || !needsHandoff}
+            onClick={() => approve(availableRows)}
           >
             <Icon name="check" size={15} />
             Approve all for {storeName(roof.name)}

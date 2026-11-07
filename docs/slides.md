@@ -101,8 +101,8 @@ SMS and email with her CR-V trade → manager approval.
 | Group leaders ask each store for the picture | Regional map, store ranking and validated roll-up |
 | Preparation stops when the tab closes | Server-owned workers and recurring reviews |
 
-**Measured public full run: 108.396 seconds.** Six concurrent child jobs; observed application
-peak 581.55 MiB on the existing Vultr VM. [Release-specific observations](../STATUS.md).
+**Measured public full run: 119.419 seconds.** Six concurrent child jobs; observed application
+peak 641.59 MiB on the existing Vultr VM. [Release-specific observations](../STATUS.md).
 
 Human triage time and business uplift have not been measured; no time-saved ratio is claimed.
 

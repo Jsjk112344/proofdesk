@@ -5,11 +5,11 @@
   "checks": [
     "group: 24 real-result tiles, one primary action, map and first tile row above fold",
     {
-      "full_run_wall_clock_seconds": 108.396
+      "full_run_wall_clock_seconds": 119.419
     },
     "Sandy: Maria first, three candidates, trade-in, timeline and score components",
     "approve-all durable handoff: three exports, reload, real download, cross-session refusal",
-    "server schedule persisted across reload",
+    "server schedule persisted across reload; test schedule then disabled",
     "data validation counts and three downloadable templates",
     "mobile: no horizontal overflow; no page errors"
   ],

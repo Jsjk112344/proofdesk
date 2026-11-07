@@ -97,7 +97,7 @@ try {
       "Sandy: Maria first, three candidates, trade-in, timeline and score components",
     );
   }
-  if (screen === "journey") {
+  if (["journey", "handoff"].includes(screen)) {
     await page
       .getByRole("button", { name: "Approve all for Sandy", exact: true })
       .click();
@@ -120,6 +120,29 @@ try {
     checks.push(
       "approve-all durable handoff: three exports, reload, real download, cross-session refusal",
     );
+    await page
+      .getByRole("button", { name: "Skip", exact: true })
+      .first()
+      .click();
+    await page
+      .getByRole("button", { name: "Approve all for Sandy", exact: true })
+      .waitFor({ state: "visible" });
+    await page.waitForFunction(
+      () => !document.querySelector(".store-hero .d-primary")?.disabled,
+    );
+    await page
+      .getByRole("button", { name: "Approve all for Sandy", exact: true })
+      .click();
+    await page.getByRole("link", { name: "CRM tasks", exact: true }).waitFor();
+    const remainingHref = await page
+      .getByRole("link", { name: "CRM tasks", exact: true })
+      .getAttribute("href");
+    const remainingTasks = await context.request.get(base + remainingHref);
+    assert.equal(remainingTasks.status(), 200);
+    assert.equal((await remainingTasks.text()).includes("Hi Maria"), false);
+    checks.push(
+      "skip after approval invalidates prior packet and enables a fresh export for the remaining store tasks",
+    );
     await page.getByRole("link", { name: "Schedule", exact: true }).click();
     await page.getByRole("switch").click();
     await page.waitForFunction(
@@ -128,7 +151,13 @@ try {
     await page.reload();
     await page.getByRole("switch").waitFor();
     assert.equal(await page.getByRole("switch").isChecked(), true);
-    checks.push("server schedule persisted across reload");
+    await page.getByRole("switch").click();
+    await page.waitForFunction(
+      () => document.querySelector("[role=switch]")?.checked === false,
+    );
+    checks.push(
+      "server schedule persisted across reload; test schedule then disabled",
+    );
     await page.getByRole("link", { name: "Data", exact: true }).click();
     await page
       .getByRole("heading", { name: "Your dealer-group data" })

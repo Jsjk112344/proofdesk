@@ -47,10 +47,10 @@ SQLite, scheduler and worker subprocesses behind Caddy. It has **2 logical CPUs*
 approximately **4 GiB RAM**. Default rooftop concurrency is **6**, configurable with
 `SALESDESK_DEALER_CONCURRENCY` (bounded to 1–12).
 
-The measured public full run took **108.396 seconds** from browser click to visible group
+The measured public full run took **119.419 seconds** from browser click to visible group
 result, with six concurrent rooftop jobs. Current and prior-night inputs executed in
-48 disposable containers. Observed application memory peaked at **581.55 MiB**; host
-available memory stayed above **2,755 MiB**. These are observed checks on this sample,
+48 disposable containers. Observed application memory peaked at **641.59 MiB**; host
+available memory stayed above **2,682 MiB**. These are observed checks on this sample,
 not capacity or performance promises. [STATUS.md](STATUS.md) records release-specific evidence.
 
 Vultr Serverless Inference runs **`qwen3.8-flash-next`**, JSON output, reasoning disabled.

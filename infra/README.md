@@ -27,7 +27,7 @@ copy; preserve existing exhausted ledgers. Local live acceptance was stopped bef
 spend authority was handed over. No credentials enter an archive or a Docker sandbox.
 
 A full direct public run succeeded with six concurrent children and an observed controller/
-worker peak of 581.55 MiB. See STATUS.md for release-specific elapsed time and memory.
+worker peak of 641.59 MiB. See STATUS.md for release-specific elapsed time and memory.
 Use `scripts.check_dealer_browser --screen journey` for direct acceptance; the legacy
 experiment journey remains an additional retained-route check.
 

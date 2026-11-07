@@ -3,12 +3,13 @@
 Product name: **SalesDesk** (renamed from ProofDesk on 2026-11-05). Existing operational
 identifiers and dated historical entries retain their original names.
 
-Current checkpoint: **The compact demo UI is deployed and directly verified on public
-HTTPS.** SSH access worked on retry. The answer/draft heroes, single primary actions,
-compact activity and collapsed supporting detail are live; all four requested desktop
-screens and mobile have fresh deployed screenshots. Browser and real HTTP journey checks
-passed without frontend overrides. See docs/demo-readability.md. Video recording, PDF
-export and official submission remain open; no submission receipt exists.
+Current checkpoint: **The dealer-group product is deployed and directly verified on
+public HTTPS.** CSV ingestion, 24-rooftop fan-out, reconciled matching/KPIs, accepted
+Qwen briefs/replay, store approvals/exports, recurring schedules and the regional/store
+UI are implemented. Final full public run: **119.419 s**, six concurrent rooftop workers.
+Dealer inference: **51 live requests**, **$0.0223900** conservative token-cost estimate,
+**$0.1024896** reserved. Video recording, PDF export and official submission remain
+owner actions; no submission receipt exists.
 
 Public URL: https://salesdesk.149.28.51.139.sslip.io
 
@@ -1064,3 +1065,31 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   ingestion case also passed in the final offline suite: **111 tests, 7 opt-in skips**.
   Frontend production build, retained mocked-browser journey, Ruff/formatting and repository
   checks passed. Final public release acceptance is recorded next.
+
+
+## Final dealer release verified: 2026-11-06
+
+- Release `a5fc406` installed; all 85 runtime hashes verified. Runtime archive SHA-256:
+  `81f1215546665adb8d56637a317d802c91913d3f2dc4b0d6251729317627a9a0`.
+  Private auxiliary archive SHA-256:
+  `d03cae6250c1accc11a1ced5cd5a3ff909f8df3e72b5dba14d92164382fdd4d0`.
+  Existing records/credentials/ledgers preserved; saved sample now binds entered assumptions.
+- Final direct external HTTPS browser journey passed: **119.419 seconds** from Run click
+  to visible group brief. All 24 rooftop jobs and the parent succeeded; current/prior
+  snapshots really executed in Docker on Vultr. Sandy/Maria, exact approvals, three
+  downloads, reload, cross-session refusal, persisted schedule and mobile all passed.
+- Peak concurrent children **6**; observed controller/worker peak **641.59 MiB**; minimum
+  available VM RAM **2,682.91 MiB**. The unchanged per-container caps held on the existing
+  2-CPU / nominal 4-GiB EWR VM. No new instance or service was provisioned.
+- Public captures refreshed: Group, live run, Sandy, Maria, downloads, mobile. Final
+  evidence: `.local/dealer-final-public/` and `.local/deployment/dealer-final-vm-monitor.json`.
+  Test schedule was disabled after proving persistence; owner schedules are not needed
+  for acceptance. Runtime flags retain the legacy health status for compatibility and
+  separately report `product_surface=dealer_group_workspace` and concurrency six.
+- No paid requests in the deployed full reviews; all inference steps revalidated exact
+  accepted replay. Dealer accounting remains 51 live requests, 47 accepted responses,
+  four rejected/uncertain calls, $0.0143516 accepted usage plus $0.0080384 uncertainty,
+  $0.0223900 conservative estimate and $0.1024896 pessimistic reservations.
+- A final UI regression check covers re-preparing the remaining approved store queue
+  after skipping an already approved item. This only changes approval-action availability,
+  not the measured analysis engine or matching results.
