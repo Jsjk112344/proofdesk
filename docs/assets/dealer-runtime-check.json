@@ -1,0 +1,11 @@
+{
+  "observed_at": "2026-11-07T00:49:40.783978+00:00",
+  "runtime_commit": "3307d43ecdb8235ba7c25c01c5546f6b362ac3d9",
+  "service": "active",
+  "dealer_inference_providers": {
+    "saved_replay": 50
+  },
+  "failed_inference_receipts": 0,
+  "dealer_reserved_requests": 51,
+  "dealer_reserved_usd": "0.1024896"
+}

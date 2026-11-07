@@ -1,0 +1,10 @@
+{
+  "live_requests": 51,
+  "accepted_unique_responses": 47,
+  "rejected_or_uncertain_requests": 4,
+  "accepted_usage_estimate_usd": "0.0143516",
+  "uncertain_pessimistic_allowance_usd": "0.0080384",
+  "known_plus_uncertain_estimate_usd": "0.0223900",
+  "pessimistic_reserved_usd": "0.1024896",
+  "note": "Dealer envelope only; provider token estimates, not compute billing receipts."
+}

@@ -2,6 +2,10 @@
 marp: true
 theme: default
 paginate: true
+style: |
+  section { font-size: 26px; padding: 40px; }
+  h1 { font-size: 44px; margin-bottom: 16px; }
+  img { display: block; margin: auto; }
 ---
 
 # SalesDesk
@@ -69,7 +73,7 @@ For Maria’s 74-day match, that is **$592** of illustrative carrying cost to da
 
 # One group. A clear next move at every store.
 
-![width:1100px](assets/salesdesk-group.png)
+![height:460px](assets/salesdesk-group.png)
 
 All numbers come from accepted job output. The sample and people are fictional.
 
@@ -77,7 +81,7 @@ All numbers come from accepted job output. The sample and people are fictional.
 
 # Watch the work happen on Vultr
 
-![width:1100px](assets/salesdesk-live-run.png)
+![height:460px](assets/salesdesk-live-run.png)
 
 24 leased rooftop jobs, six concurrent workers, separate disposable Docker sandboxes.
 Counters and state changes follow actual saved child results.
@@ -86,7 +90,7 @@ Counters and state changes follow actual saved child results.
 
 # Maria’s original car sold. The opportunity remains.
 
-![width:1050px](assets/salesdesk-maria.png)
+![height:460px](assets/salesdesk-maria.png)
 
 Blue RAV4 enquiry → sold car → silver RAV4 Hybrid XLE, 74 days on lot →
 SMS and email with her CR-V trade → manager approval.

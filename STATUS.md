@@ -1093,3 +1093,36 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
 - A final UI regression check covers re-preparing the remaining approved store queue
   after skipping an already approved item. This only changes approval-action availability,
   not the measured analysis engine or matching results.
+
+## Shipped handoff and final receipts: 2026-11-06 ET
+
+- Final runtime: **3307d43ecdb8235ba7c25c01c5546f6b362ac3d9**, archive SHA-256
+  **1a8572e06e4af2bdf60554f35b91c145741045579806c8047a01f370ba2e09ff**;
+  all 85 installed runtime file hashes verified. A transient SSH timeout on the last UI
+  update resolved on retry; the public service is active and there is no deployment blocker.
+- Direct public acceptance passed on that final UI, without mocks, asset overrides or TLS
+  exceptions: group/map/first tile row, Sandy's first two cards, Maria and score breakdown,
+  approve-all exports, reload, cross-session refusal, skip-after-approval and fresh export,
+  schedule persistence/cleanup, templates, store navigation from the bottom of the grid,
+  and mobile without overflow or page errors. Transit status and absent contact facts
+  are shown explicitly. Earlier full run **119.419 s** used the same unchanged backend.
+- Final backend suite: **112 tests, 7 opt-in skips**, passed. The full opt-in Docker suite
+  passed separately (110 tests, no skips). Production frontend build, retained legacy UI
+  browser checks, Ruff, formatting, compilation and publication checks passed. Seed
+  regeneration now matches all five committed data files; the added test verifies it.
+- Final VM audit at 00:49 UTC November 7 (November 6 ET): **50 saved_replay receipts**,
+  **zero failed inference receipts**, **zero new paid VM requests**; dealer reservations
+  remain **51 / $0.1024896**. Conservative token-cost estimate remains **$0.0223900**,
+  including the four uncertain rejected calls. Compute billing remains separate.
+- Canonical screenshots are refreshed in docs/assets: Group, real live run, store, Maria,
+  downloads and mobile. `dealer-release-evidence.json` records their hashes and separates
+  the measured full-run capture from the final UI captures; `dealer-handoff-check.json`,
+  `dealer-runtime-check.json` and `dealer-inference-accounting.json` contain sanitized receipts.
+- The older operator test schedule was disabled by its captured job identity; newer browser
+  tests disable their own schedule after proving persistence. Unrelated owner records,
+  raw historical dataset, keys, ledgers and the pre-existing untracked session prompts/root
+  screenshot remain untouched. Local live acceptance stopped before VM spend authority moved.
+- README, architecture, inference/deployment/public-demo/provenance docs, sourced slides,
+  2:45 demo script and submission copy describe the dealer product. All changes are committed
+  and pushed to main. **Owner actions:** record the narrated video, export slides as PDF,
+  verify the final LabLab form and submit. Nothing has been submitted; no receipt exists.

@@ -28,3 +28,26 @@ class DealerFixtures(unittest.TestCase):
             "sold",
         )
         self.assertEqual(next(u for u in units if u["stock_no"] == "S00138")["days_on_lot"], 74)
+
+    def test_generator_reproduces_committed_data(self):
+        import io
+        import tempfile
+        from contextlib import redirect_stdout
+        from pathlib import Path
+        from unittest.mock import patch
+
+        from scripts import generate_dealer_group as generator
+
+        original = generator.OUT
+        with tempfile.TemporaryDirectory() as tmp, patch.object(generator, "OUT", Path(tmp)):
+            with redirect_stdout(io.StringIO()):
+                generator.main()
+            for name in (
+                "rooftops.csv",
+                "inventory.csv",
+                "leads.csv",
+                "group.json",
+                "previous-night.json",
+            ):
+                with self.subTest(file=name):
+                    self.assertEqual((Path(tmp) / name).read_text(), (original / name).read_text())

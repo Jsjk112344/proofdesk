@@ -260,7 +260,9 @@ def main():
         counts=dict(
             rooftops=len(roofs), inventory=len(inventory), open_leads=9000, historical_leads=2400
         ),
-        assumption=("Entered assumption: $8 per unit per day; not a measured lending charge."),
+        assumption=(
+            "Entered assumption: $8 per inventory unit per day, not a measured lending charge."
+        ),
     )
     (OUT / "group.json").write_text(json.dumps(meta, indent=2) + "\n")
     # Actual prior-night input snapshot: contact/sold/arrival events after the cut are removed.

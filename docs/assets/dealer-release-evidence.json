@@ -1,0 +1,64 @@
+{
+  "full_run": {
+    "passed": true,
+    "kind": "Direct application acceptance; no mocks",
+    "base": "https://salesdesk.149.28.51.139.sslip.io",
+    "checks": [
+      "group: 24 real-result tiles, one primary action, map and first tile row above fold",
+      {
+        "full_run_wall_clock_seconds": 119.419
+      },
+      "Sandy: Maria first, three candidates, trade-in, timeline and score components",
+      "approve-all durable handoff: three exports, reload, real download, cross-session refusal",
+      "server schedule persisted across reload; test schedule then disabled",
+      "data validation counts and three downloadable templates",
+      "mobile: no horizontal overflow; no page errors"
+    ],
+    "screenshots": [
+      "salesdesk-group.png",
+      "salesdesk-live-run.png",
+      "salesdesk-store.png",
+      "salesdesk-maria.png",
+      "salesdesk-downloads.png",
+      "salesdesk-mobile.png"
+    ]
+  },
+  "final_ui": {
+    "passed": true,
+    "kind": "Direct application acceptance; no mocks",
+    "base": "https://salesdesk.149.28.51.139.sslip.io",
+    "checks": [
+      "group: 24 real-result tiles, one primary action, map and first tile row above fold",
+      "Sandy: Maria first, three candidates, trade-in, timeline and score components",
+      "approve-all durable handoff: three exports, reload, real download, cross-session refusal",
+      "skip after approval invalidates prior packet and enables a fresh export for the remaining store tasks",
+      "server schedule persisted across reload; test schedule then disabled",
+      "data validation counts and three downloadable templates",
+      "opening a store from the bottom of the group grid restores its header and primary action",
+      "mobile: no horizontal overflow; no page errors"
+    ],
+    "screenshots": [
+      "salesdesk-group.png",
+      "salesdesk-store.png",
+      "salesdesk-maria.png",
+      "salesdesk-downloads.png",
+      "salesdesk-mobile.png"
+    ]
+  },
+  "full_run_backend_commit": "a5fc406",
+  "final_ui_runtime_commit": "3307d43",
+  "backend_unchanged_between_full_run_and_final_ui": true,
+  "measured_full_run_seconds": 119.419,
+  "peak_concurrent_rooftops": 6,
+  "observed_peak_service_mib": 641.59,
+  "minimum_available_vm_mib": 2682.91,
+  "screenshots": {
+    "salesdesk-group.png": "a546728fb3114f6080098247d006291101f1610109a65fa334017dbe8b5fbb7d",
+    "salesdesk-live-run.png": "de1bd925d1793103945810302f22985baec91dff850e95862c1c1ba3ccc847f5",
+    "salesdesk-store.png": "256fb95bce2cce2f4707a2fdb569f2f8f8e9e4ad3248d63c4f9fc546e1947f4a",
+    "salesdesk-maria.png": "6d36b6ddc633cc03241b47cf0f1a0f3273e97ad0f412804d6d43503abdf45990",
+    "salesdesk-downloads.png": "2ab74d6ea8fa362f7667727d98c6959f878cd583f52a2eaa251460ab99a138ed",
+    "salesdesk-mobile.png": "dab94f423541539fd4e9fd55995577ab4ca08a94f8694b0377792025579cd2ad"
+  },
+  "note": "Screens captured directly on public HTTPS. Live-run frame is from the measured full run; other frames refreshed on the final UI."
+}
