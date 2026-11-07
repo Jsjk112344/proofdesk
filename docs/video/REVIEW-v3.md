@@ -84,3 +84,7 @@ That approval/Ready pair uses a separate saved-sample session with the identical
 Maria SMS; it starts no review or inference. The measured Group/trace run is unchanged.
 The new title and end-card tagline is **SalesDesk: Your AI enterprise sales analyst**;
 the maintained VO script and captions include “enterprise”.
+
+The rendered Maria hold passed a sampled frame-variation check after rebuilding;
+[the motion check](v3-motion-check.json) records the before/after reading-region
+measurements and caption/narration agreement. Both exports remain 165.000 seconds.

@@ -1,0 +1,21 @@
+{
+  "before_maria_region": {
+    "frames_sampled": 96,
+    "sample_fps": 4,
+    "mean_absolute_luma_delta": 2.600666,
+    "max_frame_mean_luma_delta": 4.998825,
+    "region": "900x650+800+150, full-resolution source, scaled to 360x260 for comparison"
+  },
+  "after_maria_region": {
+    "frames_sampled": 96,
+    "sample_fps": 4,
+    "mean_absolute_luma_delta": 0.067989,
+    "max_frame_mean_luma_delta": 0.686859,
+    "region": "900x650+800+150, full-resolution source, scaled to 360x260 for comparison"
+  },
+  "locked_maria_check": "pass: negligible frame variation during the reading hold; no animated camera crop",
+  "caption_narration_match": true,
+  "tagline": "SalesDesk: Your AI enterprise sales analyst",
+  "new_review_or_inference": false,
+  "approval_provenance": "Real click in a separate saved-sample session with identical recorded Maria SMS"
+}

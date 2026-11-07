@@ -1331,3 +1331,21 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
 - Owner still records VO, aligns the final captions/audio/edit, confirms signed-in
   upload limits, uploads the video/slides and submits by **Sunday Nov 8, 16:00 ET**.
   No upload, submission or receipt is claimed.
+
+## Video v3 cursor/camera polish and enterprise tagline (2026-11-06 ET)
+
+- Re-recorded Maria and the match view with the cursor parked off text and a locked
+  camera; removed the animated pixel-rounded zoom responsible for stepping. No
+  hover sweeps, breakdown toggles or scrolling interrupt the Maria reading hold.
+- Mid-run Group now cuts in after its pointer settles. Approval has one paced
+  cosine cursor move and a genuine click; approval/Ready use a separate saved-sample
+  session with identical Maria SMS. No new review or inference was triggered.
+  Original 127.493-second Group/trace evidence and all product metrics are unchanged.
+- Video title/end card use “SalesDesk: Your AI enterprise sales analyst”. VO script,
+  maintained SRT/ASS, plan, recording hand-off and contact sheet agree.
+- Both rebuilt cuts remain exactly 165.000 seconds, 4,950 frames, 1080p/30fps, silent.
+  A sampled static-Maria-region check passed with negligible frame variation;
+  `docs/video/v3-motion-check.json` records the check. Recording had no page errors;
+  media, subtitle agreement, Ruff/format and repository checks passed.
+- This is a video-asset revision; no app redeploy or backend/model changes. Owner
+  should use the updated enterprise line when recording the VO.
