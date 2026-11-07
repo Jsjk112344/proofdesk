@@ -78,6 +78,17 @@ class DealerJobTests(unittest.TestCase):
             result = run_job(store, job["id"], "sandy")
             self.assertEqual(result["status"], "succeeded", result["failure_reason"])
             expanded = store.result(result)
+            counts = expanded["trace"]
+            self.assertEqual(counts["open_leads"], expanded["metrics"]["open_leads"])
+            self.assertEqual(counts["at_risk"], 40)
+            self.assertEqual(counts["cold_leads"], 25)
+            self.assertEqual(
+                counts["scored_pairs"], 40 * (counts["cars_here"] + counts["cars_sister"])
+            )
+            self.assertEqual(
+                next(e["counts"] for e in result["events"] if e["stage"] == "analysis_validated"),
+                counts,
+            )
             maria = next(lead for lead in expanded["queue"] if lead["customer"] == "Maria G.")
             self.assertEqual(maria["matches"][0]["stock_no"], "S00138")
             self.assertEqual(expanded["metrics"]["cold_leads"], 25)

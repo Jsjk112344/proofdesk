@@ -73,6 +73,7 @@ export type Rooftop = {
   lng: number;
   manager: string;
   result: {
+    trace?: Record<string, number>;
     metrics: Metrics;
     queue: Lead[];
     brief: Brief;
@@ -91,7 +92,7 @@ export type Rooftop = {
   job: {
     id: string;
     status: string;
-    events: { stage: string }[];
+    events: { stage: string; counts?: Record<string, number> }[];
     failure_reason: string | null;
   } | null;
 };

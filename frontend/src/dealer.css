@@ -2285,3 +2285,17 @@
   color: #9c845d;
   margin-top: 18px !important;
 }
+
+.agent-trace { margin-bottom: 24px; padding: 24px 28px; }
+.agent-trace summary { cursor: pointer; font-size: 20px; font-weight: 650; }
+.agent-trace summary span { font-weight: 400; margin-left: 12px; }
+.agent-trace ol { list-style: none; padding: 12px 0 0; margin: 0; }
+.agent-trace li { display: flex; align-items: center; gap: 14px; padding: 12px 0; font-size: 18px; border-bottom: 1px solid #e0e8e5; transition: color .25s, background .25s; }
+.agent-trace strong { margin-left: auto; font-variant-numeric: tabular-nums; text-align: right; }
+.trace-state { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #e9efec; flex-shrink: 0; }
+.agent-trace [data-state=done] { color: #235b47; }
+.agent-trace [data-state=running] .trace-state { animation: trace-pulse 1.2s ease-in-out infinite; background: #d3ebdf; }
+.agent-trace [data-state=failed] { color: #8b3225; }
+@keyframes trace-pulse { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) { .agent-trace * { animation: none !important; transition: none !important; } }
+@media (max-width: 700px) { .agent-trace { padding: 16px; } .agent-trace li { font-size: 14px; gap: 8px; } }

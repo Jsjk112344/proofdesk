@@ -104,3 +104,12 @@ plans, ledgers, accepted responses and stores stay outside release archives. See
 
 The platform's job/contract/approval engine is reusable; automotive is the first vertical.
 Live CRM/DMS integrations and outbound sending are not implemented or claimed.
+
+## Store agent trace
+
+Store tiles remain reachable while running. The expanded trace uses only that child's
+events and accepted outputs. Analysis rows run together and complete together after
+sandbox reconciliation; there are no synthetic stage delays. Search counts cover
+available local and nearby sister-store cars, scored pairs count every at-risk lead
+against those cars. Qwen follow-up counts exclude deterministic templates and edits.
+The final row requires successful worker and brief completion. Replay provenance stays visible.

@@ -31,6 +31,40 @@ const approvalVersion = (row: Followup) => ({
   sha256: row.sha256,
 });
 
+function AgentTrace({ roof }: { roof: Rooftop }) {
+  const events = roof.job?.events || [];
+  const has = (stage: string) => events.some((e) => e.stage === stage);
+  const counts = events.find((e) => e.stage === "analysis_validated")?.counts || roof.result?.trace;
+  const validated = !!counts;
+  const active = roof.job?.status === "running";
+  const failed = roof.job?.status === "failed" || roof.result?.brief.status === "failed";
+  const done = roof.job?.status === "succeeded" && !failed;
+  const n = (key: string) => amount(counts?.[key]);
+  const qwen = roof.followups.filter((f) => ["live_model", "saved_replay"].includes(f.provenance || "")).length;
+  const steps = [
+    { label: "Picked up on Vultr", value: validated ? "Sandbox verified" : has("started") ? "Worker started" : "Queued", done: validated, running: active && !validated },
+    { label: "Read open leads", value: n("open_leads"), done: validated, running: active && !validated },
+    { label: "Flagged at risk · gone cold", value: validated ? `${n("at_risk")} · ${n("cold_leads")}` : "Pending", done: validated, running: active && !validated },
+    { label: "Searched cars here · sister stores", value: validated ? `${n("cars_here")} · ${n("cars_sister")}` : "Pending", done: validated, running: active && !validated },
+    { label: "Scored lead / car pairs", value: validated ? `${n("scored_pairs")} · top ${n("top_score")}` : "Pending", done: validated, running: active && !validated },
+    { label: "Qwen on Vultr Inference", value: roof.result ? `Brief + ${qwen} follow-ups` : "Writing brief + follow-ups", done: done, running: active && has("metrics_validated") },
+    { label: "Ready for manager review", value: done ? `${roof.followups.length} drafts` : failed ? "Needs attention" : "Pending", done, running: active && has("brief_written") },
+  ];
+  if (!roof.job) return null;
+  return <details className="agent-trace d-panel" open>
+    <summary>Agent trace <span>{storeName(roof.name)}</span></summary>
+    <ol aria-label="Agent work steps">{steps.map((step, i) => {
+      const state = step.done ? "done" : failed ? "failed" : step.running ? "running" : "pending";
+      return <li key={step.label} data-state={state}>
+        <span className="trace-state" aria-label={state}>{step.done ? "✓" : i + 1}</span>
+        <span>{step.label}</span><strong>{step.value}</strong>
+      </li>;
+    })}</ol>
+    {roof.result && <AnalystBadge brief={roof.result.brief} />}
+    {failed && <p role="alert">This store needs attention. Review its saved failure in Verification.</p>}
+  </details>;
+}
+
 function StoreStat({
   value,
   label,
@@ -716,6 +750,7 @@ export function StoreView({
           </button>
         )}
       </section>
+      <AgentTrace key={roof.job?.id || roof.id} roof={roof} />
       <div className="d-stat-strip store-stats">
         <StoreStat label="Cold leads" value={metrics?.cold_leads} />
         <StoreStat label="Matched leads" value={metrics?.matched_leads} />

@@ -17,7 +17,7 @@ from ..execution.controller import (
 from ..execution.runner import DockerRunner, RunError, Task
 from ..experiments.jobs import LEASE_SECONDS, Scheduler, _finish, _interrupted
 from ..experiments.store import dump
-from .matching import expand, reconcile, review_snapshot, typed_input
+from .matching import expand, miles, reconcile, review_snapshot, typed_input
 
 PROGRAM = Path(__file__).with_name("analysis_program.py")
 
@@ -185,6 +185,24 @@ def rooftop(store, job, token, group, runner, interpreter):
     result["reconciliation"] = reconciled
     result["execution_id"] = record["id"]
     result["program_sha256"] = sha256(PROGRAM.read_bytes())
+    roofs = {r[0]: r for r in data["rooftops"]}
+    nearby = {r for r in roofs if miles(roofs[rid], roofs[r]) <= data["distance"]}
+    available = [
+        u for u in data["inventory"] if u[1] in nearby and u[12] in ("in_stock", "in_transit")
+    ]
+    trace = dict(
+        open_leads=result["metrics"]["open_leads"],
+        at_risk=result["metrics"]["at_risk"],
+        cold_leads=result["metrics"]["cold_leads"],
+        cars_here=sum(u[1] == rid for u in available),
+        cars_sister=sum(u[1] != rid for u in available),
+        scored_pairs=result["metrics"]["at_risk"] * len(available),
+        top_score=max((u["score"] for lead in result["queue"] for u in lead["matches"]), default=0),
+    )
+    result["trace"] = trace
+    with store.transaction() as conn:
+        store.verify_lease(conn, job["id"], token)
+        store.append_job_event(conn, job, "analysis_validated", counts=trace)
     # Prior-night data are separately sandboxed and reconciled, never a host fallback.
     previous = typed_input(group, rid, previous=True)
     prior_parent = job["payload"].get("previous_parent_id")

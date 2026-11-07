@@ -178,3 +178,9 @@ history for the full table.
   invalidating review on edit use the existing endpoints and hashes.
 - Measure default document heights in a fresh public session before and after approval;
   verify one primary action and the absence of page overflow, including mobile.
+
+## Video v2 trace
+
+The real-Docker Sandy test verifies trace counts against reconciled metrics and the
+leased child event. Offline suite: 114 passed with seven optional Docker skips.
+Public verification is recorded in the v2 video facts and manifest after deployment.
