@@ -1,6 +1,16 @@
 # SalesDesk video artifacts
 
-## Current: v2
+## Current: v3
+
+- [Captioned 2:45 cut](salesdesk-v3.mp4) · [clean cut](salesdesk-v3-nosubs.mp4).
+- [Contact sheet](_review/v3-contact.png) · [review and before/after screens](REVIEW-v3.md).
+- [Hand-off](RECORDING.md) · [maintained plan](video-plan-v2.md) · [clean VO](narration-v2.txt) · [captions](subtitles-v2.srt).
+- [Public recording facts](recording-facts-v3.json) · [scene manifest](scene-manifest-v3.json) · [export checks](v3-export-check.json).
+- Native public footage in `scenes/v3-*.mp4`, 1.5× stills in `stills/v3-*.png`.
+- Motion graphics in `card-v3-*.html` and `cards-v3/`, including the separate fan-out explainer.
+- Both exports are silent; owner records VO, finishes the edit, uploads and submits.
+
+## Previous: v2
 
 - [Captioned 2:45 cut](salesdesk-v2.mp4) and [clean cut](salesdesk-v2-nosubs.mp4).
 - [Fourteen-scene contact sheet](_review/v2-contact.png).

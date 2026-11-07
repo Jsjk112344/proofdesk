@@ -8,7 +8,7 @@ Record the deployed public platform at **1280×720, deviceScaleFactor 1.5**,
 output **1920×1080, 30 fps**. Show the whole platform screen most of the time.
 No hard crops, transplanted badges or fabricated product values. Slow push-ins,
 if used in the final edit, stay at or below **1.3×**, hold, then pull back to full.
-The assembled cut uses whole-screen shots throughout.
+The assembled cut uses full frames; Maria’s payoff has a slow 1.06× push-in and pull-back.
 
 App text is at least **13 px**; desktop Agent trace text is **15 px**. During a run
 the map collapses, keeping the headline, counters, progress and at least eight tiles
@@ -68,7 +68,7 @@ Captions: [subtitles-v2.srt](subtitles-v2.srt). Hand-off: [RECORDING.md](RECORDI
 - **Maria:** last salesperson contact 7 days ago (no call-count claim); original car sold 6 days ago; silver RAV4 Hybrid XLE, 74 days on lot, match 98; 2017 CR-V trade-in.
 - **Group:** 1,050 at risk ("over a thousand"); 1,007 matched; $3,434,800 recoverable gross ("$3.4M").
 - **Sandy:** 40 at risk, 25 cold, plus the trace counts (leads read, cars searched here and at sister stores).
-- **Run:** recorded public run: 124.758 seconds. 25 accepted Qwen replays, zero new inference calls and $0 new inference cost; compute is separate. Scene 13 makes no cost claim.
+- **Run:** recorded public run: 127.493 seconds. 25 accepted Qwen replays, zero new inference calls and $0 new inference cost; compute is separate. Scene 13 makes no cost claim.
 
 ## Verified v2 corrections
 

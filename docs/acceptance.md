@@ -190,3 +190,18 @@ pending and completed steps, 375 open / 40 risk / 25 cold, 117 local + 1,638 sis
 cars, 70,200 scored pairs, top score 100, three Qwen drafts and 40 total drafts.
 The final group succeeded without failures in 124.758 seconds. Approval reached Ready
 without sends. All 85 deployed file hashes match release 1c2cf6b.
+
+## Video v3 public presentation checks (2026-11-06 ET)
+
+The compact UI was deployed and recorded from public HTTPS at a 1280×720 viewport,
+1.5 device scale and 1920×1080 output. All 85 deployed file hashes matched. A final
+24-store run succeeded in 127.493 measured seconds with 25 accepted Qwen replays,
+zero new inference calls and no recording page errors. The trace, first follow-up,
+Maria story/SMS, alternatives toggle and horizontal bounds passed direct browser
+checks in `scripts.check_video_v3`. A completed approval adds a Ready panel; one
+short scroll retains the trace and full first card together. New recorded sources
+and machine-readable checks are indexed in `docs/video/REVIEW-v3.md`.
+
+Frontend build, lint, formatting, compilation and 114 offline tests passed, with
+seven optional checks skipped. Backend execution/approval contracts did not change;
+this check does not claim a new Docker containment acceptance.

@@ -113,3 +113,9 @@ sandbox reconciliation; there are no synthetic stage delays. Search counts cover
 available local and nearby sister-store cars, scored pairs count every at-risk lead
 against those cars. Qwen follow-up counts exclude deterministic templates and edits.
 The final row requires successful worker and brief completion. Replay provenance stays visible.
+
+The v3 desktop composition supports a 1280×720 viewport: readable 13 px minimum
+text, 15 px trace rows, compact cards and a collapsed map while a review runs.
+Tile pulse/check animations follow actual job state and respect reduced motion.
+The drawer shows the best match and SMS together; breakdown and alternatives are
+expandable. These presentation changes do not change job, model or approval contracts.

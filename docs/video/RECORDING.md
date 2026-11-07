@@ -1,10 +1,10 @@
-# SalesDesk v2 recording hand-off
+# SalesDesk v3 recording hand-off
 
 The Maria-first cut is **2:45 (165 seconds)**, silent, H.264, 1920×1080, 30 fps.
-Use [salesdesk-v2.mp4](salesdesk-v2.mp4) for the captioned review and
-[salesdesk-v2-nosubs.mp4](salesdesk-v2-nosubs.mp4) for the voiceover edit.
-[Contact sheet](_review/v2-contact.png) · [Plan](video-plan-v2.md) ·
-[Measured facts](recording-facts-v2.json) · [Scene takes](scene-manifest-v2.json).
+Use [salesdesk-v3.mp4](salesdesk-v3.mp4) for the captioned review and
+[salesdesk-v3-nosubs.mp4](salesdesk-v3-nosubs.mp4) for the voiceover edit.
+[Review and before/after screenshots](REVIEW-v3.md) · [Contact sheet](_review/v3-contact.png) · [Plan](video-plan-v2.md) ·
+[Measured facts](recording-facts-v3.json) · [Scene takes](scene-manifest-v3.json).
 The previous three-minute hand-off is preserved in [RECORDING-v1.md](RECORDING-v1.md).
 
 ## Clean voiceover script
@@ -13,9 +13,9 @@ Nine days ago, Maria asked a dealership about a blue RAV4 Hybrid. Her last conta
 
 Now multiply that by 24 stores. Every morning, over a thousand leads like Maria are slipping away.
 
-Dealers don't lose these sales for lack of cars. They lose them because nobody connects the lead to the car in time.
+Dealers don't lose these sales for lack of cars. They lose them because nobody connects the lead to the car in time. SalesDesk makes sure you never lose a sale to a missed follow-up again.
 
-SalesDesk is an AI sales analyst that makes that connection, every night.
+SalesDesk. Your AI sales analyst.
 
 At 2 AM, SalesDesk starts its review. It splits the group into 24 jobs, one per store, running in parallel in isolated sandboxes on Vultr.
 
@@ -25,7 +25,7 @@ Next, it searches every car on this lot and at nearby sister stores, and scores 
 
 Then Qwen, on Vultr Serverless Inference, writes the store's morning brief and three personal follow-ups, using only recorded vehicle facts.
 
-Two minutes, five seconds later, all 24 stores are done.
+Two minutes, seven seconds later, all 24 stores are done.
 
 Remember Maria? Here's what the agent found: the silver RAV4 Hybrid on her own lot, a 98 out of 100 match. It knows about her CR-V trade-in. Her message is already written.
 
@@ -35,24 +35,23 @@ Across the group, that's over a thousand customers matched to a car in stock, an
 
 It all runs on Vultr: the scheduler and sandboxes on a Vultr VM, and Qwen on Vultr Serverless Inference, with validated drafts for manager review.
 
-SalesDesk. Every lead, every store, every morning. Sell more, with your AI sales analyst.
+SalesDesk. Every lead, every store, every morning. Never lose a sale again.
 
 ## Lay in the voice and re-time captions
 
 Record [narration-v2.txt](narration-v2.txt) as one clean read, with pauses at the scene
-boundaries in the plan. Speak the measured time skip naturally. Leave **1:46–1:58**
+boundaries in the plan. Speak the measured time skip naturally. Leave **1:49–2:01**
 quiet for Maria's full SMS; its last six seconds must remain readable without captions.
 
-Import `salesdesk-v2-nosubs.mp4`, your recording and `subtitles-v2.srt` into your editor.
+Import `salesdesk-v3-nosubs.mp4`, your recording and `subtitles-v2.srt` into your editor.
 Start VO at 0:00, align each caption to the actual spoken words, then adjust holds or
 scene boundaries to fit the read. Keep the result within **2:40–2:50**, targeting 2:45.
-Use Inter SemiBold at 42 px, white on a 60% dark box. Raise captions during Act 2 so
-they clear the chapter labels. Never burn a second caption track over the captioned cut.
+Use Inter SemiBold at 42 px, white on a 60% dark box. Keep captions bottom centre; chapter labels are top left. Never burn a second caption track over the captioned cut.
 
 If the voice already matches the edit:
 
 ```bash
-ffmpeg -i docs/video/salesdesk-v2.mp4 -i voiceover.wav \
+ffmpeg -i docs/video/salesdesk-v3.mp4 -i voiceover.wav \
   -map 0:v:0 -map 1:a:0 -c:v copy -c:a aac -b:a 192k \
   -af apad -t 165 -movflags +faststart SalesDesk-final.mp4
 ```
@@ -63,7 +62,7 @@ under VO, and retain the licence with the final project.
 
 ## Recorded facts and narration corrections
 
-- Final public run: **124.758 seconds**, rounded to **2 min 5 sec** on the visible skip.
+- Final public run: **127.493 seconds**, rounded to **2 min 7 sec** on the visible skip.
 - Group: **1,050 at risk**, **1,007 matched in stock**, **792 distinct aged units matched**,
   **$3,434,800 estimated recoverable gross**. The spoken $3.4 million is rounded.
 - Sandy: **375 open leads**, **40 at risk / 25 cold**, **117 local / 1,638 sister-store cars**,
@@ -82,42 +81,32 @@ under VO, and retain the licence with the final project.
 
 ## Footage and visual integrity
 
-All product pixels come from the deployed public URL. Source viewport: 1440×900,
-2× stills, smooth injected cursor only. No product text, counters, numbers or progress
-were injected. Trace counts come from Sandy's leased child and reconciled sandbox
-output. Analysis rows complete together because they share one sandbox pass.
-The final release keeps pending inference labelled Pending and preserves replay badges.
+All app scenes were re-recorded from the public HTTPS platform at 1280×720 with
+1.5× device scale and 1920×1080 video output. Whole screens replace v2 detail crops; Maria has a slow 1.06× push-in and pull-back.
+Playwright video uses the native CSS viewport and is scaled as a whole to 1080p;
+the retained takes had empty recorder padding removed, with the entire app frame preserved.
+Native sample labels and replay provenance remain in the app. No extra frame label
+is added. The fan-out is a separate motion graphic using the v2 verified figures:
+24 stores, six concurrent jobs and 9,000 open leads. It is followed by three seconds
+of genuine Group mid-run footage before Sandy's trace.
 
-Detail edits crop the real app and retain its actual sample badge in the edit border.
-No generated number is placed onto the UI. Maria's real score stays 98; it is not
-artificially counted up. Kinetic number cards count up separately from UI footage.
-Crisp 2× stills supply the tight wanted-car, timeline, match, score and SMS holds.
-Ready and Maria detail retakes use the same completed session after approval, with
-unchanged message content and no further inference. The approval click itself is real.
-
-## Optional Screen Studio retakes
-
-| Scene | Start state | Useful improvement |
-| --- | --- | --- |
-| 5 | Fresh public Group session, Run available | Smooth button-to-six-tiles camera move. Record the entire real run; measure it again. |
-| 6–8 | Click Sandy while its child job runs | Follow the actual trace transitions and focus each pair of rows. Never slow the job or manufacture progress. |
-| 10 | Completed Sandy review, Maria's drawer open | Smooth push-in from 98 to trade-in to the full SMS. Keep the cursor off the text and preserve the sample badge. |
-| 11 | Same review, unapproved queue | Collapse Agent trace, approve once, then pan from real Ready status to downloads. No CSV shot. |
-
-Retakes are optional. Any new run requires rechecking figures, wall time, provenance
-and the time-skip card. Source clips and 2× stills are committed under `scenes/v2-*`
-and `stills/v2-*`; raw browser recordings and session cookies remain ignored.
+Maria's wanted car, timeline, match 98 and full SMS fit in the drawer together.
+Match breakdown expands for scene 7; alternatives remain available on demand.
+Scenes 1, 6–8, 10 and 11 use new app footage; scene 5 is the new explainer, and the
+mid-run Group insert is also newly recorded. All story/impact/architecture cards
+are retained and updated to match v3 messaging.
 
 ## Rebuild
 
 ```bash
 uv sync --locked
 uv run playwright install chromium
-uv run python -m scripts.record_demo_v2
-uv run python -m scripts.record_demo_v2 --ready-only
+uv run python -m scripts.record_demo_v3
+uv run python -m scripts.record_demo_v3 --ready-only
 # Reconcile the measured time and all facts with video-plan-v2.md / subtitles-v2.srt.
-uv run python -m scripts.render_video_v2
-uv run python -m scripts.assemble_video_v2
+uv run python -m scripts.render_video_v3
+uv run python -m scripts.render_fanout_v3
+uv run python -m scripts.assemble_video_v3
 ```
 
 These commands reuse the existing recorder, asset style and assembler helpers.
@@ -129,7 +118,7 @@ the preceding recorder and makes no new inference calls.
 ## Pre-export and submission checklist
 
 - [ ] Figures match the final recorded screen, including the measured time skip.
-- [ ] No disclaimers in voiceover or captions; app sample badge remains visible.
+- [ ] Native sample labels remain visible; no extra frame overlay.
 - [ ] End footer reads “Sample dealer group · SalesDesk drafts; people send.”
 - [ ] Watch with sound off: Maria, scale, agent work, approval and payoff make sense.
 - [ ] Full SMS is readable for at least six seconds without overlapping captions.

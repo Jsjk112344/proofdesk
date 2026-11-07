@@ -198,7 +198,7 @@ and a one-day anonymous schedule lifetime. This is a hackathon demo, not product
 
 Earlier campaign/prospect code and routes remain unlinked. The proprietary/raw historical
 campaign dataset remains ignored and unserved; its separate rights boundary is in
-[THIRD_PARTY.md](THIRD_PARTY.md). The [video hand-off](docs/video/RECORDING.md) includes the 165-second Maria-first v2 cut, caption files,
+[THIRD_PARTY.md](THIRD_PARTY.md). The [video hand-off](docs/video/RECORDING.md) includes the 165-second Maria-first v3 cut, caption files,
 scene takes, cards and submission PDF. Record the voiceover, finish the edit and upload
 the video and PDF. Official submission remains an owner action; no receipt exists.
 

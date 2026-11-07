@@ -3,12 +3,11 @@
 Product name: **SalesDesk** (renamed from ProofDesk on 2026-11-05). Existing operational
 identifiers and dated historical entries retain their original names.
 
-Current checkpoint: **Maria-first video v2 is prepared; Agent trace is public and verified.**
-Both silent exports are **165.000 s**, 1080p/30fps. Final public run: **124.758 s**,
-25 accepted Qwen replays and **$0 new inference usage**. Sandy's trace and Maria's facts
-match the recorded app. See `docs/video/RECORDING.md`, `recording-facts-v2.json` and
-`_review/v2-contact.png`. Owner records VO, finishes the edit, confirms the signed-in
-video limit, uploads and submits. No receipt exists.
+Current checkpoint: **Video v3 is prepared; compact public UI and whole-frame footage verified.**
+Both silent exports are **165.000 s**, 1080p/30fps. Final public run: **127.493 s**,
+25 accepted Qwen replays and **$0 new inference usage**. See `docs/video/REVIEW-v3.md`,
+`RECORDING.md` and `_review/v3-contact.png`. Owner records VO, finishes the edit,
+uploads and submits by Sunday Nov 8, 16:00 ET. No receipt exists.
 
 Public URL: https://salesdesk.149.28.51.139.sslip.io
 
@@ -1292,3 +1291,43 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   the edit, confirms the signed-in LabLab length limit, uploads and submits by the
   Nov 8 16:00 ET target. Public event content gives no length limit; general guide
   pages failed to load. No submission or receipt is claimed.
+
+## SalesDesk video v3: public UI and full-frame recording (2026-11-06 ET)
+
+- Raised dealer UI text to 13 px minimum and desktop trace rows to 15 px. Compact
+  spacing, collapsed running map and smaller idle map keep headline, live metrics,
+  progress and more than eight store tiles above the fold at 1280×720. Real job
+  state drives colour/pulse/check motion with reduced-motion support.
+- Trace and first follow-up fit together. Maria's wanted car, timeline, best match
+  score and SMS fit in one view; breakdown and alternatives expand on demand.
+  Before/after 1280×720 screenshots and details: `docs/video/REVIEW-v3.md`.
+- Redeployed the allowlisted UI archive
+  `1a847c76cd70990bc33bb8612c8f3c136ecf7c858a922df7a5d89c7ab0a4cfbf`;
+  all 85 installed hashes matched. Rollback and runtime state/ledgers preserved.
+- Recorded every app scene again at 1280×720, deviceScaleFactor 1.5, output 1080p.
+  The first capture after restart timed out; a subsequent fresh public capture
+  and full recording passed. Two real reviews succeeded: first 123.683 seconds,
+  final **127.493 seconds**; each reused 25 accepted Qwen responses with no new
+  inference calls / **$0 new inference usage**. Compute billing remains separate
+  and unverified against billing; no new compute provisioned or ledger reset.
+- Added the separate 24-store fan-out motion graphic with six active stores at a
+  time, lead/car/brief icons and counters to 24 / 9,000, sourced from the original
+  v2 recorded facts. It cuts to three seconds of genuine Group mid-run footage.
+- Whole platform frames replace editorial detail crops and transplanted sample
+  badges. Removed empty Playwright recorder padding while retaining the entire
+  CSS viewport; future recorder uses CSS-size video and whole-frame scaling.
+  Same-session Maria/Ready retakes corrected a summary-click choreography issue;
+  SMS is fully visible, with a 12-second quiet hold. No new inference for retakes.
+- Green chapter pills slide in at top left and stay through each chapter;
+  captions stay bottom centre. Separate missed-follow-up promise, impact headline
+  and new end card match owner wording. Time skip now says **2 min 7 sec**.
+- Both final exports are **165.000 seconds**, 4,950 frames, 1920×1080, 30 fps,
+  H.264, silent. Sixteen-frame contact sheet: `docs/video/_review/v3-contact.png`.
+  Thirty-five subtitle cues match the clean narration; end footer stays visible.
+- Frontend build, Ruff, formatting, compilation, repository checks and 114 offline
+  tests passed (seven optional skips). Direct public browser layout/toggle checks
+  passed with no page errors or horizontal overflow. No new containment acceptance
+  claimed; no backend contracts, sandbox bounds or approval bindings changed.
+- Owner still records VO, aligns the final captions/audio/edit, confirms signed-in
+  upload limits, uploads the video/slides and submits by **Sunday Nov 8, 16:00 ET**.
+  No upload, submission or receipt is claimed.

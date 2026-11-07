@@ -246,3 +246,9 @@ Checked 2026-11-05: [chat-completion contract](https://api.vultrinference.com/do
 [reasoning](https://api.vultrinference.com/docs/concepts/reasoning),
 [limits](https://api.vultrinference.com/docs/concepts/limits),
 [public model metadata](https://api.vultrinference.com/v1/models/qwen3.8-flash-next).
+
+The final v3 public recording reused 25 accepted exact-input Qwen responses and
+made no new live inference requests ($0 new inference usage). The fixed analysis
+still executed in disposable Docker sandboxes. `docs/video/recording-facts-v3.json`
+records the 127.493-second observed run. VM compute billing is separate; no budget
+ledger was reset or replaced during the UI redeploy.

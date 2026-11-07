@@ -123,3 +123,11 @@ checked and the issuer's retry window respected.
 The owner manages credit balance, compute billing and eventual teardown. No account
 billing API credential is configured here; token-cost estimates are not billing receipts.
 Stopping the application or Caddy does not stop VM charges.
+
+## Video v3 presentation release
+
+The compact desktop UI was redeployed with archive SHA-256
+`1a847c76cd70990bc33bb8612c8f3c136ecf7c858a922df7a5d89c7ab0a4cfbf`.
+All 85 installed file hashes matched the release manifest. The rollback archive is
+`/opt/proofdesk-rollback/pre-video-v3-final.tar.gz`; runtime state, plans and ledgers
+were preserved. Public recording evidence is in `docs/video/recording-facts-v3.json`.
