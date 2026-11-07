@@ -1,0 +1,47 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1920
+PlayResY: 1080
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Inter,42,&H00FFFFFF,&H00FFFFFF,&H66000000,&H66000000,0,0,0,0,100,100,0,0,3,12,0,2,100,100,56,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.60,0:00:04.60,Default,,0,0,56,,Nine days ago, Maria asked a dealership\Nabout a blue RAV4 Hybrid.
+Dialogue: 0,0:00:04.60,0:00:07.60,Default,,0,0,56,,Her last contact\Nwas seven days ago.
+Dialogue: 0,0:00:07.80,0:00:10.20,Default,,0,0,56,,Six days ago, that car sold.
+Dialogue: 0,0:00:10.40,0:00:14.80,Default,,0,0,56,,Meanwhile, a silver one sat\Non the same lot for 74 days.
+Dialogue: 0,0:00:15.30,0:00:18.30,Default,,0,0,56,,Now multiply that by 24 stores.
+Dialogue: 0,0:00:18.50,0:00:22.80,Default,,0,0,56,,Every morning, over a thousand leads\Nlike Maria are slipping away.
+Dialogue: 0,0:00:23.30,0:00:26.50,Default,,0,0,56,,Dealers don't lose these sales\Nfor lack of cars.
+Dialogue: 0,0:00:26.70,0:00:30.80,Default,,0,0,56,,They lose them because nobody connects\Nthe lead to the car in time.
+Dialogue: 0,0:00:31.30,0:00:37.60,Default,,0,0,56,,SalesDesk is an AI sales analyst\Nthat makes that connection, every night.
+Dialogue: 0,0:00:38.30,0:00:41.80,Default,,0,0,180,,At 2 AM, SalesDesk\Nstarts its review.
+Dialogue: 0,0:00:41.80,0:00:45.80,Default,,0,0,180,,It splits the group into 24 jobs,\None per store,
+Dialogue: 0,0:00:45.80,0:00:49.80,Default,,0,0,180,,running in parallel\Nin isolated sandboxes on Vultr.
+Dialogue: 0,0:00:50.30,0:00:53.30,Default,,0,0,180,,Let's follow one store: Sandy.
+Dialogue: 0,0:00:53.30,0:00:57.30,Default,,0,0,180,,First, the agent reads every open lead\Nand flags the ones going cold:
+Dialogue: 0,0:00:57.30,0:01:01.60,Default,,0,0,180,,no contact in three days,\Nor the car they wanted is gone.
+Dialogue: 0,0:01:02.30,0:01:06.80,Default,,0,0,180,,Next, it searches every car on this lot\Nand at nearby sister stores,
+Dialogue: 0,0:01:06.80,0:01:11.80,Default,,0,0,180,,and scores each one against the request:\Nmodel, trim, budget, mileage.
+Dialogue: 0,0:01:11.80,0:01:16.60,Default,,0,0,180,,Cars that have sat the longest\Nget priority.
+Dialogue: 0,0:01:17.30,0:01:22.30,Default,,0,0,180,,Then Qwen, on Vultr Serverless Inference,\Nwrites the store's morning brief
+Dialogue: 0,0:01:22.30,0:01:27.60,Default,,0,0,180,,and three personal follow-ups,\Nusing only recorded vehicle facts.
+Dialogue: 0,0:01:28.30,0:01:31.60,Default,,0,0,56,,Two minutes, five seconds later,\Nall 24 stores are done.
+Dialogue: 0,0:01:32.30,0:01:34.80,Default,,0,0,56,,Remember Maria?
+Dialogue: 0,0:01:34.80,0:01:38.80,Default,,0,0,56,,Here's what the agent found:\Nthe silver RAV4 Hybrid on her own lot,
+Dialogue: 0,0:01:38.80,0:01:41.80,Default,,0,0,56,,a 98 out of 100 match.
+Dialogue: 0,0:01:42.00,0:01:45.80,Default,,0,0,56,,It knows about her CR-V trade-in.\NHer message is already written.
+Dialogue: 0,0:01:58.30,0:02:03.30,Default,,0,0,56,,At 7 AM, Sandy's manager opens\Na ranked queue of 40 follow-ups
+Dialogue: 0,0:02:03.30,0:02:06.80,Default,,0,0,56,,and approves them in one click.
+Dialogue: 0,0:02:06.80,0:02:09.80,Default,,0,0,56,,Each salesperson gets\Ntheir tasks and drafts.
+Dialogue: 0,0:02:10.30,0:02:15.80,Default,,0,0,56,,Across the group, that's over a thousand\Ncustomers matched to a car in stock,
+Dialogue: 0,0:02:15.80,0:02:21.60,Default,,0,0,56,,and an estimated $3.4 million\Nin gross back in play.
+Dialogue: 0,0:02:22.30,0:02:27.30,Default,,0,0,56,,It all runs on Vultr: the scheduler\Nand sandboxes on a Vultr VM,
+Dialogue: 0,0:02:27.30,0:02:33.60,Default,,0,0,56,,and Qwen on Vultr Serverless Inference,\Nwith validated drafts for manager review.
+Dialogue: 0,0:02:34.30,0:02:38.30,Default,,0,0,150,,SalesDesk. Every lead, every store,\Nevery morning.
+Dialogue: 0,0:02:38.50,0:02:42.50,Default,,0,0,150,,Sell more,\Nwith your AI sales analyst.
