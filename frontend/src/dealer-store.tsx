@@ -522,7 +522,7 @@ function LeadDrawer({
                   <small>match</small>
                 </strong>
               </div>
-              <details className="score-details" open={index === 0}>
+              <details className="score-details" open={false}>
                 <summary>Match breakdown</summary>
                 <div>
                   {Object.entries(unit.components).map(([key, value]) => (
