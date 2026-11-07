@@ -667,7 +667,8 @@ export function StoreView({
           <div className="store-title">
             <h1>{roof.name}</h1>
             <span className="d-soft-badge">
-              {roof.job?.status === "failed"
+              {roof.job?.status === "failed" ||
+              result?.brief.status === "failed"
                 ? "Needs attention"
                 : result
                   ? "Morning review"
@@ -792,7 +793,8 @@ export function StoreView({
           <div className="d-panel queue-empty">
             <Icon name="spark" size={25} />
             <p>
-              {roof.job?.status === "failed"
+              {roof.job?.status === "failed" ||
+              result?.brief.status === "failed"
                 ? "This rooftop needs attention. Review the saved failure in Verification."
                 : "Follow-ups appear here when the review is ready."}
             </p>

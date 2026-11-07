@@ -1,51 +1,70 @@
 # LabLab submission fields
 
-Prepared copy for Challenge 2, Powering the Future of Work. This is not a submission receipt.
-Verify the final logged-in form's field names and limits before pasting.
+Prepared for Challenge 2, Powering the Future of Work. Check the logged-in form’s current
+field names and limits. This file is not a submission receipt.
 
 **Title:** SalesDesk — Sell more: Your AI sales analyst
 
-**Short description:** SalesDesk measures campaign results, proposes your next move and prepares an approved packet while you are away. Two entry doors, one analyst loop, powered by Vultr compute and Serverless Inference.
+**Short description:** Every night, SalesDesk works every lead across every rooftop:
+finds cold leads, matches available cars, prioritises aged inventory and drafts follow-ups.
+Dealer-group leaders see the roll-up; store managers approve. Powered by Vultr.
 
 **Long description:**
 
-SalesDesk helps sales managers turn campaign evidence into a next move and a prepared
-handoff. The home screen has two entry doors: See what worked for teams with campaign
-history, and Starting from zero for teams researching their first customers.
+SalesDesk turns a dealer group’s scattered lead and inventory exports into a morning queue
+that store managers can approve. The sample is the fictional Summit Auto Group: 24 rooftops
+across the Mountain West, 3,000 cars, 9,000 open leads and 2,400 historical leads. Automotive
+is the first vertical for a reusable job, contract and approval engine.
 
-The campaign workspace analyses a genuine public, randomized e-mail campaign covering
-64,000 customers. A saved plan runs through a durable worker on a Vultr VM and a disposable
-Docker sandbox. SalesDesk presents conversion, visits, spend and uncertainty, then uses
-Vultr Serverless Inference to propose a reading and an editable next move. A person approves
-an exact version and schedules packet preparation. They can close the tab and return to a
-ready-for-review Markdown packet. Analyst activity shows the recorded steps and Verification
-keeps detailed evidence available without crowding the main workflow.
+A nightly review fans out one durable child job per rooftop on Vultr. Six workers run
+concurrently, each using its own disposable Docker sandbox with unchanged resource and
+isolation limits. A fixed analysis program flags cold leads, stale appointments, sold
+vehicle interests and slow response. It scores current and in-transit stock at the same
+store and nearby sister stores, boosts aged units, and returns three matches per at-risk
+lead. Independent controller reconciliation verifies metrics and score components before
+anything reaches the interface or model.
 
-The prospect workspace researches an example company, prepares a sourced brief, makes a
-demonstration decision and creates an unsent outreach draft. Public prospect examples are
-explicitly synthetic; the demonstration really executes in Docker. No outreach is sent.
+Vultr Serverless Inference runs Qwen 3.8 Flash Next through validated rooftop and group
+brief contracts. It receives curated metrics and facts, never raw uploaded rows or contact
+details. Quantities and vehicle facts use references rendered in code. Unsupported references,
+quantities, promises, features and sends are rejected. Accepted identical-input replay is
+revalidated and labelled; a real public run still executes the sandbox analysis.
 
-Vultr hosts FastAPI, SQLite, the scheduler, workers and Docker execution in EWR, New Jersey.
-Caddy handles HTTPS. Qwen 3.8 Flash Next runs through Vultr Serverless Inference; analysis,
-research and outreach contracts have passed live. Identical requests can use accepted,
-revalidated cached responses, with that provenance in Verification. Human approvals remain version-bound.
+In Sandy, Maria G. asked about a blue RAV4 Hybrid that sold. SalesDesk finds a silver
+2024 RAV4 Hybrid XLE with 74 days on lot and drafts a follow-up about her CR-V trade.
+The manager can edit, skip or approve a ranked queue. Approval binds an exact version;
+Vultr workers then prepare follow-ups.md, crm-tasks.csv and transfer-requests.csv.
+Nothing is sent to customers and no transfer is executed.
 
-**Challenge/category:** Powering the Future of Work / Sales Operations
+Group leadership sees the regional map, store ranking, source performance, carrying-cost
+assumptions and estimated recoverable gross. Job progress reflects saved worker events,
+not a timer. Server-owned 2 AM Mountain Time schedules continue after the browser closes.
+Data enters through bounded, session-scoped CSV uploads. Live CRM/DMS connections are next.
+The existing Vultr EWR VM hosts FastAPI, SQLite, workers, Docker and Caddy HTTPS.
 
-**Technology tags:** Vultr Cloud Compute, Vultr Serverless Inference, Qwen, Python,
-FastAPI, React, TypeScript, Docker, SQLite, Caddy, AI Agents, Workflow Automation
+**Category:** Powering the Future of Work / Sales Operations
+
+**Technology:** Vultr Cloud Compute, Vultr Serverless Inference, Qwen, Python, FastAPI,
+React, TypeScript, Docker, SQLite, Caddy, Workflow Automation
 
 **Demo URL:** https://salesdesk.149.28.51.139.sslip.io
 
 **Repository:** https://github.com/Jsjk112344/salesdesk
 
-**License:** MIT for original code; dataset and dependency notices in THIRD_PARTY.md.
+**License:** MIT original code and synthetic dealer fixtures; external sources/dependencies
+are attributed in THIRD_PARTY.md. No private customer data is included.
 
-**Video:** Upload the recording made from [demo-script.md](demo-script.md).
+**Video:** Record/export using [demo-script.md](demo-script.md), then upload.
 
-**Slides:** Upload the PDF exported from [slides.md](slides.md).
+**Slides:** Export [slides.md](slides.md) as PDF, then upload.
 
-**Cover:** [Verified public home screenshot](assets/salesdesk-home.png).
+**Cover:** [Group view screenshot](assets/salesdesk-group.png).
 
-**Submission status:** Prepared, not submitted. Video recording and PDF export remain open.
-Target supplied by owner: November 8, 2026 at 16:00 ET; deadline 18:00 ET.
+**Evidence:** [STATUS.md](../STATUS.md) contains observed full-run wall-clock, memory,
+inference requests/spend and public checks. Sample values are synthetic, floorplan is an
+entered assumption, and recoverable gross is an estimate from listed figures with possible
+repeated units. No measured sales uplift or human time saving is claimed.
+
+**Submission state:** Prepared; not submitted. No receipt exists. Owner-supplied target:
+November 8, 2026, 16:00 ET; deadline 18:00 ET. The owner must record the video, export the
+slide PDF, check the final form and submit.

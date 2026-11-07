@@ -1,3 +1,29 @@
+# Current dealer-group public surface
+
+Public URL: https://salesdesk.149.28.51.139.sslip.io
+
+Fresh sessions load the labelled fictional Summit Auto Group and a saved accepted sample
+review. No fake jobs or automatic dealer approvals are seeded. Run now creates 24 actual
+rooftop child jobs and a waiting parent; six workers execute on Vultr. Model replay is
+accepted exact-input output, revalidated and labelled. Primary UI follows real job events.
+
+CSV uploads are untrusted, session-scoped, 10 MiB/file and 50,000 rows/file, with three-file
+validation before replacement. Anonymous workspaces are capped at 200, global jobs at 5,000,
+reviews at six per session, and handoff jobs at 72. Per-rooftop analysis also retains the
+1 MiB typed-input cap. Concentrated oversized data fails visibly rather than changing limits.
+Schedules expire with the anonymous session; run quotas still apply. Owners can pause them.
+There is no customer sending or live CRM/DMS connection.
+
+The baseline sample review, accepted model responses, plans, ledgers and credentials are
+operator-managed ignored files; they are never included in a public source bundle. The
+committed dealer fixture is synthetic input, not proof of live inference or execution.
+[STATUS.md](../STATUS.md) records the direct public acceptance and actual accounting.
+
+## Retained legacy public endpoints
+
+The historical sections below describe the unlinked campaign/prospect routes and their
+separate quotas. They do not describe the new default dealer dashboard.
+
 # Public SalesDesk demo
 
 URL: https://salesdesk.149.28.51.139.sslip.io

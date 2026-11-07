@@ -1,96 +1,157 @@
-# SalesDesk: seven-slide deck
+---
+marp: true
+theme: default
+paginate: true
+---
 
-Prepared slide copy and visual directions. Export to PDF after inserting the current
-public-demo screenshots; this Markdown is not a PDF submission artifact.
+# SalesDesk
 
-## 1. Problem and persona
+## Sell more: Your AI sales analyst.
 
-**Sales managers have campaign reports. They still need a next move.**
+Every night, it works every lead across every rooftop.
 
-A sales manager needs to understand whether a campaign helped, choose what to try next,
-and keep preparation moving while the team is away from the dashboard.
+**Dealer-group GMs see the region. Store managers approve the morning queue.**
 
-Visual: a report on one side, an unprepared next-campaign brief on the other.
+[Live demo](https://salesdesk.149.28.51.139.sslip.io)
 
-## 2. Evidence: sales teams lack capacity
+---
 
-**Sales teams have work to do and too little selling time.**
+# The manager’s morning starts with a search
 
-- Sales reps report spending **60% of their workweek on non-selling activities**.
-  [Salesforce, State of Sales, seventh edition, p. 8](https://www.salesforce.com/en-us/wp-content/uploads/sites/4/documents/reports/sales/salesforce-state-of-sales-report-2026.pdf#page=8).
-- **48% of reps say they lack bandwidth for adequate cold outreach**.
-  [Salesforce's 2026 report announcement](https://www.salesforce.com/news/stories/state-of-sales-report-announcement-2026/).
+Which leads went cold? Did the car sell? Is there a replacement at a sister store?
+Which aged cars already match a buyer?
 
-Source context: vendor-published, double-anonymous survey of 4,050 sales professionals
-in 22 countries, fielded August–September 2025. These are self-reported workload measures,
-not a claim about how many campaigns go unmeasured.
+Group leadership needs visibility. Each store manager needs an action they can approve.
 
-Visual: two workload callouts with the source links visible.
+---
 
-## 3. Cost: preparation consumes sales capacity
+# Evidence: response quality and inventory both matter
 
-**Preparation and planning take 16% of the average sales professional's time.**
-[Salesforce, State of Sales, seventh edition, p. 21](https://www.salesforce.com/en-us/wp-content/uploads/sites/4/documents/reports/sales/salesforce-state-of-sales-report-2026.pdf#page=21).
+- **19%** of dealers took over an hour to respond in DAS Technology’s 2025 study.
+- **89%** did not offer an alternative available vehicle in the initial response.
+- Study scope: **1,700** U.S. dealership website inquiries, Q3–Q4 2024; the sampled
+  dealerships were not clients of DAS lead-response solutions.
 
-For an illustrative team of ten people working forty hours each, that share represents
-**64 team-hours each week**: ten × forty × 0.16. Team size and workweek are explicit
-assumptions; this is an illustration of capacity cost, not observed SalesDesk savings.
+Source: [DAS Technology, January 24, 2025](https://digitalairstrike.com/das-technology-unveils-comprehensive-automotive-dealership-lead-response-study-at-nada-2025/).
+Vendor study; these figures are not SalesDesk outcomes or a universal conversion claim.
 
-SalesDesk turns campaign evidence into a reviewable next move and prepared handoff,
-so the manager can decide what to do next in one saved workflow.
+---
 
-Visual: a team workweek with the preparation share marked, plus the arithmetic and source.
+# Inventory ties up real capital
 
-## 4. Solution
+Lithia & Driveway reported **$228.2 million** of floorplan interest expense in 2025,
+offset by **$168.5 million** of assistance, leaving **$59.7 million** of net vehicle
+carrying costs. This is one dealer group’s reported expense, not an industry average.
 
-**Sell more: Your AI sales analyst.**
+Source: [Lithia 2025 Form 10-K, floorplan expense and assistance](https://www.sec.gov/Archives/edgar/data/1023128/000102312826000015/lad-20251231.htm).
 
-SalesDesk measures the campaign, proposes your next move and prepares it for approval on Vultr.
+Cox Automotive reported **43 days’ supply** of used inventory at the start of June 2025.
+Market days’ supply measures stock relative to sales pace; it is **not** individual-car age.
 
-![Verified public two-door home and dashboard](assets/salesdesk-home.png)
+Source: [Cox Automotive, June 13, 2025](https://www.coxautoinc.com/insights/used-vehicle-inventory-may-2025/).
 
-## 5. Demo
+---
 
-**Run → understand → approve → walk away → review.**
+# The cost of the problem, made inspectable
 
-The demo uses the genuine Hillstrom campaign: 64,000 customers in its original three arms.
-The seeded Mens E-Mail comparison recorded 267 / 21,307 purchases versus 122 / 21,306
-for No E-Mail: +0.68 percentage points, 95% interval +0.50 to +0.86. This is a retrospective
-benchmark result. During recording, create a fresh **Womens E-Mail vs No E-Mail** plan and
-read its actual returned figures rather than narrating the seeded Mens result.
+Our fictional sample: **24 stores · 3,000 vehicles · 9,000 open leads**.
 
-Show Analyst activity, result chart, editable next move, Approve & schedule, then reopen
-the ready packet. Brief cameo: Starting from zero prepares a prospect brief and unsent draft.
+The run found **600 cold leads**, **960 at-risk leads**, **889 best matches in stock**,
+and **836 distinct aged units matched**.
 
-![Verified public ready packet](assets/salesdesk-ready.png)
+**$3,111,400 estimated recoverable gross** = listed price minus cost over best risk-lead
+matches. A car can match multiple leads. This is not a sales forecast or realized revenue.
 
-## 6. Before and after
+Floorplan uses an **entered $8/unit/day assumption**, not a market interest-rate claim.
+For Maria’s 74-day match, that is **$592** of illustrative carrying cost to date.
 
-| Before | With SalesDesk |
+---
+
+# One group. A clear next move at every store.
+
+![width:1100px](assets/salesdesk-group.png)
+
+All numbers come from accepted job output. The sample and people are fictional.
+
+---
+
+# Watch the work happen on Vultr
+
+![width:1100px](assets/salesdesk-live-run.png)
+
+24 leased rooftop jobs, six concurrent workers, separate disposable Docker sandboxes.
+Counters and state changes follow actual saved child results.
+
+---
+
+# Maria’s original car sold. The opportunity remains.
+
+![width:1050px](assets/salesdesk-maria.png)
+
+Blue RAV4 enquiry → sold car → silver RAV4 Hybrid XLE, 74 days on lot →
+SMS and email with her CR-V trade → manager approval.
+
+---
+
+# Before / after
+
+| Before | After |
 | --- | --- |
-| A report to interpret separately | A campaign result with uncertainty and an analyst reading |
-| Next steps in an unsaved conversation | Editable, versioned next move |
-| Preparation depends on an open tab | Server-owned scheduled work |
-| Unclear handoff | Ready packet with saved activity and download |
+| Find cold leads, check stock, search sister stores, draft follow-ups | Review a ranked queue and approve exact drafts |
+| Group leaders ask each store for the picture | Regional map, store ranking and validated roll-up |
+| Preparation stops when the tab closes | Server-owned workers and recurring reviews |
 
-**Measured in SalesDesk's own public run: 18.38 seconds from worker pickup to ready packet.**
-Recorded November 6, 2026 UTC: 02:12:28.391082 → 02:12:46.768096. This run included Docker
-analysis, a cached interpretation, a reproducibility rerun, scripted review/approval and a
-scheduled wait. It excludes fresh inference latency and human deliberation. One observation,
-not a customer time-saving claim. [Timestamp receipt and scope](workflow-measurement.json).
+**Measured public full run: 108.396 seconds.** Six concurrent child jobs; observed application
+peak 581.55 MiB on the existing Vultr VM. [Release-specific observations](../STATUS.md).
 
-## 7. Architecture on Vultr and what is next
+Human triage time and business uplift have not been measured; no time-saved ratio is claimed.
 
-Browser → Caddy HTTPS → FastAPI on the Vultr EWR VM → scheduler/worker → Docker sandbox.
-Vultr Serverless Inference supplies Qwen 3.8 Flash Next; SQLite retains session-owned state,
-approvals, events and packets. Accepted exact-input model responses can replay.
+---
 
-**Low inference cost:** checked Qwen 3.8 Flash Next rates are $0.10 input / $0.20 output
-per million tokens. Initial contract validation reserved $0.0261248 across 13 requests;
-12 reported responses estimated $0.0039680 in token usage. Accepted exact-input replay
-avoids another inference charge. Compute billing is separate. [Catalog source](https://api.vultrinference.com/v1/models/qwen3.8-flash-next)
-and [updated accounting](../STATUS.md) distinguish reservations from usage and billing.
+# Vultr is the control plane
 
-**Next:** bring your own campaign data and measure the next campaign in SalesDesk.
+Browser → Caddy → FastAPI on Vultr VM → scheduler fan-out → parallel Docker sandboxes →
+validated metrics → Vultr Serverless Inference → exact-version approvals → worker → downloads.
 
-Visual: README Mermaid diagram. Footer: public URL, public GitHub repository, MIT license.
+**VM:** 2 CPUs, nominal 4 GiB RAM, EWR/New Jersey. **Concurrency:** 6.
+**Model:** qwen3.8-flash-next. JSON contracts; reasoning disabled.
+
+Original sandbox, lease, budget, replay and session boundaries remain intact.
+
+---
+
+# AI drafts. People approve.
+
+- Two validated contracts: rooftop brief and group brief.
+- Model facts and quantities resolve through controller-rendered placeholders.
+- Top-lead Qwen drafts, additional labelled templates, human edits tracked separately.
+- Editing clears approval; preparation and downloads recheck the exact version.
+- Accepted exact-input replay is revalidated and labelled. Rejections never execute or persist.
+
+Nothing is sent to customers. Transfers are review requests, not executed moves.
+
+---
+
+# Cost, next, and the platform
+
+The dealer inference envelope is **$0.15 / 64 requests**, inside the owner’s existing
+$150 compute/inference authorization. Actual requests, usage estimates, uncertain rejected
+calls and pessimistic reservations are itemized in [STATUS.md](../STATUS.md).
+
+Current catalog rates checked November 6: **$0.10 input / $0.20 output per million tokens**.
+[Official Vultr model catalog](https://api.vultrinference.com/v1/models/qwen3.8-flash-next).
+Sample replays make no new inference request. VM billing is accounted separately.
+
+**Next:** live CRM/DMS connections, production tenancy, refreshed source feeds and other verticals.
+Current input is CSV; no named CRM/DMS integration is claimed.
+
+---
+
+# SalesDesk
+
+**Every night, it works every lead across every rooftop.**
+
+[Try the demo](https://salesdesk.149.28.51.139.sslip.io) ·
+[MIT source](https://github.com/Jsjk112344/salesdesk)
+
+Challenge 2: Powering the Future of Work · Vultr Agent Rush

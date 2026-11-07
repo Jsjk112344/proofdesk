@@ -7,7 +7,7 @@ import uuid
 from pathlib import Path
 
 from backend.app.dealer.ingestion import sample_group
-from backend.app.dealer.jobs import run_job
+from backend.app.dealer.jobs import aggregate, run_job
 from backend.app.dealer.matching import reconcile
 from backend.app.dealer.store import DealerStore
 from backend.app.execution.artifacts import Rejected
@@ -33,6 +33,34 @@ class DealerJobTests(unittest.TestCase):
             with store.reading() as conn:
                 self.assertEqual(len(store.jobs(conn, "a")), 25)
                 self.assertEqual(store.jobs(conn, "b"), [])
+
+    def test_rollup_preserves_metrics_and_surfaces_failed_analyst(self):
+        metrics = {
+            key: 0
+            for key in (
+                "open_leads",
+                "cold_leads",
+                "at_risk",
+                "matched_leads",
+                "matched_in_stock",
+                "aged_60",
+                "aged_90",
+                "recoverable_gross",
+                "floorplan_daily",
+                "floorplan_to_date",
+            )
+        }
+        metrics["at_risk"] = 5
+        result = dict(
+            rooftop_id="r02",
+            metrics=metrics,
+            queue=[],
+            sources=[],
+            brief=dict(status="failed", failure_reason="rooftop_brief_contract_rejected"),
+        )
+        value = aggregate([result], [])
+        self.assertEqual(value["totals"]["at_risk"], 5)
+        self.assertEqual(value["failures"][0]["rooftop_id"], "r02")
 
     @unittest.skipUnless(os.environ.get("PROOFDESK_DOCKER_TESTS") == "1", "opt-in Docker")
     def test_sandy_real_docker_reconciliation_and_cleanup(self):

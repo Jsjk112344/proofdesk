@@ -1,3 +1,43 @@
+# Dealer analyst contracts: current surface
+
+The dealer workflow uses **rooftop_brief** and **group_brief** with the existing Vultr-only
+transport, pessimistic reservations, aggregate envelope, diagnostics and exact-input replay.
+Model: `qwen3.8-flash-next`; JSON-object output; reasoning disabled. Authenticated catalog
+checked 2026-11-06: $0.10 input / $0.20 output per million tokens. The full sample's dealer
+contracts passed live; request, usage and uncertainty accounting is in [STATUS.md](../STATUS.md).
+
+`SALESDESK_DEALER_LIVE_PLANS` names an operator-only directory with `r01.json` through
+`r24.json` and `group.json`. Each uses the authorization schema documented below: maximum
+six requests and 108,288 reserved tokens per plan, shared $0.15 / 64-request / 1,048,576-token
+envelope. No per-request approval is needed within the standing owner authorization.
+Keys stay outside the release; templates and source files contain no credentials.
+
+The model receives validated aggregate metrics and curated top-lead facts, not CSV exports,
+notes, contact details or salesperson names. Every quantity and vehicle/name fact in a draft
+uses a `[metric:KEY]` or `[field:KEY]` reference rendered by code. The validator requires
+known top leads and best-match stock, bounded lists, SMS at most 320 rendered characters,
+known references, first-name greeting and `[Salesperson]`, and restrictive message vocabulary.
+It refuses unsupported features, guarantees/discount promises and sending language.
+These lexical contracts constrain drafts; managers still review their meaning and suitability.
+
+Qwen prepares top-lead drafts; additional drafts have **Template** provenance, and saved
+human changes have **Your edit** provenance. A failed live brief is visible, preserves
+validated metrics and never becomes a silent template/model-provider fallback.
+
+Per-plan process locks protect read/reserve/write across concurrent sessions; each rooftop
+can call in parallel, sharing the aggregate ledger's existing cross-process lock. Attempt
+receipt directories are unique. Rejected response text is neither stored nor executed.
+Public samples show accepted saved results immediately. Run now executes real Docker work;
+identical model input replays an accepted response through validation with `saved_replay`
+provenance and a cached-response tooltip. Stable serialization sorts tied rooftop inputs.
+Do not run disconnected copies of the same spend ledger on concurrent hosts: this release
+handed authority from the stopped local acceptance server to the existing Vultr VM.
+
+## Historical engine contracts and authorization schema
+
+The sections below preserve the earlier campaign/prospect implementation and its dated
+observations. The dealer workflow reuses this engine; its current spend is in STATUS.md.
+
 # Current live verification: hackathon phase 1
 
 Authenticated GET `/v1/models` on 2026-11-05 ET selected **qwen3.8-flash-next**.

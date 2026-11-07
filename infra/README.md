@@ -7,6 +7,30 @@ Ubuntu 24.04, EWR (New Jersey), two logical CPUs and about four GiB RAM observed
 Application: `/opt/proofdesk`, systemd `proofdesk`, non-root controller user with Docker
 access. FastAPI binds to loopback; Caddy handles public HTTPS. No new VM was provisioned.
 
+## Dealer runtime
+
+The default UI is the dealer group dashboard. The separate dealer SQLite store is
+`.local/dealer/experiments.sqlite`; it reuses the existing Store and scheduler/lease APIs.
+`SALESDESK_DEALER_CONCURRENCY=6` controls rooftop fan-out, bounded to 1–12. The service's
+1.5-GiB cgroup cap accommodates controller and worker processes. Individual Docker caps
+remain 128 MiB and half CPU; no sandbox policy was relaxed.
+
+`/etc/systemd/system/proofdesk.service.d/dealer.conf` supplies the plan directory
+`/opt/proofdesk/.local/dealer-plans` and concurrency. The existing root-only inference
+configuration supplies the key. Accepted replay files remain in `.local/replays/`, and
+`.local/dealer-sample-review.json` holds the accepted sample baseline. Fresh public
+sessions can read it immediately; Run now always executes actual sandbox jobs.
+
+Operator-only sample/replay/plan/ledger installation is separate from the source release.
+Hash-check allowlisted files. Never replace a live ledger with an older or disconnected
+copy; preserve existing exhausted ledgers. Local live acceptance was stopped before VM
+spend authority was handed over. No credentials enter an archive or a Docker sandbox.
+
+A full direct public run succeeded with six concurrent children and an observed controller/
+worker peak of 581.55 MiB. See STATUS.md for release-specific elapsed time and memory.
+Use `scripts.check_dealer_browser --screen journey` for direct acceptance; the legacy
+experiment journey remains an additional retained-route check.
+
 ## Public configuration
 
 `infra/Caddyfile.public` and `infra/proofdesk-public.conf` are installed with

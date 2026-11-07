@@ -160,3 +160,28 @@ is invented data in the benchmark's schema and is never shown as evidence.
   reported outreach capacity constraint and survey methodology (4,050 professionals,
   22 countries, August–September 2025). Used as linked factual references; no report
   graphics copied. Illustrative team-hour arithmetic is explicitly labelled in the slides.
+
+
+## Dealer-group sample and industry evidence — 2026-11-06
+
+The generator, fictional Summit Auto Group, fictional people, sample CSVs, regional SVG,
+vehicle body icons, matching program and product UI are original SalesDesk contributions
+under MIT. Real makes/models are product names; no vehicle photos, manufacturer logos,
+real VINs or customer records are imported. Accepted model responses stay in ignored
+operator replay storage. No model weights, vendor CRM software or vendor datasets are bundled.
+Prettier 3.6.2 (MIT) was used ephemerally for formatting, without a dependency-lock change.
+
+Linked factual evidence, checked 2026-11-06; no report graphics or third-party code copied:
+
+- [DAS Technology 2025 lead response study](https://digitalairstrike.com/das-technology-unveils-comprehensive-automotive-dealership-lead-response-study-at-nada-2025/):
+  website inquiry responsiveness and alternatives; vendor-published study with scope/date
+  stated in slides. This is not a SalesDesk performance claim.
+- [Lithia & Driveway 2025 Form 10-K](https://www.sec.gov/Archives/edgar/data/1023128/000102312826000015/lad-20251231.htm):
+  reported floorplan expense/assistance, contextualized as one group's financial disclosure.
+- [Cox Automotive used inventory report, June 13, 2025](https://www.coxautoinc.com/insights/used-vehicle-inventory-may-2025/):
+  market days' supply, explicitly distinguished from individual vehicle age.
+- [Official challenge](https://lablab.build/ai-hackathons/vultr-hackathon) and
+  [LabLab terms](https://lablab.build/terms-of-use) refreshed. No submission or receipt claimed.
+
+The sample's $8/unit/day floorplan figure is an entered assumption, independent of these
+sources. No vendor connection, endorsement, integration or affiliation is claimed.

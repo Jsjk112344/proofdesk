@@ -1,28 +1,24 @@
-# SalesDesk video script: 2:45
+# SalesDesk demo script — 2:45
 
-Recording target: 165 seconds. Use a fresh public session and let its examples initialize
-before recording. Create a **new plan** titled **Womens E-Mail vs No E-Mail**, select
-Womens E-Mail as treatment and No E-Mail as control, and ask a new question, such as
-"What did the womens campaign change, and which follow-up should our sales team test?"
-Start this plan during the recording. Read the actual returned figures. Verify its saved
-model receipt reports a fresh Vultr dispatch before using the take. This is a script,
-not a claim that a narrated video has been recorded.
+Use the deployed sample in a fresh session at 1440×900. Keep the Sample dealer group label
+visible. Record actual UI and worker progress. The full measured run is in STATUS.md;
+use a visible editorial cut after showing genuine progress if needed. Do not accelerate
+or fabricate counters. This is a recording outline, not an implementation schedule.
 
-| Time | Screen / action | Voiceover |
+| Video position | Screen/action | Narration |
 | --- | --- | --- |
-| 0:00–0:15 | Home, then new plan | “You ran an e-mail campaign. Purchases went up. What is your next move? A sales manager needs a result they can act on and a plan someone will actually prepare.” |
-| 0:15–0:27 | Two doors on home | “SalesDesk. Sell more: Your AI sales analyst. Bring a past campaign to See what worked, or start from zero and research your first customers.” |
-| 0:27–0:47 | Save the new Womens E-Mail vs No E-Mail plan; Run analysis now; Analyst activity | “This is a real public campaign with sixty-four thousand customers. I am comparing the womens e-mail arm with no e-mail. The SalesDesk worker on Vultr picks up the saved plan, runs the numbers in Docker, verifies the result and reads it with Vultr Inference.” |
-| 0:47–1:07 | Answer card and purchase chart | “Here is the purchase rate in each original campaign arm and the difference between them. The analyst leads with what happened and what to try next. I can check the denominators and uncertainty in the chart.” Read the returned purchase rates and difference if ready. |
-| 1:07–1:23 | Next move; Edit, change Notes, Save next move | “The analyst proposes the next move. I can edit the hypothesis, audience and decision rule. The full analysis and launch inputs stay one click away.” |
-| 1:23–1:54 | Answer card: Approve & schedule; show preparing; close tab; hold on closed browser; reopen same plan | “Approve and schedule. That binds my approval to this version and queues preparation on Vultr. Now I close the tab.” Leave the closed-tab beat visible. “When I return, the packet is ready for review, with a Markdown download. The server did the work while I was away.” |
-| 1:54–2:07 | Starting from zero: draft hero; Read & edit draft; Approve draft | “No campaign yet? This example prospect has a sourced brief, a demonstration decision and an unsent introduction. I review the exact draft version before using it.” |
-| 2:07–2:18 | Dashboard | “One workspace shows campaigns analysed, next moves awaiting approval and packets ready for review. Both doors use the same analyst loop.” |
-| 2:18–2:35 | Architecture diagram | “Caddy serves HTTPS to FastAPI on our Vultr VM in New Jersey. A durable scheduler dispatches workers into Docker; Vultr Serverless Inference supplies the analyst. Saved events explain what happened, and human approval controls the next move.” |
-| 2:35–2:45 | Home and URL | “Next: bring your own campaign data and measure the next campaign in the same workspace. Today, try the complete benchmark-to-packet journey at SalesDesk.” |
+| 0:00–0:18 | Group view, regional map | “It’s six AM. You run a group with 24 rooftops, three thousand cars and nine thousand open leads. Six hundred leads have gone cold. Which customer should each store work first?” |
+| 0:18–0:38 | Click Run tonight’s review now; show real changing map/tiles and counters | “SalesDesk works the group overnight. Vultr fans the review out across every rooftop, with six isolated workers in parallel. It checks lead risk, current inventory and nearby sister stores.” |
+| 0:38–0:55 | Explicit cut to saved finished run; group brief/dollar figures | “Here is the finished review. The counters are reconciled results. Recoverable gross is an estimate from listed price and cost, not a sales forecast. Leadership sees the group; managers get their next actions.” |
+| 0:55–1:35 | Open Sandy → Maria G.; timeline, best match, score bars, SMS/email tabs | “Maria asked about a blue 2024 Toyota RAV4 Hybrid XLE nine days ago. It sold six days ago. SalesDesk found this silver one at Sandy, with 74 days on lot. It fits her budget and matches the model and trim. Her 2017 Honda CR-V trade is already in the follow-up. Qwen on Vultr drafts the message using only the matched car’s facts.” |
+| 1:35–1:57 | Close drawer → Approve all for Sandy → preparing/ready/downloads | “The manager reviews, edits if needed and approves. The exact version is bound to that approval. Vultr prepares drafts and CRM tasks for the salespeople, plus any sister-store transfer requests. Nothing is sent to a customer.” |
+| 1:57–2:12 | Schedule toggle; close/reopen tab if recording permits | “Close the laptop. The work runs on the server, and the next review runs at two AM Mountain Time. New CSV exports supply updated CRM and inventory facts.” |
+| 2:12–2:28 | Before/after slide + measured run figure from STATUS | “Before: managers search leads, sold units and sister-store stock themselves. After: they approve a ranked queue. The displayed full-run figure is measured execution; we have not measured human time saved.” |
+| 2:28–2:45 | Architecture slide → Group view | “Vultr hosts the application, scheduler and disposable Docker execution. Vultr Serverless Inference writes validated briefs; people approve. Automotive is our first vertical. SalesDesk: sell more, with your AI sales analyst.” |
 
-Record the actual close/reopen beat. If preparation finishes before the tab closes, use the
-schedule control to choose a near-future due time, then preserve the real recorded sequence.
-Do not claim sends, new sales or a newly conducted study. If a live response fails validation,
-keep that outcome visible, correct the prompt if needed and use another explicitly started
-run within the existing budget. Do not substitute a successful take without checking its receipt.
+If the sample run finishes before the narration, use its genuine ready state. If an analyst
+step fails, show the failure and verified numbers; never claim a failed response passed.
+The sample's saved accepted replay is labelled in its tooltip and Verification.
+
+Owner actions: record/export the video, export slides as PDF, check the actual submission
+form, and submit. This document is not evidence of recording or submission.

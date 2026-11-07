@@ -232,6 +232,11 @@ def rooftop(store, job, token, group, runner, interpreter):
 
 
 def aggregate(results, failures):
+    failures = list(failures) + [
+        dict(rooftop_id=r["rooftop_id"], reason=r["brief"].get("failure_reason", "analyst_failed"))
+        for r in results
+        if r.get("brief", {}).get("status") == "failed"
+    ]
     totals = {
         key: sum(r["metrics"][key] for r in results)
         for key in (

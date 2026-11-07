@@ -1046,3 +1046,11 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   inventory age advances; sample dates move together) and explicit Qwen/template/human-edit
   draft labels. These refinements passed 108 backend tests (7 opt-in skips); real Sandy
   Docker and clock tests passed separately. A final release and public recheck follow.
+- Final dealer inference accounting: **51 live requests**, **47 accepted unique responses**,
+  four rejected requests with uncertain usage retained pessimistically. Accepted reported
+  usage estimates **$0.0143516**; uncertainty allowance **$0.0080384**; combined estimate
+  **$0.0223900**. Durable reservations total **$0.1024896**, separate from prior engine
+  envelopes and compute billing. `scripts/dealer_accounting.py` audits these read-only.
+  The first deployed full run produced **25 saved_replay receipts, zero failures and zero
+  fresh paid requests**. No ledger was reset. Existing VM billing/credit balance remains
+  unverified against an account billing API.

@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "kind": "Direct application acceptance; no mocks",
+  "base": "https://salesdesk.149.28.51.139.sslip.io",
+  "checks": [
+    "group: 24 real-result tiles, one primary action, map and first tile row above fold",
+    {
+      "full_run_wall_clock_seconds": 108.396
+    },
+    "Sandy: Maria first, three candidates, trade-in, timeline and score components",
+    "approve-all durable handoff: three exports, reload, real download, cross-session refusal",
+    "server schedule persisted across reload",
+    "data validation counts and three downloadable templates",
+    "mobile: no horizontal overflow; no page errors"
+  ],
+  "screenshots": [
+    "salesdesk-group.png",
+    "salesdesk-live-run.png",
+    "salesdesk-store.png",
+    "salesdesk-maria.png",
+    "salesdesk-downloads.png",
+    "salesdesk-mobile.png"
+  ]
+}

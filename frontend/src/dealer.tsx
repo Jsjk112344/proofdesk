@@ -309,6 +309,7 @@ export function AnalystBadge({
   );
 }
 function phase(roof: Rooftop) {
+  if (roof.result?.brief.status === "failed") return "failed";
   if (!roof.job) return roof.result ? "ready" : "idle";
   if (roof.job.status === "failed") return "failed";
   if (roof.job.status === "succeeded") return "ready";

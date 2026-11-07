@@ -1,109 +1,157 @@
-# SalesDesk
+# SalesDesk — Sell more: Your AI sales analyst.
 
-**Sell more: Your AI sales analyst.** SalesDesk measures what your last campaign actually
-did, proposes your next move, and prepares it for your approval, on Vultr, with every
-number verified. Start with a past campaign or research your first customers; both doors
-lead to an analyst, a next move, your approval and work prepared while you are away.
+**Every night, it works every lead across every rooftop.** SalesDesk gives dealer-group
+leaders a regional roll-up and store managers a ranked morning queue to approve.
 
-**Demo:** [Open SalesDesk](https://salesdesk.149.28.51.139.sslip.io)
+[Open SalesDesk](https://salesdesk.149.28.51.139.sslip.io) ·
+[Source](https://github.com/Jsjk112344/salesdesk) · [Observed checks and spend](STATUS.md)
 
-**Try it in 60 seconds:**
+## Try it in 60 seconds
 
-1. Open the demo and let the Vultr workers prepare your isolated example workspace.
-2. Choose **Analyse a campaign**. Read the answer and the two purchase rates.
-3. Use **Edit** under Next move if needed, save, then **Approve & schedule** in the answer card.
-4. Close the tab. Return to **Ready for review** and **Download packet** from the answer card.
-5. Try **Starting from zero**. Open the draft, read/edit it, and **Approve draft** for review.
+1. Open **Group view**: the labelled **Sample dealer group** has 24 rooftops and a saved,
+   accepted overnight review.
+2. Click **Run tonight’s review now**. Watch actual rooftop jobs and counters on Vultr;
+   the full run has its measured wall-clock in [STATUS.md](STATUS.md). You can close the tab.
+3. Open **Sandy**, then **Maria G.** She wanted a blue RAV4 Hybrid that sold; SalesDesk
+   found a silver alternative with 74 days on lot and drafted a follow-up about her CR-V trade.
+4. Choose **Approve all for Sandy**, then download **Follow-ups**, **CRM tasks**, and
+   **Transfers**. Enable the nightly review in **Schedule**.
 
-A seeded example approval and ready packet are labelled as demo examples. Your edits need
-a fresh approval. New analysis plans and prospects remain available within session limits.
+The saved sample opens immediately. A fresh full run is real work and can outlast this
+quick tour; store review and approval are also available from the saved sample.
 
-[Source repository](https://github.com/Jsjk112344/salesdesk) ·
-[Observed verification and spend](STATUS.md) · [Walkthrough](docs/demo-walkthrough.md)
+![Group view](docs/assets/salesdesk-group.png)
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-  Browser[Browser: two entry doors] --> Caddy[Caddy: HTTPS]
+  Browser[Browser] --> Caddy[Caddy HTTPS]
   Caddy --> API[FastAPI on Vultr VM]
-  API --> Store[(SQLite: session-owned work)]
-  API --> Scheduler[Scheduler and leased worker]
-  Scheduler --> Sandbox[Disposable Docker sandbox]
-  Sandbox --> Metrics[Statistics and verified result]
-  Scheduler <--> Inference[Vultr Serverless Inference]
-  Inference --> Replay[Accepted exact-input replay]
-  Metrics --> Move[Next move]
-  Move --> Approval[Human approval]
-  Approval --> Scheduler
-  Scheduler --> Packet[Packet ready for review]
-  Packet --> Browser
+  API --> Store[(Session-owned SQLite)]
+  API --> Scheduler[Server scheduler: 24 child jobs]
+  Scheduler --> Sandboxes[6 parallel disposable Docker sandboxes]
+  Sandboxes --> Metrics[Reconciled metrics and top matches]
+  Metrics --> Inference[Vultr Serverless Inference: Qwen]
+  Inference --> Contracts[Validated briefs and drafts]
+  Contracts --> Approval[Exact-version human approvals]
+  Approval --> Worker[Leased handoff worker]
+  Worker --> Downloads[Store drafts, CRM tasks, transfer requests]
+  Downloads --> Browser
 ```
 
-## How Vultr powers SalesDesk
+## How Vultr powers it
 
-The existing **proofdesk-web** Ubuntu 24.04 VM in **EWR, New Jersey** hosts FastAPI,
-the durable store, scheduler, worker subprocesses and Docker execution. Caddy terminates
-HTTPS and proxies to loopback. Work continues when the browser closes.
+The existing **proofdesk-web** Ubuntu 24.04 VM in **EWR, New Jersey** runs the API,
+SQLite, scheduler and worker subprocesses behind Caddy. It has **2 logical CPUs** and
+approximately **4 GiB RAM**. Default rooftop concurrency is **6**, configurable with
+`SALESDESK_DEALER_CONCURRENCY` (bounded to 1–12).
 
-**Vultr Serverless Inference** runs `qwen3.8-flash-next` with JSON-object output and
-reasoning disabled. Analysis, research and outreach have passed live end to end. Identical
-public requests prefer previously accepted responses, labelled **Analyst: Qwen 3.8 on Vultr Inference** with **cached response**
-in the tooltip and Verification; new requests use the same primary label. Rule-based mode is separately labelled. Failures remain
-visible, with no silent provider or rule-based substitution. See [inference](docs/inference.md).
+The measured public full run took **108.396 seconds** from browser click to visible group
+result, with six concurrent rooftop jobs. Current and prior-night inputs executed in
+48 disposable containers. Observed application memory peaked at **581.55 MiB**; host
+available memory stayed above **2,755 MiB**. These are observed checks on this sample,
+not capacity or performance promises. [STATUS.md](STATUS.md) records release-specific evidence.
 
-The owner authorized up to $150 of hackathon credit for compute and inference. Measured
-request accounting is in STATUS.md; token-cost estimates are distinct from account billing.
-No new VM was provisioned for this refactor.
+Vultr Serverless Inference runs **`qwen3.8-flash-next`**, JSON output, reasoning disabled.
+Both dealer contracts passed live across the full sample. Public runs prefer exact-input
+accepted replay, validate it again, and retain the **Qwen 3.8 · Vultr** label with a cached
+response tooltip. New inputs can use the same bounded live plans; failures stay visible.
+No provider or rule-based output silently substitutes for a failed live brief.
+
+The owner authorized up to $150 of existing hackathon credit for compute and inference.
+The dealer inference envelope is $0.15 / 64 requests; six-request plans share that envelope.
+Existing exhausted ledgers are never reset. Compute billing and credit balance are distinct
+from the token-cost estimates in [STATUS.md](STATUS.md). No new VM was provisioned.
 
 ## Analyst design
 
-**See what worked** measures a real historical e-mail campaign: a saved comparison,
-Docker statistics, uncertainty, a reading and an editable next move. **Starting from zero**
-researches a prospect, prepares a brief, decides whether the supported demonstration fits,
-and drafts an introduction. Both share measure/research → next move → approval → worker
-preparation → review.
+**Match, explain, approve, hand off.** A fixed program reviews every open lead per rooftop,
+flags contact gaps of at least 72 hours, sold interests, stale appointments and unanswered
+leads, then scores nearby inventory. The top three available units are retained per at-risk
+lead. Matching considers make/model/trim/body, year, color, budget, mileage, age and location.
+Units aged at least 60 days receive a boost; a same-store match avoids an unnecessary transfer.
+Sister stores default to a 250-mile radius. In-transit units retain their status and ETA.
 
-The controller renders figures from validated metric references and preserves the model
-contracts, sandbox limits, source checks and version-bound approvals. Analyst activity
-shows saved worker events as a compact stepper that expands while a job is running or on
-request. The campaign opens with an answer, purchase rates and one approval/download action.
-The purchase chart stays visible; **See full analysis** holds the detailed reading, uncertainty,
-metrics and spend. Next move is read-only until **Edit**; scenario and sample-size fields live
-under **Advanced**. One **Verification** entry retains source, hashes, versions and receipts.
-Prospects open on the draft with **Approve draft**, the existing exact-version review action.
-The full editable draft and its sources are collapsed until requested. Neither approval
-launches a campaign nor sends an e-mail.
+Sandbox artifacts use compact indices to stay within the existing 16 KiB result limit.
+Independent controller code reconciles risk flags, top-three scores, distance constraints,
+KPI totals, source denominators and carrying costs before expanding them for the UI.
+Group totals, distinct aged units matched, rooftop rankings and previous-night deltas come
+from accepted child results. Individual failures remain visible.
+
+The **`rooftop_brief`** contract receives validated metrics and curated facts for the top
+leads. **`group_brief`** receives the roll-up. Model quantities, vehicle facts and names use
+references rendered by code. Draft validators reject unknown leads/stock/references,
+unsupported literal quantities, features, promises and sending language. Customer-facing
+prose has a restrictive vocabulary. Models receive no raw exports, notes, contact details
+or salesperson identities. Qwen drafts cover the top leads; additional drafts are labelled
+**Template**. Human edits are labelled **Your edit**.
+
+Approval binds the exact message version, hash and lead/unit snapshot. Edits clear approval;
+preparation and every download recheck it. Approved work becomes tasks and drafts for
+salespeople, with due date today in Mountain Time, plus manager-review transfer requests.
+It never sends a message or executes a vehicle transfer.
+
+**Runs every night at 2:00 AM MT on Vultr** is a server schedule in America/Denver, including
+DST handling. Each run stores a snapshot; subsequent deltas use accepted prior results.
+Uploaded timestamps remain source facts, while risk and inventory age advance with each
+review. Synthetic sample dates move together to preserve the relative story. Public
+schedules expire with the anonymous session and remain subject to run quotas.
+
+### Entered floorplan assumption
+
+The default is **$8 per unit per day**, configurable in **Data → Review assumptions** and
+shown in **Verification**. Cost to date = days on lot × entered daily rate. It is a flat
+illustrative assumption, not measured lending expense. Recoverable gross sums listed price
+minus cost over each at-risk lead’s best match; a unit can appear for multiple leads. It
+is an estimate from listed figures, not a sales forecast or realized revenue.
+
+## CSV formats
+
+Use three UTF-8 exports. Templates are available on **Data** or at:
+
+- `/api/dealer/templates/rooftops.csv`: id, name, city, lat, lng, brand_mix, manager, salespeople.
+- `/api/dealer/templates/inventory.csv`: stock_no, vin, rooftop_id, condition, year, make,
+  model, trim, body, color, mileage, list_price, cost, days_on_lot, status, eta, sold_date.
+- `/api/dealer/templates/leads.csv`: lead_id, rooftop_id, customer, source, created_at,
+  last_contact_at, first_contact_at, last_contact_channel, assigned_salesperson,
+  vehicle_of_interest, budget_min, budget_max, trade_in, status, appointment_at, notes.
+
+Headers auto-map common aliases such as Stock #, Dealer ID, Asking Price, Lead Source,
+Assigned To and Last Contact. Ambiguous headers, invalid dates/numbers, duplicate identities,
+unknown rooftop references and invalid statuses are refused. Each file is capped at **10 MiB
+and 50,000 rows**. Primary UI shows accepted/rejected counts; row details are in Verification.
+All three files must validate before import. Customer names reduce to first name + last initial.
+
+Inventory statuses: `in_stock`, `in_transit` (ETA required), `sold` (sold_date required).
+Lead statuses: `new`, `contacted`, `appointment`, `sold`, `lost`. Dates are ISO-8601;
+zone-less dates are interpreted as UTC. Vehicle interest is a stock number or
+`year|make|model|trim|color`; trade is `year|make|model|mileage` or blank. Staff and brand lists
+use `|`. See the committed [sample and generator](fixtures/dealer-group/README.md).
 
 ## Setup
 
-Prerequisites: Python 3.12, uv, Node.js 24, npm and Docker.
+Prerequisites: Python 3.12, uv, Node.js 24+, npm and Docker with Linux cgroup v2/seccomp.
 
 ```bash
-git clone https://github.com/Jsjk112344/salesdesk.git
-cd salesdesk
 uv sync --locked
 npm --prefix frontend ci
 docker pull "$(cat infra/task-image.txt)"
-uv run python -m backend.app.experiments fetch
-uv run python -m backend.app.experiments import
 npm --prefix frontend run build
 uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --workers 1
 ```
 
-Open http://127.0.0.1:8000. Local private mode works without inference credentials using
-labelled rule-based readings. For frontend development use `npm --prefix frontend run dev`.
-Keep one API worker because it owns the scheduler thread.
+Open http://127.0.0.1:8000. A local workspace automatically opens the sample. Private mode
+uses explicitly labelled rule-based drafts without credentials. Public mode selects the
+Vultr analyst and requires operator plans; there is no silent offline fallback.
 
-Live mode requires `VULTR_INFERENCE_API_KEY` and an operator budget plan through
-`PROOFDESK_ANALYSIS_LIVE_PLAN` and `PROOFDESK_SALES_LIVE_PLAN`. Public mode uses `PROOFDESK_PUBLIC_DEMO=1` and selects Live by default. Configure credentials outside
-the checkout/release; never put them in browser code. The example plan schema and ledger
-semantics are in [docs/inference.md](docs/inference.md).
+Set `PROOFDESK_PUBLIC_DEMO=1`, `SALESDESK_DEALER_LIVE_PLANS` to a directory containing
+`r01.json` through `r24.json` and `group.json`, and `VULTR_INFERENCE_API_KEY` outside the
+checkout. Plans use the existing authorization schema in [inference.md](docs/inference.md).
+Keep the API on one worker; it owns the scheduler. Runtime data are ignored under `.local/`.
+Existing `PROOFDESK_*` identifiers remain for compatibility.
 
-Existing `PROOFDESK_*` settings, service names and paths retain their identifiers for
-compatibility with the project's former ProofDesk name. Records stay in ignored `.local/`.
-
-### Checks
+Checks:
 
 ```bash
 uv run ruff check backend scripts
@@ -113,62 +161,41 @@ uv run python -m unittest discover -s backend/tests -v
 PROOFDESK_DOCKER_TESTS=1 uv run python -m unittest discover -s backend/tests -v
 npm --prefix frontend run build
 python3 scripts/check_repository.py
-uv run python -m scripts.check_experiment_journey --base-url http://127.0.0.1:8000 --output .local/journey.json
-```
-
-Browser interactions use a disposable container and an explicitly mocked API:
-
-```bash
 docker build -t proofdesk-ui-check - < infra/browser-test.Dockerfile
-uv run python -m scripts.check_browser
+uv run python -m scripts.check_dealer_browser --base-url https://salesdesk.149.28.51.139.sslip.io --screen journey
 ```
 
-[Architecture](docs/architecture.md) · [Deployment](infra/README.md) ·
-[Public demo](docs/public-demo.md) · [Dataset and methods](docs/experiments.md)
+The direct browser check creates actual session work within quotas and uses accepted model
+replay when available. The retained legacy UI check is `uv run python -m scripts.check_browser`.
+Operator tools for full sandbox acceptance and live contract acceptance are in `scripts/`;
+live use requires the existing bounded authorization and must not duplicate ledgers across
+concurrently active hosts. [Deployment and rollback](infra/README.md).
 
-## Limits and what is mocked
+## Limits
 
-- The benchmark is the genuine 64,000-customer Hillstrom historical campaign. It is a
-  retrospective analysis, not a newly run campaign. Raw rows remain ignored and unserved;
-  charts show aggregates. See [THIRD_PARTY.md](THIRD_PARTY.md) for the dataset rights boundary.
-- Public prospect pages and demonstration documents are labelled synthetic examples. The
-  worker actually executes the demonstration in Docker. Private research supports public
-  websites through the existing SSRF-protected fetcher.
-- A saved replay is an accepted live response for identical request bytes, validated again.
-  It has a cached-response secondary label and makes no fresh model request. Browser tests use separate mocks.
-- A packet is preparation for human review. No campaign has been launched by SalesDesk and
-  historical incremental spend is not SalesDesk revenue. Missing inputs remain visible.
-- SalesDesk does not send e-mail, contact anyone or connect to a CRM.
-  No Slack, upload or mailbox integration exists.
-- Each anonymous public session has up to three plans, six runs, six tasks, three queued
-  jobs, and three prospects. Seeding uses one plan/run/task/prospect and two jobs. Due times
-  are bounded to the next day. Records are isolated by an HttpOnly session cookie.
-- Video recording, PDF slide export and the LabLab submission itself are separate from
-  these prepared assets. Nothing is submitted without a receipt.
+Summit Auto Group, its stores and its people are fictional, labelled **Sample dealer group**
+in records and UI. Makes/models are product names; fictional-format VINs identify no real
+vehicles. The sample has 24 stores, 3,000 units, 9,000 open leads and 2,400 historical leads.
+It includes planted discoverable patterns, not customer evidence or measured business gains.
 
-## Wording kept in Verification
+Data enters by CSV export. There is no integration with VinSolutions, DealerSocket, CDK,
+Reynolds, Salesforce or HubSpot. **Live CRM/DMS connections are next.** New exports are needed
+to reflect actual contact, sale or arrival events. No email/SMS is sent; downloads use a
+generic task-import format and transfer requests require a person’s review.
 
-The compact interface keeps these qualifications available in Verification and the full
-reading, without changing records or validation:
+Uploaded files are untrusted, session-scoped, size-capped and never committed. Per-rooftop
+typed input must also fit the unchanged **1 MiB** sandbox cap; a large concentrated export
+can be accepted for import but exceed this analysis limit, producing a visible job failure.
+Sandbox limits remain 128 MiB, half CPU, no network/host mounts/credentials, and a 30-second
+analysis deadline. Public sessions have six reviews and 72 handoff jobs, global limits,
+and a one-day anonymous schedule lifetime. This is a hackathon demo, not production tenancy.
 
-- SalesDesk evaluates historical campaign data, prepares experiment packets and drafts for
-  a person to review. Campaign evaluation and next-move planning run on a Vultr VM.
-- A prepared packet is a planning review, not a launched campaign, new responses or sales,
-  or a completed review. An example approval is a seeded demo approval.
-- Synthetic prospect pages are invented and read from disk. They are examples, not live
-  customer research. The public interface marks the example with an **Example** badge.
-- Edit freely; saving creates a new version and clears any approval bound to an older
-  version. Historical records are never a contact list. Draft review binds to the exact
-  saved version; editing invalidates that review. Nothing is sent by SalesDesk.
-- Per-step dates, completion states, source and artifact identifiers, metric references,
-  version hashes and interpretation provenance remain available in Verification or the
-  expanded activity. Cached responses make no fresh inference request.
+Earlier campaign/prospect code and routes remain unlinked. The proprietary/raw historical
+campaign dataset remains ignored and unserved; its separate rights boundary is in
+[THIRD_PARTY.md](THIRD_PARTY.md). Video, PDF slide export and official submission remain
+owner actions. Nothing has been submitted without a receipt.
 
 ## License
 
-Original code is [MIT licensed](LICENSE). Dependencies and references are recorded in
-[THIRD_PARTY.md](THIRD_PARTY.md); [provenance](docs/provenance.md) separates the original
-baseline from hackathon additions. No private customer data or proprietary product code
-is included. Challenge: [Powering the Future of Work, Vultr Agent Rush](https://lablab.build/ai-hackathons/vultr-hackathon).
-
-Dealer sample floorplan assumption: **$8 per unit per day**, configurable, shown as an entered assumption in Verification. See [Sample dealer group](fixtures/dealer-group/README.md).
+Original code and fictional dealer fixtures are [MIT](LICENSE). Dependencies and external
+research are attributed in [THIRD_PARTY.md](THIRD_PARTY.md).
