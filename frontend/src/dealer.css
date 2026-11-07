@@ -221,6 +221,9 @@
   flex: 1;
 }
 .d-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   height: 72px;
   padding: 0 32px;
   display: flex;
@@ -253,6 +256,14 @@
   padding: 5px 9px;
   border-radius: 4px;
   white-space: nowrap;
+}
+.drawer-data-label {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 8px 0 12px;
+  margin-bottom: 8px;
+  background: white;
 }
 .d-role-switch {
   display: flex;

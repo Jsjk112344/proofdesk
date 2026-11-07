@@ -322,6 +322,7 @@ function LeadDrawer({
   busy,
   primary = true,
   referenceTime,
+  dataLabel,
 }: {
   lead: Lead;
   row?: Followup;
@@ -330,6 +331,7 @@ function LeadDrawer({
   busy: boolean;
   primary?: boolean;
   referenceTime: string;
+  dataLabel: string;
 }) {
   const [tab, setTab] = useState("sms");
   const ref = useRef<HTMLElement>(null);
@@ -390,6 +392,9 @@ function LeadDrawer({
         aria-label={`${lead.customer} lead detail`}
         onClick={(e) => e.stopPropagation()}
       >
+        <div className="drawer-data-label">
+          <span className="sample-badge">{dataLabel}</span>
+        </div>
         <div className="d-section-heading">
           <div>
             <span className="d-eyebrow">AN OPPORTUNITY WORTH REOPENING</span>
@@ -899,6 +904,7 @@ export function StoreView({
         <LeadDrawer
           lead={selected}
           referenceTime={data.reference_time}
+          dataLabel={data.data_label}
           row={rows.find((row) => row.lead_id === selected.lead_id)}
           close={() => setDetail(null)}
           approve={() => {
