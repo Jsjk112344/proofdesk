@@ -16,6 +16,15 @@ import {
   type Unit,
 } from "./dealer";
 type Action = (fn: () => Promise<unknown>) => Promise<void>;
+const unitLocation = (unit: Unit) =>
+  unit.status === "in_transit"
+    ? unit.transfer
+      ? `In transit to ${storeName(unit.store_name)}, transfer`
+      : "In transit to this store"
+    : unit.transfer
+      ? `At ${storeName(unit.store_name)}, transfer`
+      : "In stock at this store";
+
 const approvalVersion = (row: Followup) => ({
   id: row.id,
   version: row.version,
@@ -227,11 +236,7 @@ function FollowupCard({
             <span
               className={`unit-location ${unit.transfer ? "transfer" : ""}`}
             >
-              {unit.transfer
-                ? `At ${storeName(unit.store_name)}, transfer`
-                : unit.status === "in_transit"
-                  ? "In transit to this store"
-                  : "In stock at this store"}
+              {unitLocation(unit)}
             </span>
           </div>
         </div>
@@ -419,8 +424,16 @@ function LeadDrawer({
           <li>
             <i />
             <div>
-              <strong>Last salesperson contact</strong>
-              <span>{dayAgo(lead.last_contact_at)}</span>
+              <strong>
+                {lead.last_contact_at
+                  ? "Last salesperson contact"
+                  : "No recorded contact"}
+              </strong>
+              <span>
+                {lead.last_contact_at
+                  ? dayAgo(lead.last_contact_at)
+                  : "Since enquiry"}
+              </span>
             </div>
           </li>
           {lead.risks.includes("Vehicle sold") && (
@@ -463,11 +476,7 @@ function LeadDrawer({
                     {unit.color} · {unit.days_on_lot} days on lot ·{" "}
                     {dollars(unit.list_price)}
                   </p>
-                  <span className="d-muted">
-                    {unit.transfer
-                      ? `At ${storeName(unit.store_name)}, transfer`
-                      : "At this store"}
-                  </span>
+                  <span className="d-muted">{unitLocation(unit)}</span>
                 </div>
                 <strong className="match-score">
                   {unit.score}
