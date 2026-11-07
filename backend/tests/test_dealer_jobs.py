@@ -67,6 +67,7 @@ class DealerJobTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             store = DealerStore(Path(tmp))
             group = sample_group()
+            group["inventory"][137]["cost"] = 33900  # Include a genuine loss-making best match.
             store.save_group("a", group)
             parent = store.start_review("a", uuid.uuid4().hex)
             with store.transaction() as conn:
@@ -80,6 +81,12 @@ class DealerJobTests(unittest.TestCase):
             maria = next(lead for lead in expanded["queue"] if lead["customer"] == "Maria G.")
             self.assertEqual(maria["matches"][0]["stock_no"], "S00138")
             self.assertEqual(expanded["metrics"]["cold_leads"], 25)
+            best = [lead["matches"][0] for lead in expanded["queue"] if lead["matches"]]
+            self.assertTrue(any(unit["cost"] > unit["list_price"] for unit in best))
+            self.assertEqual(
+                expanded["metrics"]["recoverable_gross"],
+                sum(unit["list_price"] - unit["cost"] for unit in best),
+            )
             directory = store.root / "executions" / job["id"]
             records = [json.loads(p.read_text()) for p in directory.glob("*/record.json")]
             self.assertTrue(all(r["cleanup"]["removed"] for r in records))

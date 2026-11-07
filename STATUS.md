@@ -1054,3 +1054,13 @@ allowing untrusted code. Select and evaluate Vultr models with an authorized cal
   The first deployed full run produced **25 saved_replay receipts, zero failures and zero
   fresh paid requests**. No ledger was reset. Existing VM billing/credit balance remains
   unverified against an account billing API.
+- Final edge-case checks: new source assumptions hide incompatible saved sample numbers
+  until a fresh run; approvals bind the source-data hash; re-exporting an edited draft keeps
+  the other still-approved tasks from that review. Synthetic exports identify their data
+  label. Never-contacted imported leads use creation time. Recoverable gross includes
+  negative listed margins rather than silently flooring them at zero. Sample metrics and
+  accepted model inputs remain unchanged. Timeline ages use the saved review's reference.
+- Full opt-in Docker suite passed: **110 tests, no skips**. The added never-contacted
+  ingestion case also passed in the final offline suite: **111 tests, 7 opt-in skips**.
+  Frontend production build, retained mocked-browser journey, Ruff/formatting and repository
+  checks passed. Final public release acceptance is recorded next.

@@ -316,6 +316,7 @@ function LeadDrawer({
   approve,
   busy,
   primary = true,
+  referenceTime,
 }: {
   lead: Lead;
   row?: Followup;
@@ -323,12 +324,13 @@ function LeadDrawer({
   approve: () => void;
   busy: boolean;
   primary?: boolean;
+  referenceTime: string;
 }) {
   const [tab, setTab] = useState("sms");
   const ref = useRef<HTMLElement>(null);
   const dayAgo = (date?: string) =>
     date
-      ? `${Math.max(0, Math.round((Date.now() - Date.parse(date)) / 86400000))} days ago`
+      ? `${Math.max(0, Math.round((Date.parse(referenceTime) - Date.parse(date)) / 86400000))} days ago`
       : "This review";
   useEffect(() => {
     const previous = document.activeElement as HTMLElement;
@@ -884,6 +886,7 @@ export function StoreView({
       {selected && (
         <LeadDrawer
           lead={selected}
+          referenceTime={data.reference_time}
           row={rows.find((row) => row.lead_id === selected.lead_id)}
           close={() => setDetail(null)}
           approve={() => {

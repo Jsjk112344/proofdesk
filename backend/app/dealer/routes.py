@@ -122,7 +122,15 @@ def register(app, owner, body):
             path = ROOT / ".local/dealer-sample-review.json"
             if path.is_file() and path.stat().st_size <= 10 * 1024 * 1024:
                 baseline = json.loads(path.read_text())
-                if len(baseline.get("results", {})) == 24 and "rollup" in baseline:
+                if (
+                    len(baseline.get("results", {})) == 24
+                    and "rollup" in baseline
+                    and baseline.get("assumptions")
+                    == {
+                        "floorplan_daily_rate": content["floorplan_daily_rate"],
+                        "match_distance_miles": content["match_distance_miles"],
+                    }
+                ):
                     results = baseline["results"]
                 else:
                     baseline = None
@@ -140,7 +148,7 @@ def register(app, owner, body):
                 )
             )
             if result:
-                materialize(store, identity, source, result, content)
+                materialize(store, identity, source, result, content, group_sha256=group["sha256"])
             with store.reading() as conn:
                 cards = list_followups(store, conn, identity, source) if source else []
             cards = [
@@ -172,6 +180,8 @@ def register(app, owner, body):
             if baseline
             else aggregate(list(results.values()), [])
         )
+        if not parent and not baseline:
+            rollup["totals"] = {key: None for key in rollup["totals"]}
         handoffs = []
         with store.reading() as conn:
             schedule = conn.execute(
@@ -223,6 +233,11 @@ def register(app, owner, body):
             handoffs=handoffs,
             schedule=dict(schedule) if schedule else {"enabled": False},
             saved_sample_review=bool(baseline),
+            reference_time=baseline["reference_time"]
+            if baseline
+            else parent["created_at"]
+            if parent
+            else content["reference_time"],
         )
 
     @app.post("/api/dealer/followups/{fid}/edit")

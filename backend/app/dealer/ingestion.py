@@ -173,7 +173,7 @@ def parse_csv(kind, raw):
                     errors.append(key + ":invalid_text")
                 value[key] = cell[:500]
             for key in REQUIRED[kind]:
-                if not value[key]:
+                if not value[key] and not (kind == "leads" and key == "last_contact_at"):
                     errors.append(key + ":required")
             for key in set(value) & NUMBERS.keys():
                 if not value[key] and key == "mileage":

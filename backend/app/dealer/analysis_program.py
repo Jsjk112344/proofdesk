@@ -131,7 +131,7 @@ def analyze(data):
         risks.append([i, mask, best])
         if best:
             unit = units[best[0][0]]
-            gross += max(0, unit[9] - unit[10])
+            gross += unit[9] - unit[10]
             matched_stock += int(unit[12] == "in_stock")
             for j, _ in best:
                 if units[j][11] >= 60:

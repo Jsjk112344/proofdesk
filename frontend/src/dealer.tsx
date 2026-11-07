@@ -96,6 +96,7 @@ export type Rooftop = {
   } | null;
 };
 export type DealerView = {
+  reference_time: string;
   group: string;
   data_label: string;
   rooftops: Rooftop[];

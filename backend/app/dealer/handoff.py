@@ -29,7 +29,7 @@ def followup(row):
     return value
 
 
-def materialize(store, owner, source, result, group):
+def materialize(store, owner, source, result, group, group_sha256=None):
     with store.reading() as conn:
         if conn.execute(
             "SELECT 1 FROM dealer_followups WHERE owner=? AND source=? LIMIT 1", (owner, source)
@@ -38,12 +38,18 @@ def materialize(store, owner, source, result, group):
     brief = result.get("brief") or {}
     if brief.get("status") != "succeeded":
         return
+    group_sha256 = group_sha256 or sha256(dump(group).encode())
     model_rows = {row["lead_id"]: row for row in brief["rendered"]["follow_ups"]}
     with store.transaction() as conn:
         for lead in result["queue"]:
             if not lead["matches"]:
                 continue
-            snapshot = dict(lead=lead, unit=lead["matches"][0], data_label=group["data_label"])
+            snapshot = dict(
+                lead=lead,
+                unit=lead["matches"][0],
+                data_label=group["data_label"],
+                group_sha256=group_sha256,
+            )
             row = model_rows.get(lead["lead_id"])
             provenance = brief["provenance"] if row else "deterministic_template"
             if row is None:
@@ -133,7 +139,26 @@ def approve(store, owner, rid, versions, request_id):
         for expected in versions:
             if not isinstance(expected, dict) or set(expected) != {"id", "sha256", "version"}:
                 raise RunError("invalid_followup_approval")
+            if type(expected["version"]) is not int or not isinstance(expected["sha256"], str):
+                raise RunError("invalid_followup_approval")
             saved = read(store, conn, owner, expected["id"])
+            bound = saved["snapshot"].get("group_sha256")
+            if bound is None:  # Compatibility for already-issued pre-binding sample records.
+                if saved["source"].startswith("sample:"):
+                    compatible = (
+                        group["content"].get("synthetic")
+                        and group["content"]["floorplan_daily_rate"] == 8
+                        and group["content"]["match_distance_miles"] == 250
+                    )
+                else:
+                    compatible = (
+                        store.job(conn, saved["source"], owner)["payload"].get("group_sha256")
+                        == group["sha256"]
+                    )
+                if not compatible:
+                    raise RunError("approval_version_conflict")
+            elif bound != group["sha256"]:
+                raise RunError("approval_version_conflict")
             if (
                 saved["rooftop_id"] != rid
                 or saved["sha256"] != expected["sha256"]
@@ -155,6 +180,19 @@ def approve(store, owner, rid, versions, request_id):
                 "UPDATE dealer_followups SET status='approved',approval=? WHERE id=?",
                 (dump(receipt), row["id"]),
             )
+        sources = {row["source"] for row in rows}
+        if len(sources) != 1:
+            raise RunError("approval_version_conflict")
+        # A fresh handoff includes the still-approved drafts from this same review.
+        # Editing one draft therefore does not strand the other approved store tasks.
+        approved = conn.execute(
+            "SELECT * FROM dealer_followups WHERE owner=? AND rooftop_id=? "
+            "AND source=? AND status='approved' ORDER BY rowid",
+            (owner, rid, rows[0]["source"]),
+        ).fetchall()
+        versions = [
+            {key: dict(row)[key] for key in ("id", "version", "sha256")} for row in approved
+        ]
         jid = store.insert_job(
             conn,
             owner=owner,
@@ -209,6 +247,8 @@ def prepare(store, job, token):
         store.heartbeat(conn, job, token, LEASE_SECONDS, stage="preparing_on_vultr")
     today = datetime.now(ZoneInfo("America/Denver")).date().isoformat()
     markdown = ["# Approved follow-ups", "", "Tasks and drafts for salespeople. Nothing sent.", ""]
+    if rows:
+        markdown += ["Data: " + rows[0]["snapshot"]["data_label"], ""]
     tasks = []
     transfers = []
     for row in rows:
@@ -231,7 +271,12 @@ def prepare(store, job, token):
             [
                 lead["lead_id"],
                 lead["salesperson"],
-                text["email_subject"],
+                (
+                    "Sample dealer group — "
+                    if row["snapshot"]["data_label"] == "Sample dealer group"
+                    else ""
+                )
+                + text["email_subject"],
                 today,
                 "SMS: " + text["sms"] + "\n\nEmail: " + text["email_body"],
             ]

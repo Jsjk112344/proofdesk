@@ -114,6 +114,9 @@ def main():
                 ),
                 flush=True,
             )
+    baseline["assumptions"] = {
+        key: group[key] for key in ("floorplan_daily_rate", "match_distance_miles")
+    }
     output.write_text(json.dumps(baseline, sort_keys=True) + "\n")
     print(
         json.dumps(

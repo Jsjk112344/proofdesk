@@ -229,7 +229,7 @@ def reconcile(result, data, raw):
         aged_matched=len(aged_indices),
         aged_60=len(aged),
         aged_90=sum(units[j][11] >= 90 for j, _ in aged),
-        recoverable_gross=round(sum(max(0, u[9] - u[10]) for u in best), 2),
+        recoverable_gross=round(sum(u[9] - u[10] for u in best), 2),
         floorplan_daily=round(len(aged) * data["rate"], 2),
         floorplan_to_date=round(sum(units[j][11] * data["rate"] for j, _ in aged), 2),
         appointment_rate=round(napp / nopen, 4) if nopen else 0,

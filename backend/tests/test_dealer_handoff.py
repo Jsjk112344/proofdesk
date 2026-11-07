@@ -93,3 +93,54 @@ class DealerHandoff(unittest.TestCase):
             self.assertTrue(set_schedule(store, "a", True)["enabled"])
             self.assertRaises(RunError, set_schedule, store, "b", True)
             self.assertFalse(set_schedule(store, "a", False)["enabled"])
+
+    def test_reexport_keeps_other_approved_tasks_and_changed_data_refuses_approval(self):
+        import copy
+
+        from backend.app.dealer.contracts import rendered
+        from backend.app.dealer.reasoning import deterministic
+        from backend.tests.test_dealer_contracts import DealerContracts
+
+        DealerContracts.setUpClass()
+        group = DealerContracts.group
+        first = copy.deepcopy(DealerContracts.lead)
+        first.update(customer="Maria G.", salesperson="Avery Vale")
+        first["matches"][0]["transfer"] = False
+        second = copy.deepcopy(first)
+        second.update(lead_id="L2", customer="Alex R.", first_name="Alex")
+        result = dict(rooftop_id="r02", metrics={}, queue=[first, second])
+        reading = deterministic("rooftop_brief", result, group)
+        result["brief"] = dict(
+            status="succeeded",
+            provenance="deterministic",
+            rendered=rendered(reading, result, group),
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            store = DealerStore(Path(tmp))
+            store.save_group("a", group)
+            materialize(store, "a", "source", result, group)
+            with store.reading() as conn:
+                rows = [
+                    dict(row)
+                    for row in conn.execute("SELECT * FROM dealer_followups ORDER BY rowid")
+                ]
+
+            def version(row):
+                return [{k: row[k] for k in ("id", "version", "sha256")}]
+
+            approve(store, "a", "r02", version(rows[0]), uuid.uuid4().hex)
+            bundle = approve(store, "a", "r02", version(rows[1]), uuid.uuid4().hex)
+            self.assertEqual(len(bundle["payload"]["versions"]), 2)
+            # Complete the queued preparations, then replace source data assumptions.
+            while True:
+                with store.transaction() as conn:
+                    job = store.claim_due(conn, now(), "lease", 120)
+                if job is None:
+                    break
+                self.assertEqual(run_job(store, job["id"], "lease")["status"], "succeeded")
+            changed = copy.deepcopy(group)
+            changed["floorplan_daily_rate"] = 12
+            store.save_group("a", changed)
+            self.assertRaises(
+                RunError, approve, store, "a", "r02", version(rows[0]), uuid.uuid4().hex
+            )

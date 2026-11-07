@@ -58,6 +58,16 @@ class DealerApi(unittest.TestCase):
                 client.cookies.clear()
                 client.get("/api/workspace")
                 self.assertFalse(client.get("/api/dealer/data").json()["imported"])
+                client.get("/api/dealer")
+                changed = client.post(
+                    "/api/dealer/assumptions",
+                    json={"floorplan_daily_rate": 12, "match_distance_miles": 250},
+                    headers={"X-ProofDesk-Request": "1"},
+                )
+                self.assertEqual(changed.status_code, 200)
+                state = client.get("/api/dealer").json()
+                self.assertFalse(state["saved_sample_review"])
+                self.assertIsNone(state["rollup"]["totals"]["recoverable_gross"])
                 self.assertEqual(
                     client.post(
                         "/api/dealer/import", json={}, headers={"X-ProofDesk-Request": "1"}

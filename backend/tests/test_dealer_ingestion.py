@@ -40,6 +40,25 @@ class IngestionTests(unittest.TestCase):
                 self.assertRaises(RunError, store.group, conn, "owner-b")
             self.assertRaises(RunError, store.finish_import, "owner-b")
 
+    def test_never_contacted_lead_uses_creation_time(self):
+        import csv
+        import io
+
+        from backend.app.dealer.ingestion import SAMPLE
+
+        rows = list(csv.DictReader(io.StringIO((SAMPLE / "leads.csv").read_text())))
+        lead = rows[0]
+        lead["last_contact_at"] = ""
+        lead["first_contact_at"] = ""
+        lead["status"] = "new"
+        output = io.StringIO()
+        writer = csv.DictWriter(output, fieldnames=list(lead))
+        writer.writeheader()
+        writer.writerow(lead)
+        values, report = parse_csv("leads", output.getvalue().encode())
+        self.assertEqual(report["accepted"], 1)
+        self.assertEqual(values[0]["last_contact_at"], "")
+
     def test_review_clock_advances_uploaded_age_and_preserves_sample_story(self):
         from datetime import timedelta
 
