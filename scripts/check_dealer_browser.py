@@ -14,7 +14,9 @@ from backend.app.execution.runner import command
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-url", default="http://host.docker.internal:8011")
-    parser.add_argument("--screen", choices=["group", "store", "handoff", "journey"], default="group")
+    parser.add_argument(
+        "--screen", choices=["group", "store", "handoff", "journey"], default="group"
+    )
     parser.add_argument("--output", default=".local/dealer-browser")
     args = parser.parse_args()
     output = Path(args.output)
